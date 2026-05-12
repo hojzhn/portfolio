@@ -1,3 +1,7 @@
+# Build output
+/dist/
+src/tailwind.output.css
+
 # Logs
 logs
 *.log
