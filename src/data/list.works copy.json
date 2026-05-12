@@ -1,0 +1,316 @@
+[
+  {
+    "id": 1,
+    "title": "Rathouse",
+    "slug": "Rathouse",
+    "category": "designer",
+    "date": "May, 2024",
+    "role": ["UX"],
+    "summary": "Art and digital. Exclusivity and accessibility.",
+    "menu": [
+      {
+        "title": "Overview",
+        "subsections": [
+          "Summary",
+          "From Research to Insight",
+          "From Insight to Product Concept"
+        ]
+      },
+
+      {
+        "title": "Conceptual Framing",
+        "subsections": [
+          "The art world now operates within a digital communication infrastructure",
+          "Digital content creation as a structural parallel",
+          "Integration produces structural tension"
+        ]
+      },
+
+      {
+        "title": "Preliminary Research",
+        "subsections": [
+          "In-depth Interviews",
+          "Observational Research",
+          "Qualitative Synthesis"
+        ]
+      },
+      {
+        "title": "Key Findings",
+        "subsections": [
+          "Value Recognition Through Credibility",
+          "Malleable Nature of Art",
+          "Accessibility for Continuity"
+        ]
+      },
+      {
+        "title": "Storyboards & HMWs",
+        "subsections": [
+          "Buyer Uncertainty",
+          "Social-Professional Ambiguity",
+          "Artist Sustainability"
+        ]
+      },
+      {
+        "title": "Design Directions",
+        "subsections": [
+          "Social Media - Database Hybrid Navigation",
+          "Crowdfunded Revenue Share Model"
+        ]
+      },
+      {
+        "title": "Exploratory Test",
+        "subsections": ["Something", "Method", "Insights"]
+      },
+      { "title": "What Comes Next?", "subsections": [] }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Bol",
+    "slug": "BakeSupport",
+    "category": "designer",
+    "date": "Feb, 2024",
+    "role": ["Front-End", "Back-End", "UX", "UI"],
+    "desc_items": [
+      {
+        "title": "Tech Stack",
+        "content": [
+          "React Native",
+          "Expo",
+          "NativeWind",
+          "AsyncStorage",
+          "Firebase"
+        ]
+      },
+      {
+        "title": "Role",
+        "content": [
+          "Solo project, designed and implemented end-to-end",
+          "- Data modeling",
+          "- Algorithm design",
+          "- UX/UI implementation",
+          "- Design system",
+          "- Full-stack development"
+        ]
+      },
+
+      { "title": "Duration", "content": ["3 Months"] },
+      { "title": "Scale", "content": ["Versioning and Persistence Support"] }
+    ],
+    "summary": "Reconstructing the intuition of recipe-building.",
+    "menu": [
+      {
+        "title": "Overview",
+        "subsections": ["Summary"]
+      },
+      {
+        "title": "Design Motivation",
+        "subsections": [
+          "Logic",
+          "Easy Unit Conversions",
+          "Easy Manipulation",
+          "Recipe-Ingredient Integration",
+          "Scalable Design"
+        ]
+      },
+      {
+        "title": "Technical Implementation",
+        "subsections": [
+          "Data Model",
+          "Computation Logic",
+          "UI Integration",
+          "Persistence",
+          "Versioning"
+        ]
+      },
+      {
+        "title": "UX Considerations",
+        "subsections": [
+          "Starting Point",
+          "Object-Building Sequences",
+          "Navigation Sequences",
+          "Interaction Principles",
+          "Conclusion"
+        ]
+      },
+      {
+        "title": "UI Design",
+        "subsections": ["Design System", "Screens"]
+      },
+      {
+        "title": "Takeaways",
+        "subsections": []
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Canton",
+    "slug": "Canton",
+    "category": "designer",
+    "date": "Jul, 2024",
+    "role": ["Front-End", "Back-End", "UX", "UI"],
+
+    "summary": "Remodeling conversation as a navigable map of time and space.",
+    "menu": [
+      {
+        "title": "Overview",
+        "subsections": ["Summary", "Design Motivation"]
+      },
+      {
+        "title": "Conceptual Framing",
+        "subsections": [
+          "From Stream to Structure",
+          "Memory as Interface",
+          "Intended Use Cases"
+        ]
+      },
+      {
+        "title": "System Design",
+        "subsections": [
+          "Temporal Anchors (Chapters)",
+          "Spatial Branches (Tabs)",
+          "Roles, Characters, and Macros",
+          "Reading Mode & Handouts"
+        ]
+      },
+      {
+        "title": "Data Modeling",
+        "subsections": [
+          "Firestore Architecture",
+          "Navigability over Flatness",
+          "Tradeoffs and Reflections"
+        ]
+      },
+      {
+        "title": "What Comes Next?",
+        "subsections": ["Generalization Beyond TRPG", "Design Questions"]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Let Them Wave Flag",
+    "slug": "Flag",
+    "category": "designer",
+    "date": "Jul, 2025",
+    "role": ["UX", "HCI"],
+    "desc_items": [
+      {
+        "title": "Methods",
+        "content": [
+          "Rule-based online interaction tests",
+          "Event-log analysis",
+          "Post-phase Likert items",
+          "Post-test text interviews"
+        ]
+      },
+      {
+        "title": "Role",
+        "content": [
+          "Interaction rule design",
+          "System-assigned Check target procedure",
+          "Built the data pipeline",
+          "Quantative analysis",
+          "Figure planning"
+        ]
+      },
+
+      { "title": "Duration", "content": ["8 phases per test", "2 Months"] }
+    ],
+    "summary": "Rule Effects on Action in Hesitant Users",
+    "menu": [
+      {
+        "title": "Overview",
+        "subsections": ["Summary"]
+      },
+      {
+        "title": "Conceptual Framing",
+        "subsections": [
+          "Attentive non-initiation in group settings",
+          "Inactivity as a threshold under agency burden",
+          "Research Opportunity"
+        ]
+      },
+      {
+        "title": "Research Design and Methodology",
+        "subsections": [
+          "Test Design",
+          "Test Rules",
+          "Measures and Data Collection"
+        ]
+      },
+      {
+        "title": "Analysis",
+        "subsections": ["Coding and Variables", "Methods", "Limitations"]
+      },
+      {
+        "title": "Findings and Interpretation",
+        "subsections": [
+          "Baseline initiation under consequence-free probing (Test 1).",
+          "Check initiation increased under Flag gating",
+          "Lower Check volume, higher Flag adoption under system assignment",
+          "Participation inequality fell under gating and system assignment",
+          "Escalation timing diverged by rule"
+        ]
+      },
+      { "title": "What Comes Next?" }
+    ]
+  },
+  {
+    "recipe_id": "r_001",
+
+    // Metadata (title, tags, version info, source, etc.)
+    // Timestamps (created, updated, touched)
+    "group_order": ["g_1", "g_2", "g_3"],
+
+    "groups": {
+      "g_1": {
+        "id": "g_1",
+        "name": "Main Dough",
+        "line_ids": ["l_0", "l_3", "l_5"]
+      },
+      "g_2": {
+        "id": "g_2",
+        "name": "Preferment",
+        "line_ids": ["l_1", "l_4"]
+      }
+    },
+
+    "lines": {
+      "l_0": {
+        "id": "l_0",
+        "ingredient_id": "in_1",
+        "type": "base",
+        "g": 400,
+        "locked": false,
+        "note": null
+      },
+      "l_1": {
+        "id": "l_1",
+        "ingredient_id": "in_1",
+        "type": "base",
+        "g": 100
+      }
+    },
+
+    "dir_group_order": ["dg_1", "dg_2"],
+
+    "dir_groups": {
+      "dg_1": {
+        "id": "dg_1",
+        "name": "Preparation",
+        "direction_ids": ["d_1", "d_2"]
+      }
+    },
+
+    "dir_lines": {
+      "d_1": {
+        "id": "d_1",
+        "title": "Mix ingredients and rest 30 min",
+        "body": null,
+        "line_refs": ["l_0", "l_3"]
+      }
+    }
+  }
+]

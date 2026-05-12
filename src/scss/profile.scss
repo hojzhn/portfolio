@@ -1,0 +1,42 @@
+.profile {
+  header {
+    margin-bottom: 0.75em;
+    line-height: 1.2;
+
+    .catchphrase {
+      margin-left: 0.75em;
+    }
+  }
+
+  .name {
+    font-size: clamp(0px, calc(650px / 4), 30vw);
+
+    line-height: 1.2;
+  }
+
+  .status {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: "●";
+      margin-right: 5px;
+      color: green;
+      text-shadow: 0px 0px 3px green;
+      font-size: 0.6em;
+    }
+  }
+
+  .icons {
+    position: relative;
+    z-index: 2;
+
+    i {
+    }
+  }
+
+  footer {
+    margin-bottom: 25px;
+  }
+}

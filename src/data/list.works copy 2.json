@@ -1,0 +1,467 @@
+[
+  {
+    "id": 1,
+    "title": "Rathouse",
+    "slug": "Rathouse",
+    "category": "designer",
+    "date": "May, 2024",
+    "role": ["UX Research", "Product Design"],
+    "summary": "Art and digital. Exclusivity and accessibility.",
+    "desc": "An end-to-end product plan for the contemporary art market through two coordinated interventions: an SNS–database hybrid platform and a crowdfunded revenue-share model. Began as a research-driven inquiry into how digital integration is reshaping the contemporary art market. Advanced from structural diagnosis to product logic, translating market-level tensions into a focused design intervention tested through controlled interaction.",
+    "desc_items": [
+      {
+        "title": "Role",
+        "content": [
+          "Sole researcher & designer",
+          "Qualitative research",
+          "Concept development",
+          "Behavioral test design"
+        ]
+      },
+      {
+        "title": "Methods",
+        "content": [
+          "Expert & stakeholder interviews",
+          "Field observation",
+          "Thematic analysis",
+          "Controlled behavioral study"
+        ]
+      },
+
+      {
+        "title": "Duration",
+        "content": ["4 months", "Feb–May 2024"]
+      },
+      {
+        "title": "Status",
+        "content": ["Test A complete", "Test B designed, not yet run"]
+      }
+    ],
+
+    "menu": [
+      {
+        "title": "Overview",
+        "desc": "Digital didn't break the art world. \nIt just made the cracks visible.",
+        "subsections": [
+          { "title": "Recurring Tensions", "descKey": "RTdesc" },
+          { "title": "Two Directions", "descKey": "TDdesc" }
+        ]
+      },
+
+      {
+        "title": "Conceptual Framing",
+        "desc": "The art world has been online for fifteen years. \nIt still hasn't really moved in.",
+        "subsections": [
+          "The art world now operates within a digital communication infrastructure",
+          "Digital content creation as a structural parallel",
+          "Integration produces structural tension"
+        ]
+      },
+
+      {
+        "title": "Preliminary Research",
+        "desc": "Twelve interviews, several gallery visits. \nNobody quite has the rules.",
+        "subsections": [
+          { "title": "In-depth Interviews", "descKey": "InterviewDesc" },
+          { "title": "Observational Research", "descKey": "ObsDesc" },
+          { "title": "Qualitative Synthesis", "descKey": "QSDesc" }
+        ]
+      },
+      {
+        "title": "Key Findings",
+        "desc": "Credibility holds value in place. \nAccessibility lets it move.",
+        "subsections": [
+          "Value Recognition Through Credibility",
+          "Malleable Nature of Art",
+          "Accessibility for Continuity"
+        ]
+      },
+      {
+        "title": "Storyboards & HMWs",
+        "desc": "How Might We...",
+        "subsections": [
+          "Buyer Uncertainty",
+          "Social-Professional Ambiguity",
+          "Artist Sustainability"
+        ]
+      },
+      {
+        "title": "Design Directions",
+        "desc": "Two interventions. \nOne tested, one designed to be.",
+        "subsections": [
+          {
+            "title": "Social Media - Database Hybrid Navigation",
+            "descKey": "Direction1Desc"
+          },
+          {
+            "title": "Crowdfunded Revenue Share Model",
+            "descKey": "Direction2Desc"
+          }
+        ]
+      },
+      {
+        "title": "Exploratory Test A",
+        "desc": "Ten participants, three formats, one variable. \nThe interface won.",
+        "subsections": [
+          "Test Design (A)",
+          "Test Execution",
+          {
+            "title": "Framing Shaped Communication",
+            "descKey": "Framing Shaped Communication Description"
+          },
+          {
+            "title": "Purchase Prioritized Structure and Affiliation",
+            "descKey": "Purchase Prioritized Structure and Affiliation Description"
+          },
+          {
+            "title": "Context was Built Through Exploratory Checks",
+            "descKey": "Context was Built Through Exploratory Checks Description"
+          },
+          {
+            "title": "Lateral Exploration Relied on Relational Cues",
+            "descKey": "Lateral Exploration Relied on Relational Cues Description"
+          }
+        ]
+      },
+      {
+        "title": "Exploratory Test B",
+        "desc": "A model isn't validated until someone risks money on it.",
+        "subsections": [
+          { "title": "Test Design (B)", "descKey": "TestBDesc" },
+          { "title": "Test Measures (B)", "descKey": "TestBMeaDesc" },
+          { "title": "Test Analysis (B)", "descKey": "TestBAnaDesc" }
+        ]
+      },
+      {
+        "title": "What Comes Next?",
+        "desc": "Run the test. \nLet the behavior set the constraints.",
+        "subsections": []
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Bol",
+    "slug": "BakeSupport",
+    "category": "designer",
+    "desc": "A recipe application built end-to-end as an exploration of treating baking as structured, manipulable state. Bol reframes recipe design as a unified problem of data structure, interaction, and iteration. Built in React Native with a custom computation layer.",
+    "date": "Feb, 2024",
+    "role": ["Data Modeling", "Product Design", "Prototyping"],
+    "desc_items": [
+      {
+        "title": "Role",
+        "content": ["Solo project, designed and implemented end-to-end"]
+      },
+
+      { "title": "Duration", "content": ["2 Months"] },
+      { "title": "Scale", "content": ["Versioning and Persistence Support"] }
+    ],
+    "summary": "Reconstructing the intuition of recipe-building.",
+    "menu": [
+      {
+        "title": "Overview",
+
+        "desc": "A recipe, treated as a working system.",
+        "subsections": [{ "title": "Summary", "descKey": "SummaryDesc" }]
+      },
+      {
+        "title": "Design Motivation",
+        "desc": "Modeling cooking as structured state.",
+
+        "subsections": ["Areas of Focus", "Pain Points and Solutions"]
+      },
+
+      {
+        "title": "Interaction Design",
+        "desc": " Editing the recipe in place.",
+        "subsections": [
+          {
+            "title": "Editing Model",
+            "contentKey": "Editing Model",
+            "descKey": "Editing Model Description"
+          },
+          {
+            "title": "Direct Manipulation",
+            "contentKey": "Direct Manipulation",
+            "descKey": "Direct Manipulation Description"
+          },
+          {
+            "title": "Unit Representation",
+            "contentKey": "Unit Representation",
+            "descKey": "Unit Representation Description"
+          }
+        ]
+      },
+
+      {
+        "title": "System and Data Design",
+        "desc": "Separating identity from composition.",
+        "subsections": [
+          {
+            "title": "Recipe Schema",
+            "contentKey": "Recipe Schema",
+            "descKey": "Recipe Schema Description"
+          },
+          {
+            "title": "Versioning",
+            "contentKey": "Versioning",
+            "descKey": "Versioning Description"
+          },
+          "Computation Logic",
+
+          {
+            "title": "Ingredient Model",
+            "contentKey": "Ingredient Model",
+            "descKey": "Ingredient Model Description"
+          }
+        ]
+      },
+
+      {
+        "title": "Structure and Flows",
+        "desc": "Where reusable data meets recipe logic.",
+        "subsections": [
+          {
+            "title": "UX Structure Map",
+            "contentKey": "UX Structure Map",
+            "descKey": "UX Structure Map Description"
+          },
+          "Example A. Add / Edit Ingredient",
+          "Example B. Add / Edit Block",
+          "Example C. Manage Directions",
+          "Example D. Shelf Navigation"
+        ]
+      },
+
+      {
+        "title": "What Comes Next?",
+        "desc": "Git for cooks"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Let Them Wave Flag",
+    "slug": "Flag",
+    "category": "designer",
+    "desc": "Existing flows ask the user to evaluate the configuration. Instrument selection, allocation, risk profile, fee structure. Each step asks the user to author a decision. This redesign collapses those into one decision. The level at which to back a view drawn from the user's own engagement. The system handles the configuration underneath. \n  The redesign rests on a behavioral observation. When the system carries target selection at the initiation step, more users participate and the action spreads more broadly across the cohort. The observation came from research outside finance. The financial application is a hypothesis, not a finding.",
+
+    "date": "Jul, 2025",
+    "role": ["HCI Research"],
+    "desc_items": [
+      {
+        "title": "Type",
+        "content": ["Commitment-flow redesign"]
+      },
+      {
+        "title": "Role",
+        "content": [
+          "Interaction rule design",
+          "Quantative analysis",
+          "Figure planning",
+          "Design concept development"
+        ]
+      },
+
+      {
+        "title": "Premise",
+        "content": [
+          "Configuration off the user",
+          "Conviction as the user's decision"
+        ]
+      }
+    ],
+    "summary": "A redesign of the commitment flow in a thematic-portfolio product.",
+    "menu": [
+      {
+        "title": "Overview",
+        "descKey": "overviewDesc",
+        "desc": "Conviction upfront. And then the rest becomes easy.",
+        "subsections": [{ "title": "The Proposition" }, { "title": "The Flow" }]
+      },
+      {
+        "title": "Problem Statement",
+        "descKey": "ProblehmmDesc",
+        "desc": "The attention that does not become commitments.",
+        "subsections": [
+          {
+            "title": "Where this started",
+            "desc": "Where this started",
+            "descKey": ""
+          },
+          { "title": "Opportunities", "desc": "Opportunities", "descKey": "" }
+        ]
+      },
+      {
+        "title": "The Intervention",
+        "desc": "Collapsing the authoring chain.",
+        "descKey": "InterventionDesc",
+        "subsections": [
+          { "title": "The baseline", "descKey": "baselineDesc" },
+          { "title": "What moves where", "descKey": "movesDesc" },
+          { "title": "What stays and why", "descKey": "staysDesc" }
+        ]
+      },
+
+      {
+        "title": "Research Design and Methodology",
+        "desc": "A small game, \nbecause watching people play tells you more than asking them.",
+        "subsections": [
+          { "title": "Test Design", "descKey": "Test design description" },
+          "Test Rules",
+          "Measures and Data Collection"
+        ]
+      },
+      {
+        "title": "Analysis",
+        "desc": "Turning every click and choice into numbers.",
+        "subsections": ["Coding and Variables", "Methods", "Limitations"]
+      },
+      {
+        "title": "Findings and Interpretation",
+        "desc": "What happened when the system picked targets instead of letting people choose for themselves. ",
+        "subsections": [
+          "Baseline initiation under consequence-free probing (Test 1).",
+          "Check initiation increased under Flag gating",
+          "Lower Check volume, higher Flag adoption under system assignment",
+          "Participation inequality fell under gating and system assignment",
+          "Escalation timing diverged by rule"
+        ]
+      },
+
+      {
+        "title": "What Comes Next?",
+        "desc": "Initiation structure defines the future interaction."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Twenty CRM",
+    "slug": "Twenty",
+    "category": "designer",
+    "date": "Apr, 2026",
+    "demo": {
+      "url": "https://twenty-inbox-demo.vercel.app/",
+      "buttonText": "Go to live demo"
+    },
+    "role": ["Product Design"],
+    "summary": "An Inbox that walks the graph.",
+    "desc": "Two-week sprint with Twenty, an open-source CRM. I designed a notification inbox as a view of the existing Task object. Four primitives: a notification data model, a Focus filter using graph distance, an action panel, and a Resolve-with pattern that closes related notifications in one move. Five-user moderated test on an interactive prototype against a scripted high-stakes scenario. Shipped a live, fully functional hi-fi prototype.",
+    "descKey": "overviewDesc",
+
+    "desc_items": [
+      {
+        "title": "Role",
+        "content": ["Product design", "Interaction design", "System modeling"]
+      },
+      {
+        "title": "Methods",
+        "content": [
+          "Journey mapping",
+          "Wireframe critique",
+          "Functional prototype with seeded data",
+          "Domain simulation"
+        ]
+      },
+      {
+        "title": "Duration",
+        "content": ["2 weeks", "Sprint-setting"]
+      },
+      {
+        "title": "Partner",
+        "content": ["Twenty CRM"]
+      }
+    ],
+
+    "menu": [
+      {
+        "title": "Overview",
+        "desc": "What do I have to do right now?",
+        "descKey": "overviewDesc"
+      },
+
+      {
+        "title": "Problem Statement",
+        "descKey": "ProblemDesc",
+        "desc": "Everything is on fire. \n And fire's everywhere.",
+
+        "subsections": [
+          {
+            "title": "A Bad Day at Volt",
+            "descKey": "BadDaydesc"
+          },
+          {
+            "title": "Opportunities",
+            "descKey": "Oppdesc"
+          }
+        ]
+      },
+
+      {
+        "title": "Ideation",
+        "descKey": "IdeationDesc",
+        "desc": "Building on top of existing structure.",
+
+        "subsections": [
+          {
+            "title": "Constraints",
+            "descKey": "constraintsdesc"
+          },
+          {
+            "title": "Defining Notification",
+            "descKey": "dndesc"
+          },
+          {
+            "title": "Iterations",
+            "descKey": "itdesc"
+          }
+        ]
+      },
+
+      {
+        "title": "The Design",
+        "desc": "Four tools to draw one full picture.",
+
+        "subsections": [
+          {
+            "title": "Focus and Distance",
+            "descKey": "focusDistanceDesc"
+          },
+          {
+            "title": "Action Panel as Remote Control",
+            "descKey": "actionPanelDesc"
+          },
+          {
+            "title": "Resolve with",
+            "descKey": "resolveWithDesc"
+          },
+          {
+            "title": "Frictionless Task Resolution",
+            "descKey": "safetyPatternsDesc"
+          }
+        ]
+      },
+
+      {
+        "title": "Prototype & Testing",
+        "descKey": "PrototypeDesc",
+        "desc": "Five sessions against the bad day.",
+        "subsections": [
+          { "title": "Test Method", "descKey": "MethodDesc" },
+          { "title": "Synthesis", "descKey": "RYGDesc" }
+        ]
+      },
+
+      {
+        "title": "What Comes Next?",
+        "desc": "Reflections",
+        "subsections": [
+          { "title": "Tradeoffs" },
+          { "title": "Open Questions" },
+          { "title": "Action built without building a new object." }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+:root {
+
+    --contain-width: 80%;
+
+}
+
+
+.article-media-wrapper {
+
+
+    width: 100%;
+    min-height: 800px;
+    background: black;
+
+}
+
+
+.contain {
+    margin: auto;
+    max-width: var(--contain-width);
+
+}

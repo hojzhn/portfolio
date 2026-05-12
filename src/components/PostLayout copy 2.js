@@ -1,0 +1,568 @@
+import React, {
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+} from "react";
+import ElasticLines from "./ElasticLines";
+import { LayoutContext } from "../context/LayoutContext";
+function PostLayout({
+  work,
+  slug,
+  scrollContainerRef,
+  scrolledPastHeader,
+  handleItemSelection,
+}) {
+  const { layout, setLayout, setTheme } = useContext(LayoutContext);
+
+  const [collapsed, setCollapsed] = useState(false);
+  const [isFooterOpen, setFooterOpen] = useState(false);
+  const [showBars, setShowBars] = useState(true);
+  const lastScrollTop = useRef(0);
+  useEffect(() => {
+    setCollapsed(layout.mobile);
+  }, [layout.mobile]);
+
+  const [sectionContents, setSectionContents] = useState({});
+  const [activeSection, setActiveSection] = useState(null);
+  const [activeSubsection, setActiveSubsection] = useState(null);
+
+  const stickySentinelRefs = useRef({});
+
+  const [stuckSections, setStuckSections] = useState({});
+
+  const menu = work?.menu ?? []; // safe menu even if work is not yet loaded
+  useEffect(() => {
+    if (!scrollContainerRef.current || menu.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const updated = {};
+        entries.forEach(({ target, isIntersecting }) => {
+          const key = target.dataset.key;
+          updated[key] = !isIntersecting;
+        });
+        setStuckSections((prev) => ({ ...prev, ...updated }));
+      },
+      {
+        root: scrollContainerRef.current,
+        threshold: 0.1,
+      },
+    );
+
+    for (const section of menu) {
+      const title = typeof section === "string" ? section : section.title;
+      const sentinel = stickySentinelRefs.current[title]?.current;
+      if (sentinel) {
+        sentinel.dataset.key = title;
+        observer.observe(sentinel);
+      }
+    }
+
+    return () => observer.disconnect();
+  }, [scrollContainerRef, menu, slug]);
+
+  const sectionRefs = useRef({});
+  const subsectionRefs = useRef({});
+
+  useEffect(() => {
+    if (!slug) return;
+    import(`../pages/${slug}.content.js`)
+      .then((mod) => {
+        setSectionContents(mod.default || {});
+      })
+      .catch((err) => {
+        console.error(`Failed to load content for ${slug}`, err);
+        setSectionContents({});
+      });
+  }, [slug]);
+
+  useEffect(() => {
+    if (!scrollContainerRef?.current) return;
+
+    const handleScroll = () => {
+      const container = scrollContainerRef.current;
+      const scrollTop = container.scrollTop;
+      const containerMid = scrollTop + container.clientHeight / 2;
+      const current = container.scrollTop;
+
+      if (current > lastScrollTop.current + 5) {
+        // scrolling down
+        setShowBars(false);
+      } else if (current < lastScrollTop.current - 5) {
+        // scrolling up
+        setShowBars(true);
+      }
+
+      lastScrollTop.current = current;
+      const getOffset = (ref) => {
+        if (!ref?.current || !scrollContainerRef.current) return Infinity;
+        const rect = ref.current.getBoundingClientRect();
+        const containerRect =
+          scrollContainerRef.current.getBoundingClientRect();
+        return (
+          rect.top - containerRect.top + scrollContainerRef.current.scrollTop
+        );
+      };
+
+      // SECTION offset detection
+      const sectionOffsets = Object.entries(sectionRefs.current).map(
+        ([key, ref]) => [key, getOffset(ref)],
+      );
+
+      const currentSection = sectionOffsets
+        .filter(([_, offset]) => offset <= containerMid)
+        .sort((a, b) => b[1] - a[1])[0]?.[0];
+
+      if (currentSection !== activeSection) {
+        setActiveSection(currentSection);
+      }
+
+      // SUBSECTION detection — uses proximity to top
+      const subsectionOffsets = [];
+
+      for (const section of menu) {
+        const sectionTitle =
+          typeof section === "string" ? section : section.title;
+        const subs = Array.isArray(section.subsections)
+          ? section.subsections
+          : [];
+
+        for (const sub of subs) {
+          const subKey = typeof sub === "string" ? sub : sub.s;
+          const offset = getOffset(subsectionRefs.current[subKey]);
+          subsectionOffsets.push({
+            section: sectionTitle,
+            sub: subKey,
+            offset,
+          });
+        }
+      }
+
+      const currentSub = subsectionOffsets
+        .filter(
+          ({ offset, section }) =>
+            section === currentSection && offset <= scrollTop + 120,
+        )
+        .sort((a, b) => b.offset - a.offset)[0];
+
+      if (
+        currentSub?.sub !== activeSubsection ||
+        currentSub?.section !== activeSection
+      ) {
+        setActiveSubsection(currentSub?.sub ?? null);
+      }
+    };
+
+    const node = scrollContainerRef.current;
+    node.addEventListener("scroll", handleScroll);
+    return () => node.removeEventListener("scroll", handleScroll);
+  }, [scrollContainerRef, menu]);
+
+  const scrollToTarget = (target) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    if (target === "__TOP__") {
+      container.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const ref = sectionRefs.current[target];
+    if (!ref?.current) return;
+
+    container.scrollTo({
+      top:
+        ref.current.getBoundingClientRect().top -
+        container.getBoundingClientRect().top +
+        container.scrollTop,
+      behavior: "smooth",
+    });
+  };
+
+  const sectionTitles = menu.map((s) => (typeof s === "string" ? s : s.title));
+
+  const activeIndex = sectionTitles.indexOf(activeSection);
+
+  const hasPrev = activeIndex > 0 || activeIndex === 0;
+
+  const hasNext = activeIndex === -1 || activeIndex < sectionTitles.length - 1;
+
+  const prevTarget =
+    activeIndex === 0
+      ? "__TOP__"
+      : activeIndex > 0
+        ? sectionTitles[activeIndex - 1]
+        : null;
+
+  const nextTarget =
+    activeIndex === -1
+      ? sectionTitles[0]
+      : activeIndex < sectionTitles.length - 1
+        ? sectionTitles[activeIndex + 1]
+        : null;
+
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      {/* Page fade header */}
+      <div
+        className={`w-full h-4/5 bg-white duration-500 ${
+          scrolledPastHeader ? "opacity-0" : "opacity-1"
+        }`}
+      ></div>
+      {/* Fixed side menu */}
+      {!layout.mobiler && (
+        <div
+          className={`${
+            collapsed ? "w-[250px]" : "w-[250px]"
+          } pointer-events-none 
+         pt-8 transition-all duration-500 fixed h-screen flex flex-col justify-center ${
+           scrolledPastHeader
+             ? "top-0 opacity-1"
+             : "top-10 opacity-0 pointer-events-none"
+         }`}
+          style={{
+            zIndex: 100,
+            left: layout.mobile
+              ? layout.design.globalMargin + 10 + "px"
+              : "unset",
+          }}
+        >
+          <div
+            className="pointer-events-auto"
+            onMouseEnter={() => layout.mobile && setCollapsed(false)}
+            onMouseLeave={() => layout.mobile && setCollapsed(true)}
+          >
+            <div
+              className={`text-sm mb-3 cursor-pointer transition-all `}
+              onClick={() => {
+                if (scrollContainerRef.current) {
+                  scrollContainerRef.current.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }
+              }}
+            >
+              <i className="fa-thin fa-arrow-up"></i>
+            </div>
+            {menu.map((section) => {
+              const title =
+                typeof section === "string" ? section : section.title;
+              return (
+                <div
+                  key={title}
+                  onClick={() => {
+                    const ref = sectionRefs.current[title];
+                    if (ref?.current && scrollContainerRef.current) {
+                      scrollContainerRef.current.scrollTo({
+                        top:
+                          ref.current.getBoundingClientRect().top -
+                          scrollContainerRef.current.getBoundingClientRect()
+                            .top +
+                          scrollContainerRef.current.scrollTop,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                  className={`text-sm ${
+                    collapsed ? "mb-1" : "mb-3"
+                  } cursor-pointer transition-all ${
+                    activeSection !== title && "opacity-50"
+                  } `}
+                  style={{
+                    color:
+                      activeSection === title ? "var(--txt)" : "var(--txt2)",
+                  }}
+                >
+                  {collapsed ? (
+                    <i
+                      class="fa-solid fa-circle"
+                      style={{ fontSize: "8px" }}
+                    ></i>
+                  ) : (
+                    title
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* header and footer  */}
+      {layout.mobiler && (
+        <>
+          <div
+            className="fixed top-0 left-0 w-full h-[60px] border-b  flex flex-row justify-center items-center transition-transform duration-300"
+            style={{
+              background: "var(--bg)",
+              borderColor: "var(--txt2)",
+              zIndex: 105,
+              transform: showBars ? "translateY(0%)" : "translateY(-100%)",
+            }}
+          >
+            <div className="absolute left-5" onClick={handleItemSelection}>
+              <i class="fa-light fa-xmark-large"></i>
+            </div>
+            <div
+              className="uppercase font-bold cursor-pointer"
+              onClick={() => {
+                if (scrollContainerRef.current) {
+                  scrollContainerRef.current.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }
+                setFooterOpen(false);
+              }}
+            >
+              {work.title}
+            </div>
+          </div>
+
+          <div
+            className={`w-full h-full fixed top-0 left-0 z-110 opacity-50 transition-all duration-300 ${
+              isFooterOpen ? "" : "pointer-events-none"
+            }`}
+            style={{
+              backgroundColor: isFooterOpen ? "var(--bg)" : "transparent",
+            }}
+            onClick={() => isFooterOpen && setFooterOpen(false)}
+          />
+          <div
+            className={`fixed bottom-0 left-0 w-full transition-all duration-300 ${
+              isFooterOpen ? "flex-col flex" : ""
+            } border-t  duration-300 flex justify-center items-center`}
+            style={{
+              height: isFooterOpen ? "max(50vh, 400px)" : "60px",
+
+              background: "var(--bg)",
+              borderColor: "var(--txt2)",
+              zIndex: 105,
+              transform: showBars ? "translateY(0%)" : "translateY(-100%)",
+            }}
+          >
+            {isFooterOpen && (
+              <div className="flex flex-col w-full items-center justify-start h-full overflow-y-auto ">
+                <div
+                  className="border-b w-full pt-8 pb-4 px-2 gap-2 flex items-center font-bold uppercase"
+                  style={{ borderColor: "var(--txt2)" }}
+                >
+                  <i class="fa-solid fa-list-ul"></i>
+                  Outline
+                </div>
+
+                {menu.map((section) => {
+                  const title =
+                    typeof section === "string" ? section : section.title;
+                  return (
+                    <div
+                      key={title}
+                      onClick={() => {
+                        setFooterOpen(false);
+                        const ref = sectionRefs.current[title];
+                        if (ref?.current && scrollContainerRef.current) {
+                          scrollContainerRef.current.scrollTo({
+                            top:
+                              ref.current.getBoundingClientRect().top -
+                              scrollContainerRef.current.getBoundingClientRect()
+                                .top +
+                              scrollContainerRef.current.scrollTop,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                      className={`text-sm w-full  py-4 pl-8 pr-4 border-b cursor-pointer transition-all  `}
+                      style={{
+                        borderColor: "var(--txt2)",
+                        backgroundColor:
+                          activeSection === title
+                            ? "var(--bg2)"
+                            : "transparent",
+                        color:
+                          activeSection === title
+                            ? "var(--txt)"
+                            : "var(--txt2)",
+                      }}
+                    >
+                      {title}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <div className="h-[60px] absolute bottom-0 w-full flex flex-row items-center">
+              {hasPrev && (
+                <button
+                  className={`absolute left-5 w-8 h-8 transition-all duration-300`}
+                  onClick={() => {
+                    scrollToTarget(prevTarget);
+                    setFooterOpen(false);
+                  }}
+                >
+                  <i class="fa-sharp fa-solid fa-backward"></i>
+                </button>
+              )}
+
+              {hasNext && (
+                <button
+                  className={`absolute right-5  w-8 h-8 transition-all duration-300`}
+                  onClick={() => {
+                    scrollToTarget(nextTarget);
+                    setFooterOpen(false);
+                  }}
+                >
+                  <i class="fa-sharp fa-solid fa-forward"></i>
+                </button>
+              )}
+              <div
+                className={`flex flex-col items-center justify-center h-full w-full cursor-pointer transition-all duration-300 ${
+                  isFooterOpen ? "" : "opacity-100"
+                }`}
+                onClick={() => {
+                  setFooterOpen(!isFooterOpen);
+                }}
+              >
+                <span className="">{activeSection || "Menu"}</span>
+                <span className="opacity-50 text-xs">{activeSubsection} </span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Main article content */}
+
+      <div
+        className={`${
+          layout.mobile
+            ? collapsed
+              ? ""
+              : "translate-x-[100px]"
+            : "ml-[250px]"
+        } mt-16 transition-all duration-500`}
+      >
+        {menu.map((section, index) => {
+          const title = typeof section === "string" ? section : section.title;
+
+          const subsections = Array.isArray(section.subsections)
+            ? section.subsections
+            : [];
+
+          if (!sectionRefs.current[title]) {
+            sectionRefs.current[title] = React.createRef();
+          }
+          if (!stickySentinelRefs.current[title]) {
+            stickySentinelRefs.current[title] = React.createRef();
+          }
+
+          const SectionComponent = sectionContents[title];
+
+          // console.log(stuckSections["Overview"]);
+
+          return (
+            <div key={index}>
+              <div
+                ref={stickySentinelRefs.current[title]}
+                className="h-1"
+              ></div>
+              <div
+                ref={sectionRefs.current[title]}
+                className="h-0"
+                data-key={title}
+              />
+              <div
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to bottom, var(--bg) 60%, transparent 100%)",
+                }}
+                className={`-mx-16 px-16 flex flex-row items-end justify-start  z-10 pt-6 pb-12     pointer-events-none
+ ${layout.mobiler ? "-top-2" : "-top-16 sticky"}
+                  
+                  ${
+                    !collapsed && layout.mobile && stuckSections[title]
+                      ? "translate-x-[-100px]"
+                      : ""
+                  }
+ transition-all duration-500
+                  
+                  `}
+              >
+                <h2
+                  className={`grotesk uppercase ${
+                    layout.mobiler ? "text-6xl" : "text-6xl"
+                  } `}
+                >
+                  {title}
+                </h2>
+                {(() => {
+                  const matchingSub =
+                    Array.isArray(section.subsections) &&
+                    section.subsections.find((s) =>
+                      typeof s === "string"
+                        ? s === activeSubsection
+                        : s.s === activeSubsection,
+                    );
+
+                  return (
+                    matchingSub && (
+                      <span className="text-xs uppercase ">
+                        　/　
+                        {typeof matchingSub === "string"
+                          ? matchingSub
+                          : matchingSub.s}
+                      </span>
+                    )
+                  );
+                })()}
+              </div>
+              {SectionComponent ? (
+                <div className="max-w-[1080px] mb-16">
+                  <SectionComponent />
+                </div>
+              ) : (
+                ""
+              )}
+              {subsections.map((sub, subIndex) => {
+                const subKey = typeof sub === "string" ? sub : sub.s;
+                const subLabel = typeof sub === "string" ? sub : sub.l;
+
+                if (!subsectionRefs.current[subKey]) {
+                  subsectionRefs.current[subKey] = React.createRef();
+                }
+
+                const SubComponent = sectionContents[subKey];
+
+                return (
+                  <div
+                    key={subIndex}
+                    ref={subsectionRefs.current[subKey]}
+                    className="max-w-[1080px] mb-12 gap-4 flex flex-col"
+                  >
+                    <h3 className="text-2xl font-semibold mb-4">{subLabel}</h3>
+                    {SubComponent ? (
+                      <SubComponent />
+                    ) : (
+                      <p className="italic" style={{ color: "var(--txt2)" }}>
+                        No content for "{subKey}"
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+
+              <div className="my-24">
+                <ElasticLines />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Suspense>
+  );
+}
+
+export default PostLayout;

@@ -1,0 +1,405 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+
+/* ——— Tusker Grotesk ——— */
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("../assets/fonts/TUSKERGROTESK-8800SUPER.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("../assets/fonts/TUSKERGROTESK-4800SUPER.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("../assets/fonts/TUSKERGROTESK-3800SUPER.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("../assets/fonts/TUSKERGROTESK-2600SEMIBOLD.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ——— Neue Haas Grotesk ——— */
+/* ——— Neue Haas Display ——— */
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayThin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayThinItalic.ttf") format("truetype");
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayRoman.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayRomanItalic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayMedium.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayMediumItalic.ttf") format("truetype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --main-l-width: 300px;
+  --margin-constant: 25px;
+}
+
+body {
+  font-family: "NHaas Display", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  font-size: 14px;
+  font-style: normal;
+  line-height: 1.6;
+  // text-shadow: 0px 0px 2px rgb(0 0 0 / 15%);
+}
+html {
+  scrollbar-gutter: stable;
+}
+.grotesk {
+  font-family: "Tusker Grotesk";
+  font-weight: 400;
+  font-style: normal;
+}
+
+.instrument {
+  font-family: "Instrument Serif", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 2px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.w300 {
+  font-weight: 300;
+}
+
+.w400 {
+  font-weight: 400;
+}
+
+.w600 {
+  font-weight: 600;
+}
+
+.w800 {
+  font-weight: 800;
+}
+
+.em60 {
+  font-size: 0.6em;
+}
+
+.em75 {
+  font-size: 0.75em;
+}
+
+.em125 {
+  font-size: 1.5em;
+  line-height: 1.2;
+}
+
+.em1000 {
+  font-size: 10em;
+  line-height: 1.2;
+}
+
+.fullscreen {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+:root {
+  --bg: #dddddd;
+  --bg2: #c0c0c0;
+  --bg3: #717171;
+  --txt: #202020;
+  --txt2: #313131;
+  --txt3: #484848;
+  --point1: #ff76b8;
+  --point2: #2e2624;
+  --point3: #657b83;
+}
+
+/* LIGHT */
+:root[data-mode="light"][data-theme="noncommittal"] {
+  --bg: hsl(40, 6%, 98%); /* almost-white, faintest warm cast */
+  --bg2: hsl(38, 5%, 94%); /* hover, subtle fill */
+  --bg3: hsl(36, 5%, 86%); /* borders, dividers */
+  --txt: hsl(30, 8%, 15%); /* body */
+  --txt2: hsl(32, 6%, 38%); /* secondary */
+  --txt3: hsl(34, 5%, 58%); /* tertiary, captions */
+
+  --point: hsl(30, 10%, 28%); /* accent, slightly warmer than txt */
+  --point1: hsl(25, 12%, 35%);
+  --point2: hsl(35, 10%, 42%);
+  --point3: hsl(40, 8%, 50%);
+}
+:root[data-mode="light"][data-theme="BakeSupport"] {
+  --bg: #faf6ec; // warm cream / paper
+  --bg2: #f2ecdb; // lifted parchment
+  --bg3: #e8e0cb; // elevated kraft
+  --txt: #2a2418; // dark espresso (primary)
+  --txt2: #6b6452; // muted khaki
+  --txt3: #a39b85; // faint khaki
+  --point: #b85a3e; // terracotta (deepened for contrast on light)
+  --point2: #f5dbc7; // soft cream-peach (accent BG)
+  --point3: #7a3a1f; // deep ember (highlight text on point2)
+}
+
+:root[data-mode="light"][data-theme="Rathouse"] {
+  --bg: #f8f2f8; // soft lavender-cream
+  --bg2: #efe4ee; // lifted lavender
+  --bg3: #e2d2df; // elevated lavender-mauve
+  --txt: #1f0f2c; // very dark purple (primary)
+  --txt2: #5c5266; // muted purple-gray
+  --txt3: #9c8faa; // faint purple-gray
+  --point: #a33cc9; // magenta (deepened for contrast on light)
+  --point2: #f1ddf5; // soft lavender-pink (accent BG)
+  --point3: #6e1a8c; // deep purple (highlight text on point2)
+}
+
+:root[data-mode="light"][data-theme="Flag"] {
+  --bg: #f5f2eb; // warm cream
+  --bg2: #ece7dc; // lifted parchment
+  --bg3: #ddd8ce; // elevated kraft
+  --txt: #1a1f1d; // dark ink
+  --txt2: #6b716c; // muted
+  --txt3: #9a9f98; // faint
+  --point: #c2603e; // deeper terracotta (was #D97757, deepened for contrast)
+  --point2: #f5dbc7; // soft cream-peach (was deep brown in dark)
+}
+:root[data-mode="light"][data-theme="Twenty"] {
+  --bg: #ffffff; // canvas white (primary surface)
+  --bg2: #fcfcfc; // raised surface
+  --bg3: #ebebeb; // elevated panel
+  --txt: #333333; // primary text
+  --txt2: #666666; // secondary text
+  --txt3: #999999; // tertiary text
+  --point: #3e63dd; // Twenty indigo (brand, accent-9)
+  --point2: #d2deff; // soft indigo (accent BG)
+  --point3: #3451b2; // deep indigo (fg on point2)
+}
+/* DARK */
+:root[data-mode="dark"][data-theme="noncommittal"] {
+  --bg: hsl(35, 6%, 10%); /* near-black with warm cast */
+  --bg2: hsl(35, 5%, 14%); /* surface */
+  --bg3: hsl(33, 5%, 22%); /* borders */
+  --txt: hsl(38, 8%, 92%); /* body */
+  --txt2: hsl(36, 6%, 70%); /* secondary */
+  --txt3: hsl(34, 5%, 50%); /* tertiary */
+
+  --point: hsl(38, 10%, 78%); /* accent, lighter than txt2 */
+  --point1: hsl(30, 12%, 72%);
+  --point2: hsl(40, 10%, 66%);
+  --point3: hsl(45, 8%, 58%);
+}
+
+:root[data-mode="dark"][data-theme="BakeSupport"] {
+  --bg: #1a1610; // very dark espresso brown
+  --bg2: #2a241b; // lifted oak
+  --bg3: #3d352a; // elevated toasted oak
+  --txt: #e8dec8; // warm cream
+  --txt2: #9d9382; // muted khaki
+  --txt3: #5c5444; // faint khaki
+  --point: #c76a4b; // terracotta / ember (signature)
+  --point2: #7a3220; // deep ember (accent backgrounds)
+  --point3: #f0d7a8; // soft wheat / butter (highlight text)
+}
+
+:root[data-mode="dark"][data-theme="Rathouse"] {
+  --bg: #170126; // very dark purple — kept
+  --bg2: #261140; // lifted purple surface (was #292840 — too blue)
+  --bg3: #3a2454; // elevated card surface (was #4a4d50 gray)
+  --txt: #e5dde8; // cream-tinted (was flat #dddddd)
+  --txt2: #9c8faa; // muted purple-gray (was khaki)
+  --txt3: #5c5266; // faint purple-gray (was khaki)
+  --point: #d476ff; // magenta — kept (Rathouse signature)
+  --point2: #4a226f; // deep purple for accent backgrounds — kept
+  --point3: #f5e0e0; // cream-pink for soft accents — slight tweak
+}
+
+:root[data-mode="dark"][data-theme="Flag"] {
+  --bg: #0f1714;
+  --bg2: #16201c;
+  --bg3: #1b2823;
+  --txt: #e8e5de;
+  --txt2: #8e938c;
+  --txt3: #5c625b;
+  --point: #d97757;
+  --point2: #2e2624;
+}
+:root[data-mode="dark"][data-theme="Twenty"] {
+  --bg: #171717; // near-black (primary surface)
+  --bg2: #1b1b1b; // raised surface
+  --bg3: #222222; // elevated panel
+  --txt: #ebebeb; // primary text
+  --txt2: #b3b3b3; // secondary text
+  --txt3: #818181; // tertiary text
+  --point: #5472e4; // lifted indigo (brand for dark, accent-10)
+  --point2: #1d2e62; // dim indigo (accent BG, accent-4)
+  --point3: #9eb1ff; // bright indigo (fg on point2, accent-11)
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt);
+}
+
+.elasticLine {
+  height: 1px;
+  width: 100%;
+  position: relative;
+  margin-top: 20px;
+
+  .box {
+    height: 40px;
+    position: relative;
+    top: -20px;
+    z-index: 1;
+  }
+
+  svg {
+    width: 100%;
+    height: 100px;
+    top: -50px;
+    position: absolute;
+
+    path {
+      stroke-width: 1px;
+      stroke: var(--txt);
+      fill: none;
+    }
+  }
+}
+.react-flow__edges {
+  z-index: 4 !important;
+}
+
+.react-flow__nodes {
+  z-index: 3 !important;
+}
+// flexbox formatting
+
+.flex {
+  display: flex;
+}
+
+.flex-justify {
+  justify-content: space-between;
+}
+
+.flex-justify-end {
+  justify-content: flex-end;
+}
+
+.flex-center {
+  align-items: center;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.half {
+  flex-basis: 50%;
+}
+
+.third {
+  flex-basis: 33%;
+}
+
+// size setting
+
+.h100 {
+  height: 100%;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--txt2) transparent;
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 3px;
+}
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: var(--txt2);
+  border-radius: 2px;
+}
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--txt);
+}

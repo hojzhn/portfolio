@@ -1,0 +1,378 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+
+/* ——— Tusker Grotesk ——— */
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("../assets/fonts/TUSKERGROTESK-8800SUPER.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("../assets/fonts/TUSKERGROTESK-4800SUPER.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("../assets/fonts/TUSKERGROTESK-3800SUPER.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("../assets/fonts/TUSKERGROTESK-2600SEMIBOLD.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ——— Neue Haas Grotesk ——— */
+/* ——— Neue Haas Display ——— */
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayThin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayThinItalic.ttf") format("truetype");
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayRoman.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayRomanItalic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayMedium.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NHaas Display";
+  src: url("../assets/fonts/NeueHaasDisplayMediumItalic.ttf") format("truetype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --main-l-width: 300px;
+  --margin-constant: 25px;
+}
+
+body {
+  font-family: "NHaas Display", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  font-size: 14px;
+  font-style: normal;
+  line-height: 1.6;
+  // text-shadow: 0px 0px 2px rgb(0 0 0 / 15%);
+}
+
+.grotesk {
+  font-family: "Tusker Grotesk";
+  font-weight: 400;
+  font-style: normal;
+}
+
+.instrument {
+  font-family: "Instrument Serif", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 2px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.w300 {
+  font-weight: 300;
+}
+
+.w400 {
+  font-weight: 400;
+}
+
+.w600 {
+  font-weight: 600;
+}
+
+.w800 {
+  font-weight: 800;
+}
+
+.em60 {
+  font-size: 0.6em;
+}
+
+.em75 {
+  font-size: 0.75em;
+}
+
+.em125 {
+  font-size: 1.5em;
+  line-height: 1.2;
+}
+
+.em1000 {
+  font-size: 10em;
+  line-height: 1.2;
+}
+
+.fullscreen {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+:root {
+  --bg: #dddddd;
+  --bg2: #c0c0c0;
+  --bg3: #717171;
+  --txt: #202020;
+  --txt2: #313131;
+  --txt3: #484848;
+  --point1: #ff76b8;
+}
+
+/* LIGHT */
+:root[data-mode="light"][data-theme="noncommittal"] {
+  --bg: #dddddd;
+  --bg2: #c0c0c0;
+  --bg3: #717171;
+  --txt: #202020;
+  --txt2: #313131;
+  --txt3: #484848;
+  --point1: #ff76b8;
+}
+
+:root[data-mode="light"][data-theme="Rathouse"] {
+  --bg: #f0f0f0;
+  --bg2: #c0c0c0;
+  --txt: #202020;
+  --txt2: #404040;
+}
+
+:root[data-mode="light"][data-theme="BakeSupport"] {
+  --bg: rgb(206, 198, 189);
+  --bg2: rgb(177, 161, 150);
+  --bg3: #807468;
+  --txt: rgb(68 64 60);
+  --txt2: rgb(119, 106, 98);
+  --txt3: #927759;
+  --point: #8c0719;
+}
+
+:root[data-mode="light"][data-theme="Flag"] {
+  --bg: #bfbcb8;
+  --bg2: #9a9f97;
+  --bg3: #616750;
+  --txt: #44403c;
+  --txt2: #6d726d;
+  --txt3: #627a65;
+  --point: #c1613f;
+  --point2: #fdf6e3;
+  --point3: #657b83;
+}
+
+:root[data-mode="light"][data-theme="tact"] {
+  --bg: purple;
+  --txt: yellow;
+}
+
+:root[data-mode="light"][data-theme="theme2"] {
+  --bg: #e0ffe0;
+}
+
+/* DARK */
+:root[data-mode="dark"][data-theme="noncommittal"] {
+  --bg: #202020;
+  --bg2: #313131;
+  --bg3: #484848;
+  --txt: #dddddd;
+  --txt2: #9c9c9c;
+  --txt3: #484848;
+  --point: #ff76b8;
+  --point2: #fdf6e3;
+  --point3: #ffffff;
+}
+
+:root[data-mode="dark"][data-theme="BakeSupport"] {
+  --bg: rgb(68 64 60);
+  --bg2: rgb(120 113 108);
+  --txt: rgb(191 186 184);
+  --txt2: rgb(120 113 108);
+  --point: #c52036;
+}
+
+:root[data-mode="dark"][data-theme="Rathouse"] {
+  --bg: #37212f;
+  --bg2: #574250;
+  --bg3: #484848;
+  --txt: #dddddd;
+  --txt2: #9c9b89;
+  --txt3: #666551;
+  --point: #ff76b8;
+  --point2: #5d3b60;
+  --point3: hsl(0, 49%, 88%);
+}
+
+:root[data-mode="dark"][data-theme="Flag"] {
+  --bg: #0c2724;
+  --bg2: #204737;
+  --bg3: #2e4d2f;
+  --txt: rgb(168 162 158);
+  --txt2: rgb(132, 127, 121);
+  --txt3: rgb(100, 95, 91);
+  --point: #8c2a07;
+  --point2: #681e03;
+}
+
+:root[data-mode="dark"][data-theme="tact"] {
+  --bg: navy;
+  --txt: white;
+}
+
+:root[data-mode="dark"][data-theme="theme2"] {
+  --bg: #336633;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt);
+}
+
+.elasticLine {
+  height: 1px;
+  width: 100%;
+  position: relative;
+  margin-top: 20px;
+
+  .box {
+    height: 40px;
+    position: relative;
+    top: -20px;
+    z-index: 1;
+  }
+
+  svg {
+    width: 100%;
+    height: 100px;
+    top: -50px;
+    position: absolute;
+
+    path {
+      stroke-width: 1px;
+      stroke: var(--txt);
+      fill: none;
+    }
+  }
+}
+
+// flexbox formatting
+
+.flex {
+  display: flex;
+}
+
+.flex-justify {
+  justify-content: space-between;
+}
+
+.flex-justify-end {
+  justify-content: flex-end;
+}
+
+.flex-center {
+  align-items: center;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.half {
+  flex-basis: 50%;
+}
+
+.third {
+  flex-basis: 33%;
+}
+
+// size setting
+
+.h100 {
+  height: 100%;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--txt2) transparent;
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 3px;
+}
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: var(--txt2);
+  border-radius: 2px;
+}
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--txt);
+}

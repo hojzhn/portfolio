@@ -1,0 +1,280 @@
+{
+  "$schema": "rathouse-backer-data",
+  "generatedAt": "April 26, 2026",
+  "notes": {
+    "valueOf": "valueOf(stake): if phase==='holding' use mkt; if phase==='settled' use paid; else cost.",
+    "formulas": {
+      "portfolioValue": "sum(valueOf(stake) for all stakes)",
+      "costBasis": "sum(stake.cost)",
+      "unrealized": "sum(stake.mkt - stake.cost) for stakes where phase===\"holding\"",
+      "realized": "sum(stake.paid - stake.cost) for stakes where phase===\"settled\"",
+      "pl": "unrealized + realized",
+      "sharePctAtClose": "(stake.cost / project.goal) * (project.poolPct)  // pool default = 30% of first sale"
+    },
+    "formattersUsed": {
+      "fmtSigned": "(n) => (n>=0 ? \"+\" : \"−\") + \"€\" + Math.abs(Math.round(n))",
+      "fmtPct": "(n) => (n>=0 ? \"+\" : \"−\") + Math.abs(n).toFixed(1) + \"%\""
+    }
+  },
+  "tokens": {
+    "paper": "#faf5fb",
+    "paperWarm": "#f0e6f3",
+    "ink": "#2a1638",
+    "ink2": "#4a3550",
+    "ink3": "#7a6c82",
+    "rule": "rgba(90,45,122,0.14)",
+    "rule2": "rgba(90,45,122,0.24)",
+    "accent": "#9a56c9",
+    "accentTint": "#ead8f4",
+    "accentInk": "#5a2d7a",
+    "accentDeep": "#3a1857",
+    "serif": "\"Instrument Serif\", Georgia, serif",
+    "mono": "\"JetBrains Mono\", monospace",
+    "sans": "\"Geist\", system-ui, sans-serif"
+  },
+  "phases": {
+    "funding": {
+      "label": "Funding",
+      "dot": "#2a1638",
+      "description": "Primary issuance is open; backers stake to receive a share at close."
+    },
+    "holding": {
+      "label": "Holding",
+      "dot": "#5a2d7a",
+      "description": "Funding closed; work is in production. Shares are tradable on the resale market."
+    },
+    "settled": {
+      "label": "Settled",
+      "dot": "#9a56c9",
+      "description": "Work has sold; payouts disbursed."
+    }
+  },
+  "systemEvents": {
+    "closing": {
+      "label": "Funding closes",
+      "tone": "#2a1638"
+    },
+    "resale": {
+      "label": "Resale opens",
+      "tone": "#5a2d7a"
+    },
+    "payout": {
+      "label": "Payout estimated",
+      "tone": "#9a56c9"
+    },
+    "paid": {
+      "label": "Paid out",
+      "tone": "#9a56c9"
+    },
+    "sale": {
+      "label": "Sale window",
+      "tone": "#5a2d7a"
+    },
+    "funded": {
+      "label": "Funding update",
+      "tone": "#4a3550"
+    }
+  },
+  "stakes": [
+    {
+      "artist": "Rin Halverson",
+      "work": "Salt Cathedral",
+      "phase": "funding",
+      "cost": 420,
+      "share": 11.1,
+      "when": "closes May 7 · 11d",
+      "funded": 64,
+      "region": "Iceland",
+      "medium": "Salt / sculpture",
+      "career": "Mid-career",
+      "galleryGroup": "Tres Patios"
+    },
+    {
+      "artist": "Adaeze Okwu",
+      "work": "Earth Memory IV",
+      "phase": "holding",
+      "cost": 180,
+      "share": 0.3,
+      "mkt": 214,
+      "mktChange": 18.9,
+      "mktStale": false,
+      "estLow": 280,
+      "estHigh": 340,
+      "when": "resale live · sale est. Q3 '26",
+      "region": "Lagos",
+      "medium": "Oil / earth pigment",
+      "career": "Mid-career",
+      "galleryGroup": "Tres Patios"
+    },
+    {
+      "artist": "Iona Reyes",
+      "work": "Untitled (lake)",
+      "phase": "holding",
+      "cost": 240,
+      "share": 0.4,
+      "mkt": 226,
+      "mktChange": -5.8,
+      "mktStale": true,
+      "estLow": 220,
+      "estHigh": 380,
+      "when": "resale live · sale est. 2027",
+      "region": "Lisbon",
+      "medium": "Photography",
+      "career": "Emerging",
+      "galleryGroup": "Independent"
+    },
+    {
+      "artist": "Vito Sarmiento",
+      "work": "Recess (triptych)",
+      "phase": "settled",
+      "cost": 60,
+      "share": 0.1,
+      "paid": 184,
+      "when": "paid Apr 9",
+      "region": "Mexico City",
+      "medium": "Oil",
+      "career": "Established",
+      "galleryGroup": "kurimanzutto"
+    },
+    {
+      "artist": "Baako Mensah",
+      "work": "Lagos series #3",
+      "phase": "settled",
+      "cost": 60,
+      "share": 0.1,
+      "paid": 72,
+      "when": "paid Mar 30",
+      "region": "Lagos",
+      "medium": "Photography",
+      "career": "Emerging",
+      "galleryGroup": "Independent"
+    }
+  ],
+  "studioLog": {
+    "upcoming": [
+      {
+        "date": "May 07",
+        "dayLabel": "11d",
+        "kind": "system",
+        "sys": "closing",
+        "work": "Salt Cathedral",
+        "artist": "Rin Halverson",
+        "note": "Funding closes — stake locks at 0.70%"
+      },
+      {
+        "date": "May 08",
+        "dayLabel": "12d",
+        "kind": "system",
+        "sys": "resale",
+        "work": "Salt Cathedral",
+        "artist": "Rin Halverson",
+        "note": "Resale opens — shares tradable until payout"
+      },
+      {
+        "date": "May 22",
+        "dayLabel": "26d",
+        "kind": "system",
+        "sys": "payout",
+        "work": "Lagos series #3",
+        "artist": "Baako Mensah",
+        "note": "Estimated payout · +€72"
+      },
+      {
+        "date": "Aug 09",
+        "dayLabel": "105d",
+        "kind": "system",
+        "sys": "sale",
+        "work": "Salt Cathedral",
+        "artist": "Rin Halverson",
+        "note": "Tres Patios summer programme — first sale window"
+      }
+    ],
+    "log": [
+      {
+        "date": "Apr 24",
+        "day": "Wed",
+        "kind": "artist",
+        "work": "Salt Cathedral",
+        "artist": "Rin Halverson",
+        "stage": "Maquette · test block 02",
+        "body": "Cured the second test block. Salt took on a paler tone than expected — running another with magnesium next.",
+        "thumb": "cool"
+      },
+      {
+        "date": "Apr 22",
+        "day": "Mon",
+        "kind": "system",
+        "sys": "funded",
+        "work": "Salt Cathedral",
+        "artist": "Rin Halverson",
+        "note": "Funding 64% complete · €11,520 of €18,000"
+      },
+      {
+        "date": "Apr 18",
+        "day": "Thu",
+        "kind": "artist",
+        "work": "Untitled (lake)",
+        "artist": "Iona Reyes",
+        "stage": "Selected for Lisbon Photo '26",
+        "body": "Frame 4 will hang in the Carmo cloister this October. Backers get first viewing the night before opening."
+      },
+      {
+        "date": "Apr 16",
+        "day": "Tue",
+        "kind": "artist",
+        "work": "Earth Memory IV",
+        "artist": "Adaeze Okwu",
+        "stage": "Underpainting · panel 3 of 4",
+        "body": "Red ochre over thin gesso, third panel down. Wall is starting to remember.",
+        "thumb": "warm"
+      },
+      {
+        "date": "Apr 12",
+        "day": "Fri",
+        "kind": "artist",
+        "work": "Recess (triptych)",
+        "artist": "Vito Sarmiento",
+        "stage": "Sold · Pinault Collection",
+        "body": "Triptych entered the Pinault this morning. Backers receive payout within 14 days. Longer story at the Mexico City dinner in June."
+      },
+      {
+        "date": "Apr 09",
+        "day": "Tue",
+        "kind": "system",
+        "sys": "paid",
+        "work": "Recess (triptych)",
+        "artist": "Vito Sarmiento",
+        "note": "Paid out · +€184 to your account"
+      },
+      {
+        "date": "Apr 02",
+        "day": "Tue",
+        "kind": "artist",
+        "work": "Lagos series #3",
+        "artist": "Baako Mensah",
+        "stage": "Print run · 12 of 12 complete",
+        "body": "All twelve out of the darkroom. Set ships to Tokyo Friday.",
+        "thumb": "warm"
+      },
+      {
+        "date": "Mar 30",
+        "day": "Sat",
+        "kind": "system",
+        "sys": "paid",
+        "work": "Lagos series #3",
+        "artist": "Baako Mensah",
+        "note": "Paid out · +€72 to your account"
+      },
+      {
+        "date": "Mar 28",
+        "day": "Thu",
+        "kind": "artist",
+        "work": "Salt Cathedral",
+        "artist": "Rin Halverson",
+        "stage": "Site survey · Hellisheidi",
+        "body": "Three days at the geothermal field. Wind is the variable I had not accounted for.",
+        "thumb": "cool"
+      }
+    ]
+  }
+}

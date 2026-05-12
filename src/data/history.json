@@ -1,0 +1,108 @@
+[
+    {
+        "id": 1,
+        "category": "WORK",
+        "title": "Web Developer",
+        "sub1": "Freelance",
+        "startyear": 2020,
+        "endyear" : 2021,
+        "description": "Developed multiple community websites featuring dynamic discussion boards for continuous user engagement. Proficient in front-end development, database management, and designing intricate interaction mechanics such as virtual currencies, marketplaces, messaging systems, and web-game features to enhance user engagement and foster community growth."
+    },
+    {
+        "id": 2,
+        "category": "SELF",
+        "title": "UN/FORM",
+        "sub1": "Garment",
+        "startmonth": "Sep",
+        "startyear": 2022
+    },
+    {
+        "id": 3,
+        "category": "SELF",
+        "title": "Of Judges and Messiahs",
+        "sub1": "Webcomic",
+        "startmonth": "Apr",
+        "startyear": 2022
+    },
+    {
+        "id": 4,
+        "category": "SELF",
+        "title": "Brass Nautili(黃銅菊石)",
+        "sub1": "Webcomic",
+        "startmonth": "Jul",
+        "startyear": 2018
+    },
+    {
+        "id": 5,
+        "category": "SELF",
+        "title": "Beslangel and Zakritko",
+        "sub1": "Comic",
+        "startmonth": "Nov",
+        "startyear": 2017
+    },
+    {
+        "id": 6,
+        "category": "SELF",
+        "title": "Holidays",
+        "sub1": "Illustrated Zine",
+        "startmonth": "Jul",
+        "startyear": 2017
+    },
+    {
+        "id": 7,
+        "category": "EXHIBITION",
+        "title": "Unnamed Exhibition",
+        "sub1": "Myrtle Hall Gallery, Pratt Institute, NY",
+        "sub2": "Communication Management",
+        "startmonth": "May",
+        "startyear": 2024,
+        "description": "Played a role in organizing and designing a student group show. Helped define the exhibition theme and directed its execution. Compiled exhibition information, curated artist works, and designed promotional posters. Contributed to the show's success by ensuring cohesive presentation and effective promotion."
+    },
+    {
+        "id": 8,
+        "category": "EXHIBITION",
+        "title": "Augmented Impressions",
+        "sub1": "Myrtle Hall Gallery, Pratt Institute, NY",
+        "sub2": "Student Artist, Press Release ",
+        "startmonth": "Dec",
+        "startyear": 2023,
+        "description": "Participated as an artist. Also authored the press release, effectively articulating the exhibition's vision and significance to enhance its overall impact and reception within the community."
+    },
+    {
+        "id": 9,
+        "category": "EXHIBITION",
+        "title": "Crown Shyness",
+        "sub1": "Online Exhibition",
+        "sub2": "Student Artist",
+        "startmonth": "Dec",
+        "startyear": 2020
+    },
+    {
+        "id": 10,
+        "category": "EXHIBITION",
+        "title": "There's Something In The Air",
+        "sub1": "KNUA Gallery, Seoul, Republic of Korea",
+        "sub2": "Student Artist",
+        "startmonth": "Jul",
+        "startyear": 2020
+    },
+    {
+        "id": 11,
+        "category": "EDUCATION",
+        "title": "Pratt Institute",
+        "sub1": "Master of Fine Arts, Digital Arts(Interactive)",
+        "startmonth": "Sep",
+        "startyear": 2023
+    },
+    {
+        "id": 12,
+        "category": "EDUCATION",
+        "title": "Korea National University of Arts",
+        "sub1": "Bachelor of Arts, Fine Arts",
+        "sub2": "Minor in Dance Theory",
+        "startmonth": "Feb",
+        "startyear": 2015,
+        "endmonth": "Mar",
+        "endyear": 2022
+    }
+]

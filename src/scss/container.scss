@@ -1,0 +1,154 @@
+.outer {
+  background: var(--bg);
+  color: var(--txt);
+  width: 100%;
+  height: auto;
+  min-height: 100dvh; /* dynamic viewport height */
+  position: relative; /* not fixed */
+  overflow-x: hidden;
+  justify-content: center;
+  transition: 0.5s;
+
+  .header {
+    position: absolute;
+    top: 0;
+    width: calc(100% - 50px);
+    display: flex;
+    justify-content: space-between;
+    font-size: 75%;
+    align-items: center;
+    height: 25px;
+  }
+
+  .main-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    .button {
+      button {
+        width: 100%;
+        height: auto;
+        position: relative;
+        font-size: 12px;
+        font-weight: bold;
+      }
+    }
+
+    .preload {
+      pointer-events: none;
+      font-size: 200px;
+      padding: 25px;
+      opacity: 0;
+    }
+
+    .main-l {
+      height: 100%;
+      width: 100%;
+      left: 0px;
+      background: red;
+      z-index: 55;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+      scroll-snap-type: y mandatory;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .main-l-content {
+        display: none;
+
+        section.main-l-section {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          scroll-snap-align: center;
+        }
+      }
+    }
+
+    .main-r {
+      height: 100%;
+      width: 0%;
+      left: 0px;
+      z-index: 55;
+      overflow: hidden;
+      position: relative;
+
+      .main-right {
+        overflow: hidden;
+
+        .list-image {
+          background: var(--bg3);
+        }
+
+        .list {
+          overflow: hidden;
+
+          .list-sort {
+            display: block;
+            overflow: hidden;
+            max-width: 200px;
+            width: 200px;
+
+            font-size: 0.75em;
+
+            .sorting-options {
+              button {
+              }
+            }
+
+            .role-filters {
+              label {
+                display: block;
+
+                input {
+                  display: none;
+                }
+              }
+            }
+          }
+
+          .list-items {
+            overflow-y: auto;
+
+            .item-wrapper {
+              &.v2 {
+                .item {
+                  flex-direction: row-reverse;
+                }
+              }
+
+              input {
+                display: none;
+              }
+
+              .item {
+                border: 1px solid transparent;
+                height: 100%;
+
+                &.selected {
+                  overflow-y: hidden;
+
+                  .item-inlist {
+                    flex-basis: 100%;
+                  }
+
+                  .item-thumbnail {
+                    display: none;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.reformat {
+  display: none;
+}

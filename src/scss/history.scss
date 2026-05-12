@@ -1,0 +1,23 @@
+.item {
+
+    .cue {
+        display: flex;
+        width: 100%;
+
+        .timeframe {
+
+            width: 100px;
+        }
+    }
+
+    .desc {
+
+        position: fixed;
+        width: 500px;
+        pointer-events: none;
+
+    }
+
+    .active {}
+
+}
