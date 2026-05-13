@@ -25,7 +25,7 @@ export default function Success() {
   let body;
 
   if (state.flow === "A") {
-    banner = "[ INVESTMENT SUBMITTED ]";
+    banner = "[ INVESTMENT SUBMITTED! ]";
     label = "Order";
     idPrefix = "ORD";
     body =
@@ -38,7 +38,7 @@ export default function Success() {
       etf.name +
       " has been received.";
   } else if (state.flow === "R") {
-    banner = "[ ORDER SUBMITTED ]";
+    banner = "[ ORDER SUBMITTED! ]";
     label = "Order";
     idPrefix = "ORD";
     const shares = state.amount / etf.pricePerShare;
@@ -51,7 +51,7 @@ export default function Success() {
       fmtMoneyDec(etf.pricePerShare) +
       " each has been submitted for execution.";
   } else {
-    banner = "[ STANDING CREATED ]";
+    banner = "[ STANDING CREATED! ]";
     label = "Standing";
     idPrefix = "STD";
     body =
@@ -62,20 +62,13 @@ export default function Success() {
       " per month.";
   }
 
-  const bannerLine = "|   " + banner.padEnd(30, " ") + " |";
-
   return (
-    <div className="flex-1 flex flex-col py-6 px-4">
-      <pre className="font-mono">{`+----------------------------------+
-|                                  |
-${bannerLine}
-|                                  |
-+----------------------------------+
-`}</pre>
+    <div className="flex-1 flex flex-col py-6">
+      <div className="">{banner}</div>
 
       <div className="mt-[14px]">{body}</div>
 
-      <Box className="mt-4 min-w-[320px] max-w-[420px]">
+      <Box className="mt-4 w-full max-w-[420px]">
         {state.flow === "R" ? (
           <>
             <div>

@@ -27,16 +27,19 @@ export default function ActionBar() {
   };
 
   return (
-    <div className={cn("border-t pt-[10px] pb-2 flex justify-between items-center gap-2 flex-wrap px-4", palette.border)}>
+    <div
+      className={cn(
+        "border-t pt-[10px] pb-2 flex justify-between items-center gap-2 flex-wrap px-4 pb-8",
+        palette.border,
+      )}
+    >
       <div>
         {!isFirst ? (
           <Button ghost onClick={prevStep}>
             {"[ < BACK ]"}
           </Button>
         ) : (
-          <span className={palette.mutedText}>
-            Step {state.step} of {total}
-          </span>
+          <span className={palette.mutedText}></span>
         )}
       </div>
       <div className="flex gap-[10px] items-center">

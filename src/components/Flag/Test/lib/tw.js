@@ -5,26 +5,26 @@
 
 export const palette = {
   // surfaces
-  bg: "bg-white",
-  bgSubtle: "bg-neutral-50",
-  bgSelected: "bg-neutral-100",
-  bgInverted: "bg-black",
+  bg: "bg-[var(--bg)]",
+  bgSubtle: "bg-[var(--bg2)]",
+  bgSelected: "bg-[var(--bg3)]",
+  bgInverted: "bg-[var(--bg3)]",
   bgTransparent: "bg-transparent",
 
   // text
-  text: "text-black",
-  mutedText: "text-neutral-600",
-  invertedText: "text-white",
+  text: "text-[var(--txt)]",
+  mutedText: "text-[var(--txt2)]",
+  invertedText: "text-[var(--txt2)]",
 
   // borders
-  border: "border-black",
+  border: "border-[var(--bg3)]",
   borderTransparent: "border-transparent",
 
   // interactive states
-  hoverBg: "hover:bg-neutral-100",
-  hoverBgInverted: "hover:bg-black",
+  hoverBg: "hover:bg-[var(--bg2)]",
+  hoverBgInverted: "hover:bg-[var(--txt)]",
   hoverBgTransparent: "hover:bg-transparent",
-  disabledText: "disabled:text-neutral-500",
-  disabledBorder: "disabled:border-neutral-500",
-  disabledHoverBg: "disabled:hover:bg-white",
+  disabledText: "disabled:text-[var(--txt2)]",
+  disabledBorder: "disabled:text-[var(--txt2)]",
+  disabledHoverBg: "disabled:bg-[var(--bg2)]",
 };

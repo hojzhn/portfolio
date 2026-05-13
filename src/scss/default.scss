@@ -358,7 +358,7 @@ body {
 }
 
 .scroll-container::-webkit-scrollbar {
-  width: 3px;
+  width: 1px;
 }
 .scroll-container::-webkit-scrollbar-track {
   background: transparent;
@@ -369,4 +369,17 @@ body {
 }
 .scroll-container::-webkit-scrollbar-thumb:hover {
   background-color: var(--txt);
+}
+
+/* The Test prototype scrolls with no visible scrollbar — zero layout footprint,
+   so content never shifts when a scroll area appears. Wheel / trackpad / touch /
+   keyboard still scroll normally. `scrollbar-width` is inherited so it cascades
+   to every child; the `::-webkit-scrollbar` rule uses a descendant selector so
+   nested scroll areas (tables, disclosure boxes, …) are covered too. */
+.test-scrollbars {
+  scrollbar-width: none; /* Firefox / standard */
+}
+.test-scrollbars ::-webkit-scrollbar,
+.test-scrollbars::-webkit-scrollbar {
+  display: none; /* Chromium / WebKit */
 }

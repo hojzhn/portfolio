@@ -11,8 +11,9 @@ import {
 } from "../lib/format";
 import { cn } from "../lib/cn";
 import { palette } from "../lib/tw";
-import { Button, SelectBox, BareInput } from "../components/ui";
+import { Button, SelectBox, BareInput, Box } from "../components/ui";
 import CatalogRow from "../components/CatalogRow";
+import MetaRows from "../components/MetaRows";
 import { useContainerSize } from "../lib/containerSize";
 // ============================================================================
 // Action config
@@ -26,7 +27,7 @@ export function getTraditionalActionConfig(state, stepId) {
   if (stepId === "amount") disabled = state.amount < DETAIL.amount.minimum;
   if (stepId === "confirm") {
     disabled = !state.agreed;
-    label = "[ SUBMIT INVESTMENT ]";
+    label = "[ SUBMIT ]";
   }
   return { disabled, label };
 }
@@ -102,9 +103,12 @@ function HoldingsScreen() {
   if (!etf) return null;
   const total = DETAIL.holdings.reduce((a, h) => a + h.weight, 0);
 
+  const { isMobile } = useContainerSize();
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 02 OF 06 · {etf.ticker}</div>
+      <div className={cn("mb-1", palette.mutedText)}>
+        STEP 02 OF 06 · {etf.ticker}
+      </div>
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
         Review holdings and composition
       </h1>
@@ -114,7 +118,12 @@ function HoldingsScreen() {
       </div>
 
       <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+        <div
+          className={cn(
+            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+            palette.border,
+          )}
+        >
           <span>TOP 10 HOLDINGS</span>
           <span className={cn("font-normal", palette.mutedText)}>
             {fmtPct(total, 1)} of fund
@@ -124,19 +133,44 @@ function HoldingsScreen() {
           <table className="border-collapse w-full min-w-[620px]">
             <thead>
               <tr>
-                <th className={cn("border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]", palette.border)}>
+                <th
+                  className={cn(
+                    "border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]",
+                    palette.border,
+                  )}
+                >
                   #
                 </th>
-                <th className={cn("border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]", palette.border)}>
+                <th
+                  className={cn(
+                    "border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]",
+                    palette.border,
+                  )}
+                >
                   Holding
                 </th>
-                <th className={cn("border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]", palette.border)}>
+                <th
+                  className={cn(
+                    "border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]",
+                    palette.border,
+                  )}
+                >
                   Sector
                 </th>
-                <th className={cn("border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]", palette.border)}>
+                <th
+                  className={cn(
+                    "border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]",
+                    palette.border,
+                  )}
+                >
                   Weight
                 </th>
-                <th className={cn("border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]", palette.border)}>
+                <th
+                  className={cn(
+                    "border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]",
+                    palette.border,
+                  )}
+                >
                   Weight
                 </th>
               </tr>
@@ -144,22 +178,47 @@ function HoldingsScreen() {
             <tbody>
               {DETAIL.holdings.map((h, i) => (
                 <tr key={h.ticker}>
-                  <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+                  <td
+                    className={cn(
+                      "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                      palette.border,
+                    )}
+                  >
                     {i + 1}
                   </td>
-                  <td className={cn("border px-2 py-1 text-left align-top font-normal", palette.border)}>
+                  <td
+                    className={cn(
+                      "border px-2 py-1 text-left align-top font-normal",
+                      palette.border,
+                    )}
+                  >
                     {h.name}{" "}
                     <span className={palette.mutedText}>({h.ticker})</span>
                     <br />
                     <span className={palette.mutedText}>{h.country}</span>
                   </td>
-                  <td className={cn("border px-2 py-1 text-left align-top font-normal", palette.border)}>
+                  <td
+                    className={cn(
+                      "border px-2 py-1 text-left align-top font-normal",
+                      palette.border,
+                    )}
+                  >
                     {h.sector}
                   </td>
-                  <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+                  <td
+                    className={cn(
+                      "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                      palette.border,
+                    )}
+                  >
                     {asciiBar(h.weight * 5, 8)}
                   </td>
-                  <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+                  <td
+                    className={cn(
+                      "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                      palette.border,
+                    )}
+                  >
                     {fmtPct(h.weight, 1)}
                   </td>
                 </tr>
@@ -169,9 +228,16 @@ function HoldingsScreen() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
+      <div
+        className={`grid grid-cols-1 ${isMobile ? "" : "grid-cols-2"} gap-[10px]`}
+      >
         <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-          <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+          <div
+            className={cn(
+              "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+              palette.border,
+            )}
+          >
             <span>SECTORS</span>
           </div>
           <div className="overflow-x-auto">
@@ -179,13 +245,28 @@ function HoldingsScreen() {
               <tbody>
                 {DETAIL.sectorBreakdown.map((s) => (
                   <tr key={s.sector}>
-                    <td className={cn("border px-2 py-1 text-left align-top font-normal", palette.border)}>
+                    <td
+                      className={cn(
+                        "border px-2 py-1 text-left align-top font-normal",
+                        palette.border,
+                      )}
+                    >
                       {s.sector}
                     </td>
-                    <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+                    <td
+                      className={cn(
+                        "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                        palette.border,
+                      )}
+                    >
                       {asciiBar(s.weight, 14)}
                     </td>
-                    <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+                    <td
+                      className={cn(
+                        "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                        palette.border,
+                      )}
+                    >
                       {fmtPct(s.weight, 0)}
                     </td>
                   </tr>
@@ -195,20 +276,40 @@ function HoldingsScreen() {
           </div>
         </div>
         <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-          <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+          <div
+            className={cn(
+              "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+              palette.border,
+            )}
+          >
             <span>GEOGRAPHIC EXPOSURE</span>
           </div>
           <table className="border-collapse w-full">
             <tbody>
               {DETAIL.geographicExposure.map((g) => (
                 <tr key={g.region}>
-                  <td className={cn("border px-2 py-1 text-left align-top font-normal", palette.border)}>
+                  <td
+                    className={cn(
+                      "border px-2 py-1 text-left align-top font-normal",
+                      palette.border,
+                    )}
+                  >
                     {g.region}
                   </td>
-                  <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+                  <td
+                    className={cn(
+                      "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                      palette.border,
+                    )}
+                  >
                     {asciiBar(g.weight, 14)}
                   </td>
-                  <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+                  <td
+                    className={cn(
+                      "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                      palette.border,
+                    )}
+                  >
                     {fmtPct(g.weight, 0)}
                   </td>
                 </tr>
@@ -252,7 +353,9 @@ function RiskScreen() {
   ];
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 03 OF 06 · {etf.ticker}</div>
+      <div className={cn("mb-1", palette.mutedText)}>
+        STEP 03 OF 06 · {etf.ticker}
+      </div>
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
         Review the risk profile
       </h1>
@@ -262,7 +365,12 @@ function RiskScreen() {
       </div>
 
       <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+        <div
+          className={cn(
+            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+            palette.border,
+          )}
+        >
           <span>RISK RATING</span>
           <span className={cn("font-normal", palette.mutedText)}></span>
         </div>
@@ -289,7 +397,12 @@ function RiskScreen() {
       </div>
 
       <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+        <div
+          className={cn(
+            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+            palette.border,
+          )}
+        >
           <span>RISK METRICS</span>
         </div>
         <div
@@ -305,7 +418,10 @@ function RiskScreen() {
               key={m.label}
               className={cn(
                 isMobile
-                  ? cn("py-1", i > 0 && cn("border-t border-dashed", palette.border))
+                  ? cn(
+                      "py-1",
+                      i > 0 && cn("border-t border-dashed", palette.border),
+                    )
                   : "contents",
               )}
             >
@@ -317,7 +433,12 @@ function RiskScreen() {
       </div>
 
       <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+        <div
+          className={cn(
+            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+            palette.border,
+          )}
+        >
           <span>DOES THIS MATCH YOUR RISK TOLERANCE?</span>
         </div>
         {r.suitabilityOptions.map((o) => {
@@ -356,7 +477,9 @@ function FeesScreen() {
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 04 OF 06 · {etf.ticker}</div>
+      <div className={cn("mb-1", palette.mutedText)}>
+        STEP 04 OF 06 · {etf.ticker}
+      </div>
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
         Review fees and costs
       </h1>
@@ -368,72 +491,142 @@ function FeesScreen() {
       <table className="border-collapse w-full">
         <thead>
           <tr>
-            <th className={cn("border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]", palette.border)}>
+            <th
+              className={cn(
+                "border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]",
+                palette.border,
+              )}
+            >
               Line item
             </th>
-            <th className={cn("border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]", palette.border)}>
+            <th
+              className={cn(
+                "border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]",
+                palette.border,
+              )}
+            >
               Rate
             </th>
-            <th className={cn("border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]", palette.border)}>
+            <th
+              className={cn(
+                "border px-2 py-1 text-left align-top font-bold underline tracking-[0.02em]",
+                palette.border,
+              )}
+            >
               Cost / $10k
             </th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td className={cn("border px-2 py-1 text-left align-top font-normal", palette.border)}>
+            <td
+              className={cn(
+                "border px-2 py-1 text-left align-top font-normal",
+                palette.border,
+              )}
+            >
               Management fee
               <br />
               <span className={palette.mutedText}>
                 Paid to the fund manager.
               </span>
             </td>
-            <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+            <td
+              className={cn(
+                "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                palette.border,
+              )}
+            >
               {fmtPct(f.managementFee)}
             </td>
-            <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+            <td
+              className={cn(
+                "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                palette.border,
+              )}
+            >
               {fmtMoney(f.managementFee * 10000)}
             </td>
           </tr>
           <tr>
-            <td className={cn("border px-2 py-1 text-left align-top font-normal", palette.border)}>
+            <td
+              className={cn(
+                "border px-2 py-1 text-left align-top font-normal",
+                palette.border,
+              )}
+            >
               Other costs
               <br />
               <span className={palette.mutedText}>
                 Custody, administration, trading costs.
               </span>
             </td>
-            <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+            <td
+              className={cn(
+                "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                palette.border,
+              )}
+            >
               {fmtPct(f.otherCosts)}
             </td>
-            <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+            <td
+              className={cn(
+                "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                palette.border,
+              )}
+            >
               {fmtMoney(f.otherCosts * 10000)}
             </td>
           </tr>
           <tr className="font-bold">
-            <td className={cn("border px-2 py-1 text-left align-top font-normal", palette.border)}>
+            <td
+              className={cn(
+                "border px-2 py-1 text-left align-top font-normal",
+                palette.border,
+              )}
+            >
               TOTAL ANNUAL COST
               <br />
               <span className={cn("font-normal", palette.mutedText)}>
                 Total expense ratio.
               </span>
             </td>
-            <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+            <td
+              className={cn(
+                "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                palette.border,
+              )}
+            >
               {fmtPct(f.expenseRatio)}
             </td>
-            <td className={cn("border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap", palette.border)}>
+            <td
+              className={cn(
+                "border px-2 py-1 text-left align-top font-normal text-right whitespace-nowrap",
+                palette.border,
+              )}
+            >
               {fmtMoney(f.expenseRatio * 10000)}
             </td>
           </tr>
         </tbody>
       </table>
 
-      <div className={cn("border-dashed border p-[10px_12px] mb-[10px] mt-3", palette.border)}>
+      <div
+        className={cn(
+          "border-dashed border p-[10px_12px] mb-[10px] mt-3",
+          palette.border,
+        )}
+      >
         Category average expense ratio is {fmtPct(f.categoryAvgExpenseRatio)}.
         This fund is {Math.abs(diff * 100).toFixed(2)} percentage points{" "}
         {diffWord} than the category average.
       </div>
-      <div className={cn("border-dashed border p-[10px_12px] mb-[10px]", palette.border)}>
+      <div
+        className={cn(
+          "border-dashed border p-[10px_12px] mb-[10px]",
+          palette.border,
+        )}
+      >
         Projected fee cost on {fmtMoney(10000)} invested over 10 years, assuming
         the position is held throughout: approximately{" "}
         {fmtMoney(f.tenYearCostOn10kUSD)}.
@@ -454,7 +647,9 @@ function AmountScreen() {
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 05 OF 06 · {etf.ticker}</div>
+      <div className={cn("mb-1", palette.mutedText)}>
+        STEP 05 OF 06 · {etf.ticker}
+      </div>
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
         How much would you like to invest?
       </h1>
@@ -538,7 +733,9 @@ function ConfirmScreen() {
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 06 OF 06 · {etf.ticker}</div>
+      <div className={cn("mb-1", palette.mutedText)}>
+        STEP 06 OF 06 · {etf.ticker}
+      </div>
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
         Review and confirm
       </h1>
@@ -547,42 +744,40 @@ function ConfirmScreen() {
         submit.
       </div>
 
-      <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Theme</div>
-          <div>{etf.name}</div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Ticker</div>
-          <div>{etf.ticker}</div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1 font-bold text-[14px]", palette.border)}>
-          <div className={palette.mutedText}>Amount</div>
-          <div>
-            {fmtMoney(state.amount, c)}{" "}
-            {state.frequency === "one-time"
-              ? ""
-              : "/ " + getFreqLabel(state.frequency).toLowerCase()}
-          </div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Risk profile</div>
-          <div>
-            {DETAIL.risk.ratingLabel} ({DETAIL.risk.rating}/
-            {DETAIL.risk.ratingScaleMax}) · {DETAIL.risk.timeHorizonYears.min}–
-            {DETAIL.risk.timeHorizonYears.max}Y horizon
-          </div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Total annual cost</div>
-          <div>
-            {fmtPct(DETAIL.fees.expenseRatio)} (≈ {fmtMoney(annualFee, c)} /
-            year on {fmtMoney(annualEquiv, c)} annualized)
-          </div>
-        </div>
-      </div>
+      <Box>
+        <MetaRows
+          divided
+          keyWidth="140px"
+          rows={[
+            { label: "Theme", value: etf.name },
+            { label: "Ticker", value: etf.ticker },
+            {
+              label: "Amount",
+              bold: true,
+              value: `${fmtMoney(state.amount, c)}${
+                state.frequency === "one-time"
+                  ? ""
+                  : ` / ${getFreqLabel(state.frequency).toLowerCase()}`
+              }`,
+            },
+            {
+              label: "Risk profile",
+              value: `${DETAIL.risk.ratingLabel} (${DETAIL.risk.rating}/${DETAIL.risk.ratingScaleMax}) · ${DETAIL.risk.timeHorizonYears.min}–${DETAIL.risk.timeHorizonYears.max}Y horizon`,
+            },
+            {
+              label: "Total annual cost",
+              value: `${fmtPct(DETAIL.fees.expenseRatio)} (≈ ${fmtMoney(annualFee, c)} / year on ${fmtMoney(annualEquiv, c)} annualized)`,
+            },
+          ]}
+        />
+      </Box>
 
-      <div className={cn("border p-[10px_12px] max-h-[160px] overflow-y-auto mb-[10px]", palette.border)}>
+      <div
+        className={cn(
+          "border p-[10px_12px] max-h-[160px] overflow-y-auto mb-[10px]",
+          palette.border,
+        )}
+      >
         {DETAIL.disclosure.bullets.map((b, i) => (
           <p key={i} className={i > 0 ? "mt-[6px]" : ""}>
             · {b}

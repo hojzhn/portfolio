@@ -9,6 +9,7 @@ import { palette } from "../lib/tw";
 import { Button, SelectBox, BareInput } from "../components/ui";
 import CatalogRow from "../components/CatalogRow";
 import KeyStatsGrid from "../components/KeyStatsGrid";
+import MetaRows from "../components/MetaRows";
 import { useContainerSize } from "../lib/containerSize";
 // ============================================================================
 // Action config
@@ -37,7 +38,7 @@ export function getRedesignActionConfig(state, stepId) {
 // ============================================================================
 function DiscoverScreen() {
   const { state, selectTicker } = useTestState();
-
+  const { isMobile } = useContainerSize();
   return (
     <>
       <div className={cn("mb-1", palette.mutedText)}>STEP 01 OF 03</div>
@@ -49,12 +50,22 @@ function DiscoverScreen() {
         engagement history. Select the view you would back.
       </div>
 
-      <div className={cn("flex justify-between mb-2", palette.mutedText)}>
-        <span>Last updated 10:42 AM</span>
-        <SelectBox>
-          <option>Sort: Signal strength</option>
-          <option>Sort: Momentum 90d</option>
-        </SelectBox>
+      <div
+        className={
+          cn(isMobile ? "flex-col justify-end" : "flex justify-between") +
+          " " +
+          cn("mb-2", palette.mutedText)
+        }
+      >
+        <div className={`${isMobile && "text-right mb-2"}`}>
+          Last updated 10:42 AM
+        </div>
+        <div className="flex justify-end">
+          <SelectBox>
+            <option>Sort: Signal strength</option>
+            <option>Sort: Momentum 90d</option>
+          </SelectBox>
+        </div>
       </div>
 
       {CATALOG.map((etf) => {
@@ -146,7 +157,9 @@ function SetLevelScreen() {
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 02 OF 03 · {etf.ticker}</div>
+      <div className={cn("mb-1", palette.mutedText)}>
+        STEP 02 OF 03 · {etf.ticker}
+      </div>
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
         Set the level
       </h1>
@@ -154,8 +167,14 @@ function SetLevelScreen() {
         Choose how much to back this view at.
       </div>
 
-      <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-4 border p-[14px]", palette.border)}>
-        <div className={cn("md:border-r md:pr-4", palette.border)}>
+      <div
+        className={cn(
+          "grid grid-cols-1 gap-4 border p-[14px]",
+          palette.border,
+          !isMobile && "grid-cols-2",
+        )}
+      >
+        <div className={cn(palette.border, !isMobile && "border-r pr-4")}>
           <div className="font-bold mb-2">SET MONTHLY EXPOSURE</div>
 
           <div className="flex items-baseline gap-2">
@@ -182,23 +201,25 @@ function SetLevelScreen() {
             ))}
           </div>
 
-          <div className="grid grid-cols-[180px_1fr] gap-x-3 gap-y-1 mt-[10px]">
-            <div className={palette.mutedText}>Deployment cadence</div>
-            <div>{d.deploymentCadence}</div>
-            <div className={palette.mutedText}>Estimated annual fee</div>
-            <div>{fmtPct(d.fees.expenseRatio)}</div>
-            <div className={palette.mutedText}>Risk profile</div>
-            <div>{d.risk.ratingLabel}</div>
-            <div className={palette.mutedText}>Time horizon</div>
-            <div>
-              {d.risk.timeHorizonYears.min}–{d.risk.timeHorizonYears.max} years
-            </div>
-            <div className={palette.mutedText}>Region</div>
-            <div>{d.region}</div>
-          </div>
+          <MetaRows
+            className="mt-[10px]"
+            rows={[
+              { label: "Deployment cadence", value: d.deploymentCadence },
+              {
+                label: "Estimated annual fee",
+                value: fmtPct(d.fees.expenseRatio),
+              },
+              { label: "Risk profile", value: d.risk.ratingLabel },
+              {
+                label: "Time horizon",
+                value: `${d.risk.timeHorizonYears.min}–${d.risk.timeHorizonYears.max} years`,
+              },
+              { label: "Region", value: d.region },
+            ]}
+          />
         </div>
 
-        <div className="md:pl-4">
+        <div className={!isMobile ? "pl-4" : undefined}>
           <div
             className={cn(
               "flex justify-between font-bold mb-2",
@@ -229,18 +250,30 @@ function SetLevelScreen() {
 
           <div className={cn("border-t mt-3 pt-[10px]", palette.border)}>
             <div className="flex justify-between items-baseline font-bold mb-[6px]">
-              <span>{etf.themeShort.split(" ")[0]} exposure after commit</span>
-              <span>[+{delta.toFixed(0)} PP]</span>
+              <span>Theme exposure after commit</span>
             </div>
-            <div className="text-[16px]">
-              {currentPct.toFixed(0)}% → {postPct.toFixed(0)}%
+            <div>
+              <span className="text-[16px]">
+                {currentPct.toFixed(0)}% → {postPct.toFixed(0)}%
+              </span>{" "}
+              <span>[+{delta.toFixed(0)} PP]</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className={cn("border p-[10px_12px] mb-[10px] mt-[10px]", palette.border)}>
-        <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+      <div
+        className={cn(
+          "border p-[10px_12px] mb-[10px] mt-[10px]",
+          palette.border,
+        )}
+      >
+        <div
+          className={cn(
+            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+            palette.border,
+          )}
+        >
           <span>DETAILS</span>
         </div>
 
@@ -265,9 +298,14 @@ function SetLevelScreen() {
           These factors could negatively impact the performance of this
           exposure.
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+        <div
+          className={`grid grid-cols-1 ${isMobile ? "" : "grid-cols-2"} gap-2 mt-2`}
+        >
           {d.keySensitivities.map((s) => (
-            <div key={s.name} className={cn("border p-[8px_10px]", palette.border)}>
+            <div
+              key={s.name}
+              className={cn("border p-[8px_10px]", palette.border)}
+            >
               <div className="font-bold">{s.name}</div>
               <div className={cn("mt-[2px]", palette.mutedText)}>{s.note}</div>
             </div>
@@ -275,7 +313,9 @@ function SetLevelScreen() {
         </div>
       </div>
 
-      <div className={cn("py-[10px]", palette.mutedText)}>{d.disclosure.shortNote}</div>
+      <div className={cn("py-[10px]", palette.mutedText)}>
+        {d.disclosure.shortNote}
+      </div>
     </>
   );
 }
@@ -297,7 +337,9 @@ function ConfirmScreen() {
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 03 OF 03 · {etf.ticker}</div>
+      <div className={cn("mb-1", palette.mutedText)}>
+        STEP 03 OF 03 · {etf.ticker}
+      </div>
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
         Confirm standing
       </h1>
@@ -307,46 +349,47 @@ function ConfirmScreen() {
       </div>
 
       <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+        <div
+          className={cn(
+            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+            palette.border,
+          )}
+        >
           <span>YOUR STANDING</span>
         </div>
-        <div className={cn("grid grid-cols-[180px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Theme</div>
-          <div>{etf.themeShort}</div>
-        </div>
-        <div className={cn("grid grid-cols-[180px_1fr] border-b border-dashed py-1 font-bold text-[14px]", palette.border)}>
-          <div className={palette.mutedText}>Level</div>
-          <div>{fmtMoney(state.amount, c)} per month</div>
-        </div>
-        <div className={cn("grid grid-cols-[180px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Cadence</div>
-          <div>{d.deploymentCadence}</div>
-        </div>
-        <div className={cn("grid grid-cols-[180px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Risk profile</div>
-          <div>
-            {d.risk.ratingLabel} ({d.risk.rating}/{d.risk.ratingScaleMax}) ·{" "}
-            {d.risk.timeHorizonYears.min}–{d.risk.timeHorizonYears.max}Y horizon
-          </div>
-        </div>
-        <div className={cn("grid grid-cols-[180px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Portfolio impact</div>
-          <div>
-            {currentPct.toFixed(0)}% → {postPct.toFixed(0)}% exposure to this
-            theme
-          </div>
-        </div>
-        <div className={cn("grid grid-cols-[180px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Annual fee</div>
-          <div>
-            {fmtPct(d.fees.expenseRatio)} (≈ {fmtMoney(annualFee, c)} / year on{" "}
-            {fmtMoney(annualEquiv, c)} annualized)
-          </div>
-        </div>
+        <MetaRows
+          divided
+          rows={[
+            { label: "Theme", value: etf.themeShort },
+            {
+              label: "Level",
+              bold: true,
+              value: `${fmtMoney(state.amount, c)} per month`,
+            },
+            { label: "Cadence", value: d.deploymentCadence },
+            {
+              label: "Risk profile",
+              value: `${d.risk.ratingLabel} (${d.risk.rating}/${d.risk.ratingScaleMax}) · ${d.risk.timeHorizonYears.min}–${d.risk.timeHorizonYears.max}Y horizon`,
+            },
+            {
+              label: "Portfolio impact",
+              value: `${currentPct.toFixed(0)}% → ${postPct.toFixed(0)}% exposure to this theme`,
+            },
+            {
+              label: "Annual fee",
+              value: `${fmtPct(d.fees.expenseRatio)} (≈ ${fmtMoney(annualFee, c)} / year on ${fmtMoney(annualEquiv, c)} annualized)`,
+            },
+          ]}
+        />
       </div>
 
       <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+        <div
+          className={cn(
+            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+            palette.border,
+          )}
+        >
           <span>WHAT YOU SHOULD KNOW</span>
         </div>
         <div>

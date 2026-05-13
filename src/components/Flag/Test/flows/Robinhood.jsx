@@ -11,9 +11,10 @@ import {
 } from "../lib/format";
 import { cn } from "../lib/cn";
 import { palette } from "../lib/tw";
-import { Button, SelectBox, BareInput } from "../components/ui";
+import { Button, SelectBox, BareInput, Box } from "../components/ui";
 import CatalogRow from "../components/CatalogRow";
 import KeyStatsGrid from "../components/KeyStatsGrid";
+import MetaRows from "../components/MetaRows";
 
 const ORDER_TYPES = ["Buy", "Sell", "Limit", "Stop"];
 const PERIODS = ["1D", "1W", "1M", "3M", "1Y", "5Y"];
@@ -63,7 +64,7 @@ function ListScreen() {
       </div>
 
       <div className={cn("flex justify-between mb-2", palette.mutedText)}>
-        <span>Trending in Thematic ETFs</span>
+        <span>Trending </span>
         <SelectBox>
           <option>Sort: 1Y return</option>
           <option>Sort: Volume</option>
@@ -143,7 +144,9 @@ function DetailScreen() {
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 02 OF 04 · {etf.ticker}</div>
+      <div className={cn("mb-1", palette.mutedText)}>
+        STEP 02 OF 04 · {etf.ticker}
+      </div>
 
       <div className="mb-[14px]">
         <div className={palette.mutedText}>{etf.name}</div>
@@ -181,14 +184,24 @@ function DetailScreen() {
       </div>
 
       <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+        <div
+          className={cn(
+            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+            palette.border,
+          )}
+        >
           <span>KEY STATS</span>
         </div>
         <KeyStatsGrid stats={stats} />
       </div>
 
       <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+        <div
+          className={cn(
+            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+            palette.border,
+          )}
+        >
           <span>ABOUT</span>
         </div>
         <div>
@@ -198,13 +211,21 @@ function DetailScreen() {
       </div>
 
       <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]", palette.border)}>
+        <div
+          className={cn(
+            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
+            palette.border,
+          )}
+        >
           <span>RECENT NEWS</span>
         </div>
         {etf.news.map((n, i) => (
           <div
             key={i}
-            className={cn("py-[6px] border-b border-dashed last:border-b-0", palette.border)}
+            className={cn(
+              "py-[6px] border-b border-dashed last:border-b-0",
+              palette.border,
+            )}
           >
             <div className={cn("text-[11px]", palette.mutedText)}>
               {n.date} · {n.source}
@@ -230,7 +251,9 @@ function AmountScreen() {
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 03 OF 04 · {etf.ticker}</div>
+      <div className={cn("mb-1", palette.mutedText)}>
+        STEP 03 OF 04 · {etf.ticker}
+      </div>
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
         Buy {etf.ticker}
       </h1>
@@ -288,7 +311,13 @@ function AmountScreen() {
         ))}
       </div>
 
-      <div className={cn("border p-[10px_12px] my-[10px] mt-[18px]", palette.bgSubtle, palette.border)}>
+      <div
+        className={cn(
+          "border p-[10px_12px] my-[10px] mt-[18px]",
+          palette.bgSubtle,
+          palette.border,
+        )}
+      >
         <div className="flex justify-between py-[2px]">
           <span className={palette.mutedText}>Estimated price per share</span>
           <span>{fmtMoneyDec(etf.pricePerShare)}</span>
@@ -297,7 +326,12 @@ function AmountScreen() {
           <span className={palette.mutedText}>Estimated shares</span>
           <span>{estShares.toFixed(4)}</span>
         </div>
-        <div className={cn("flex justify-between py-[6px] mt-1 border-t border-dashed font-bold", palette.border)}>
+        <div
+          className={cn(
+            "flex justify-between py-[6px] mt-1 border-t border-dashed font-bold",
+            palette.border,
+          )}
+        >
           <span>Estimated total</span>
           <span>{fmtMoneyDec(state.amount)}</span>
         </div>
@@ -331,7 +365,9 @@ function ReviewScreen() {
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 04 OF 04 · {etf.ticker}</div>
+      <div className={cn("mb-1", palette.mutedText)}>
+        STEP 04 OF 04 · {etf.ticker}
+      </div>
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
         Review order
       </h1>
@@ -339,42 +375,26 @@ function ReviewScreen() {
         Review the details below before submitting your order.
       </div>
 
-      <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Symbol</div>
-          <div>
-            <strong>{etf.ticker}</strong>
-          </div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Name</div>
-          <div>{etf.name}</div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Order type</div>
-          <div>{state.orderType}</div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Frequency</div>
-          <div>{getFreqLabel(state.frequency)}</div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Estimated price</div>
-          <div>{fmtMoneyDec(etf.pricePerShare)}</div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Estimated shares</div>
-          <div>{estShares.toFixed(4)}</div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1", palette.border)}>
-          <div className={palette.mutedText}>Estimated fees</div>
-          <div>$0.00 (commission-free)</div>
-        </div>
-        <div className={cn("grid grid-cols-[140px_1fr] border-b border-dashed py-1 font-bold text-[14px]", palette.border)}>
-          <div className={palette.mutedText}>Estimated total</div>
-          <div>{fmtMoneyDec(state.amount)}</div>
-        </div>
-      </div>
+      <Box>
+        <MetaRows
+          divided
+          keyWidth="140px"
+          rows={[
+            { label: "Symbol", value: <strong>{etf.ticker}</strong> },
+            { label: "Name", value: etf.name },
+            { label: "Order type", value: state.orderType },
+            { label: "Frequency", value: getFreqLabel(state.frequency) },
+            { label: "Estimated price", value: fmtMoneyDec(etf.pricePerShare) },
+            { label: "Estimated shares", value: estShares.toFixed(4) },
+            { label: "Estimated fees", value: "$0.00 (commission-free)" },
+            {
+              label: "Estimated total",
+              bold: true,
+              value: fmtMoneyDec(state.amount),
+            },
+          ]}
+        />
+      </Box>
 
       <div className={cn("py-[10px]", palette.mutedText)}>
         By submitting, you authorize the execution of this order at the best
