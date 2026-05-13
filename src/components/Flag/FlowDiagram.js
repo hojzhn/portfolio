@@ -1,7 +1,38 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Toggle from "../Toggle";
 import { FLOW_BOX_CLASS, FlowArrow, ARROW_W } from "./FlowRow";
+
+// Container-width threshold. Below this the diagram flips to a vertical stack.
+// Container — not viewport — because the diagram is rendered inside the page's
+// content column; a 1280px screen can still leave us with ~600px to work in.
+const NARROW_PX = 640;
+
+// Watch our own width and report whether we're under NARROW_PX. Returns
+// [ref, narrow]; attach the ref to the element whose width we want to track.
+function useNarrowContainer(threshold = NARROW_PX) {
+  const ref = useRef(null);
+  const [narrow, setNarrow] = useState(false);
+
+  useLayoutEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+    const measure = () =>
+      setNarrow(node.getBoundingClientRect().width < threshold);
+    measure();
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measure);
+      return () => window.removeEventListener("resize", measure);
+    }
+    const ro = new ResizeObserver(([entry]) =>
+      setNarrow(entry.contentRect.width < threshold),
+    );
+    ro.observe(node);
+    return () => ro.disconnect();
+  }, [threshold]);
+
+  return [ref, narrow];
+}
 
 /**
  * Standard ↔ Redesigned flow in one component.
@@ -11,6 +42,10 @@ import { FLOW_BOX_CLASS, FlowArrow, ARROW_W } from "./FlowRow";
  * Toggling the mode reorders the array and changes the grows — framer's
  * `layout` animates the boxes gliding to their new slots while the
  * collapsing ones (`holdings`'s siblings) shrink into the merged box.
+ *
+ * When the container is narrow (< NARROW_PX) the diagram flips to a
+ * vertical stack. Boxes are grouped by bracket; each group renders as a
+ * column of boxes with a rotated `↑ label` running up its right side.
  */
 
 const EASE = [0.4, 0, 0.2, 1];
@@ -90,56 +125,98 @@ const BRACKETS = [
 
 const toneColor = (t) => (t === "txt2" ? "var(--txt2)" : "var(--point)");
 
+// Rotated `↑ label` strip used on the right side of each narrow-mode group.
+// The `↑` glyph rotates with the text and ends up pointing left at the stack.
+const SideLabel = ({ label, tone }) => (
+  <div className="shrink-0 w-8 flex items-center justify-center self-stretch">
+    <div
+      className="font-mono text-[0.7em] uppercase tracking-[0.16em] whitespace-nowrap -rotate-90 origin-center"
+      style={{ color: toneColor(tone) }}
+    >
+      ↑ {label}
+    </div>
+  </div>
+);
+
 export default function FlowDiagram({ defaultRedesigned = false }) {
   const [redesigned, setRedesigned] = useState(defaultRedesigned);
+  const [rootRef, narrow] = useNarrowContainer();
   const cfg = MODE[redesigned ? "redesigned" : "standard"];
 
   const ordered = [...BOX_IDS].sort((a, b) => cfg[a].order - cfg[b].order);
   const visible = ordered.filter((id) => cfg[id].grow > 0);
   const lastVisible = visible[visible.length - 1];
 
-  // Walk `ordered`, emitting box cells + arrow cells. Arrows go after a
-  // visible box that isn't the last visible one (placed before any
-  // collapsed boxes that follow it).
-  const cells = [];
-  ordered.forEach((id) => {
+  // Shared box renderer — works in both modes. `layoutId` lets framer match
+  // each box across mode toggles even when its parent container changes
+  // (narrow mode regroups boxes per bracket), so positions glide instead of
+  // popping. Closed boxes stay in the DOM with `opacity: 0` so framer can
+  // animate their collapse — same as how `flex-basis: 0` collapses them in
+  // horizontal mode.
+  const renderBox = (id) => {
     const c = cfg[id];
     const open = c.grow > 0;
-    cells.push(
+    const tagColor =
+      c.kind && c.kind !== "retained" ? "var(--txt2)" : "var(--point)";
+    return (
       <motion.div
         key={id}
         layout
+        layoutId={`flow-box-${id}`}
         transition={{ duration: DUR, ease: EASE }}
         animate={{ opacity: open ? 1 : 0 }}
-        style={{ flexGrow: c.grow, flexBasis: 0 }}
+        style={narrow ? undefined : { flexGrow: c.grow, flexBasis: 0 }}
         className={`min-w-0 rounded-md overflow-hidden ${
           open ? "px-2 py-2.5 sm:px-3 sm:py-3" : "p-0"
         } ${open ? FLOW_BOX_CLASS[c.kind || "default"] : ""}`}
       >
         <motion.div layout="position" className="min-w-0">
-          <div className="leading-tight whitespace-nowrap sm:whitespace-normal">
+          {narrow && open && (
+            <div
+              className="font-mono text-[0.7em] tracking-[0.14em] uppercase mb-1"
+              style={{ color: tagColor }}
+            >
+              {`0${visible.indexOf(id) + 1}`}
+            </div>
+          )}
+          <div
+            className={`leading-tight ${
+              narrow ? "" : "whitespace-nowrap sm:whitespace-normal"
+            }`}
+          >
             {c.label}
           </div>
-          <div className="text-[0.8em] text-[var(--txt2)] leading-tight mt-0.5 whitespace-nowrap sm:whitespace-normal">
+          <div
+            className={`text-[0.8em] text-[var(--txt2)] leading-tight mt-0.5 ${
+              narrow ? "" : "whitespace-nowrap sm:whitespace-normal"
+            }`}
+          >
             {c.sub}
           </div>
         </motion.div>
-      </motion.div>,
+      </motion.div>
     );
+  };
+
+  // Wide-mode: flat sequence of boxes + arrows.
+  const cells = [];
+  ordered.forEach((id) => {
+    const c = cfg[id];
+    const open = c.grow > 0;
+    cells.push(renderBox(id));
     if (open && id !== lastVisible) {
-      cells.push(<FlowArrow key={`arr-${id}`} mobileVertical />);
+      cells.push(<FlowArrow key={`arr-${id}`} />);
     }
   });
 
-  // Tag row (one cell per box in `ordered`, mirroring widths) — fades in
-  // for the redesigned view.
+  // Wide-mode tag row (one cell per box, mirroring widths).
   const tagCells = [];
   ordered.forEach((id) => {
     const c = cfg[id];
     tagCells.push(
       <motion.span
         key={id}
-        layout
+        layout={!narrow}
         transition={{ duration: DUR, ease: EASE }}
         style={{
           flexGrow: c.grow,
@@ -159,7 +236,44 @@ export default function FlowDiagram({ defaultRedesigned = false }) {
     }
   });
 
-  // Bracket annotation cells for the redesigned view.
+  // Narrow-mode groups: walk `ordered` (so closed boxes stay in the DOM and
+  // framer can animate them collapsing) bucketed by bracket. Standard mode
+  // has no brackets — collapse to one group with the "Each step…" caption.
+  const narrowGroups = narrow
+    ? (() => {
+        if (!redesigned) {
+          return [
+            {
+              boxes: ordered,
+              sideLabel: "Each step requires the user to author a decision",
+              sideTone: "point",
+            },
+          ];
+        }
+        const out = [];
+        ordered.forEach((id) => {
+          const c = cfg[id];
+          const grp = BRACKETS.find(
+            (b) =>
+              cfg[b.fromId].order <= c.order &&
+              c.order <= cfg[b.toId].order,
+          );
+          const last = out[out.length - 1];
+          if (last && last.bracket === grp) {
+            last.boxes.push(id);
+          } else {
+            out.push({ bracket: grp, boxes: [id] });
+          }
+        });
+        return out.map((g) => ({
+          boxes: g.boxes,
+          sideLabel: g.bracket ? g.bracket.label : null,
+          sideTone: g.bracket ? g.bracket.tone : "point",
+        }));
+      })()
+    : null;
+
+  // Bracket annotation cells for the wide redesigned view.
   const renderBrackets = () => {
     const cs = [];
     ordered.forEach((id) => {
@@ -188,8 +302,6 @@ export default function FlowDiagram({ defaultRedesigned = false }) {
         </div>,
       );
       if (open && id !== lastVisible) {
-        // connector segment over the arrow if the next visible box is in
-        // the same group
         const next = visible[visible.indexOf(id) + 1];
         const sameGroup =
           grp &&
@@ -217,8 +329,6 @@ export default function FlowDiagram({ defaultRedesigned = false }) {
   };
 
   const renderBracketLabels = () => {
-    // group blocks: walk visible boxes, merge consecutive ones in the
-    // same bracket.
     const out = [];
     let i = 0;
     while (i < visible.length) {
@@ -229,7 +339,6 @@ export default function FlowDiagram({ defaultRedesigned = false }) {
           cfg[id].order <= cfg[b.toId].order,
       );
       if (grp) {
-        // collect this run
         const run = [];
         while (
           i < visible.length &&
@@ -269,60 +378,104 @@ export default function FlowDiagram({ defaultRedesigned = false }) {
 
   return (
     <>
-      <div className="border border-[var(--bg3)] rounded-lg bg-[var(--bg2)] px-3 py-4">
+      <div
+        ref={rootRef}
+        className="border border-[var(--bg3)] rounded-lg bg-[var(--bg2)] px-3 py-4"
+      >
         <div className="font-mono text-[var(--point)] text-[0.75em] uppercase tracking-[0.16em] mb-4">
           {redesigned ? "Redesigned flow " : "Standard flow"}
         </div>
 
-        {/* Tag row (hidden on mobile — stacked boxes already imply order). */}
-        <div className="flex flex-row gap-px mb-1 max-sm:hidden">
-          {tagCells}
-        </div>
+        {/* Tag row — wide only. */}
+        {!narrow && (
+          <div className="flex flex-row gap-px mb-1">{tagCells}</div>
+        )}
 
-        {/* Box row — vertical on mobile. */}
-        <div className="flex flex-row items-stretch gap-px max-sm:flex-col">
-          {cells}
-        </div>
+        {/* Boxes — narrow stacks them by bracket group with a rotated side
+            label; wide keeps the horizontal row. Each box has a `layoutId`
+            so framer animates it across mode toggles even when groups (and
+            therefore parent containers) reshape. */}
+        {narrow ? (
+          <div className="flex flex-col">
+            {narrowGroups.map((g, gi) => (
+              <React.Fragment key={gi}>
+                <div className="flex flex-row gap-3 items-stretch">
+                  <div className="flex-1 min-w-0 flex flex-col items-stretch gap-px">
+                    {g.boxes.map((id, bi) => {
+                      const open = cfg[id].grow > 0;
+                      const hasNextOpen = g.boxes
+                        .slice(bi + 1)
+                        .some((nid) => cfg[nid].grow > 0);
+                      return (
+                        <React.Fragment key={id}>
+                          {renderBox(id)}
+                          {open && hasNextOpen && (
+                            <FlowArrow key={`arr-${id}`} vertical />
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                  {g.sideLabel && (
+                    <SideLabel label={g.sideLabel} tone={g.sideTone} />
+                  )}
+                </div>
+                {/* Inter-group arrow — aligned with the box column above. */}
+                {gi < narrowGroups.length - 1 && (
+                  <div className="flex flex-row gap-3 items-stretch">
+                    <div className="flex-1 min-w-0">
+                      <FlowArrow vertical />
+                    </div>
+                    <div className="shrink-0 w-8" />
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-row items-stretch gap-px">{cells}</div>
+        )}
 
-        {/* Annotation / caption */}
-        <AnimatePresence mode="wait" initial={false}>
-          {redesigned ? (
-            <motion.div
-              key="brackets"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="max-sm:hidden"
-            >
-              <div className="flex flex-row gap-px mt-3">
-                {renderBrackets()}
-              </div>
-              <div className="flex flex-row gap-px mt-1.5">
-                {renderBracketLabels()}
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="standard-note"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div
-                className="border-t border-dashed mt-4"
-                style={{
-                  borderColor:
-                    "color-mix(in srgb, var(--point) 55%, transparent)",
-                }}
-              />
-              <div className="font-mono text-[var(--point)] text-[0.7em] uppercase tracking-[0.16em] text-center mt-4">
-                ↑ Each step requires the user to author a decision
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Wide-mode annotation below the row. */}
+        {!narrow && (
+          <AnimatePresence mode="wait" initial={false}>
+            {redesigned ? (
+              <motion.div
+                key="brackets"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="flex flex-row gap-px mt-3">
+                  {renderBrackets()}
+                </div>
+                <div className="flex flex-row gap-px mt-1.5">
+                  {renderBracketLabels()}
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="standard-note"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div
+                  className="border-t border-dashed mt-4"
+                  style={{
+                    borderColor:
+                      "color-mix(in srgb, var(--point) 55%, transparent)",
+                  }}
+                />
+                <div className="font-mono text-[var(--point)] text-[0.7em] uppercase tracking-[0.16em] text-center mt-4">
+                  ↑ Each step requires the user to author a decision
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
       </div>
 
       <Toggle

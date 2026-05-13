@@ -1,18 +1,50 @@
-import React from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import MonoLabel from "../MonoLabel";
 
-/**
- * Card grid layout. One column on mobile, `cols` columns at the 2xl
- * breakpoint (default 2). Each <Card> matches the ChartContainer aesthetic:
- *   border, rounded-lg, bg-[var(--bg2)], px-3 py-4.
- * MonoLabel sits at the top of each card.
- */
+// Min width per column before we step down. Tune if cards need more breathing
+// room — bigger values flip to fewer columns sooner.
+const MIN_COL_PX = 260;
 
+// Measure the element's own width with ResizeObserver. Returns [ref, width].
+function useContainerWidth() {
+  const ref = useRef(null);
+  const [width, setWidth] = useState(null);
+
+  useLayoutEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+    const measure = () => setWidth(node.getBoundingClientRect().width);
+    measure();
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measure);
+      return () => window.removeEventListener("resize", measure);
+    }
+    const ro = new ResizeObserver(([entry]) =>
+      setWidth(entry.contentRect.width),
+    );
+    ro.observe(node);
+    return () => ro.disconnect();
+  }, []);
+
+  return [ref, width];
+}
+
+/**
+ * Card grid layout. Shows exactly `cols` columns when its **own container**
+ * is wide enough (≥ `cols * MIN_COL_PX`), otherwise drops straight to 1
+ * column — no intermediate step. No viewport breakpoints.
+ */
 export function CardGrid({ children, className = "", cols = 2 }) {
+  const [ref, width] = useContainerWidth();
+  const actualCols =
+    width != null && width < cols * MIN_COL_PX ? 1 : cols;
   return (
     <div
-      className={`grid grid-cols-1 2xl:grid-cols-[var(--cardgrid-cols)] gap-4 items-stretch ${className}`}
-      style={{ "--cardgrid-cols": `repeat(${cols}, minmax(0, 1fr))` }}
+      ref={ref}
+      className={`grid gap-4 items-stretch ${className}`}
+      style={{
+        gridTemplateColumns: `repeat(${actualCols}, minmax(0, 1fr))`,
+      }}
     >
       {children}
     </div>

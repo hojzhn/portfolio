@@ -6,7 +6,7 @@ export const SiteRoleContext = createContext();
 export const LayoutProvider = ({ children }) => {
   const [layout, setLayout] = useState({
     mobile: false,
-    mobiler: window.innerWidth < 600,
+    mobiler: window.innerWidth < 768,
     menu: false,
     post: false,
     orientation: "portrait",
@@ -56,7 +56,7 @@ export const LayoutProvider = ({ children }) => {
   useEffect(() => {
     const checkMobile = () => {
       const isMobile = window.innerWidth < 1200;
-      const isMobiler = window.innerWidth < 600;
+      const isMobiler = window.innerWidth < 768;
       const newOrientation = isMobile ? "landscape" : "portrait";
       const newHeight = window.innerHeight - layout.design.globalMargin * 2;
 

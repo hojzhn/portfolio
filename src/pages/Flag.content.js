@@ -14,6 +14,7 @@ import HMWFraming from "../components/Twenty/HMW.js";
 import { CodeInline } from "../components/Code.js";
 import Pill from "../components/Pill.js";
 import PainPointsInteractive from "../components/Bol/PainPoints.js";
+import SimpleList from "../components/SimpleList.js";
 const Overview = () => (
   <>
     <img
@@ -234,7 +235,7 @@ const Investment = () => (
     <FindingParagraph
       title="Precedent"
       first
-      tagline="A compressed trade flow lets attentive users act. It does not produce commitment."
+      tagline="A compressed trade flow lets attentive users act. However, it does not produce commitment."
       desc={
         <p>
           Robinhood and similar consumer brokerages run single-screen amount
@@ -720,20 +721,70 @@ const Synthesis = () => (
       look like rigor to a trader are not relevant to a long-term theme backer,
       and vice versa. This is consistent with the matching reading developed in{" "}
       <span className="font-mono tracking-[0.18em] text-[0.8em] text-[var(--point)] uppercase">
-        Loss instinct at –10%
-      </span>{" "}
-      and{" "}
-      <span className="font-mono tracking-[0.18em] text-[0.8em] text-[var(--point)] uppercase">
-        The matching mechanism articulated
+        Direction and substance
       </span>{" "}
       . Confidence does not survive translation across frames any more than
       disposition does.
     </p>
     <FindingParagraph
-      title="Loss instinct at –10%"
-      tagline="Loss responses split based on participant intent set prior."
+      title=" Direction and substance"
+      tagline="Intent is set before the flow begins."
+      desc="Intent operates at two layers. 1) Direction as the surfaces the user belongs in, such as long-term holding or short-term trading. 2) Substance as a view the user backs inside that surface. The framing dimension addresses the first, and the surfacing mechanism addresses the second."
     />
-    <FindingParagraph title="The matching mechanism articulated" />
+    <CardGrid>
+      <Card>
+        <div>
+          <MonoLabel margin={false} className="text-[var(--point)]">
+            Direction
+          </MonoLabel>
+          <div className="text-lg">User arrives with the intention.</div>
+        </div>
+        <SimpleList
+          className="text-[var(--txt2)]"
+          label="Observed in loss-instinct responses"
+          line={false}
+          items={[
+            "Tolerates loss when invested with a reason",
+            'Separates "short term money" from "investing"',
+            "Treats drops as buying opportunities when conviction holds",
+          ]}
+        />
+      </Card>
+      <Card>
+        <div>
+          <MonoLabel margin={false} className="text-[var(--point)]">
+            Substance
+          </MonoLabel>
+          <div className="text-lg">The flow should surface the intent.</div>
+        </div>{" "}
+        <SimpleList
+          className="text-[var(--txt2)]"
+          label="Articulated in comparative interview"
+          line={false}
+          items={[
+            "Would commit fully to a theme she genuinely stood by",
+            "The flow format would not matter if the theme matched",
+            "Chooses what to invest first and regards the provider as secondary",
+          ]}
+        />
+      </Card>
+    </CardGrid>
+    <p>
+      Direction is fixed. The framing dimension's value is matching surface to
+      existing Direction, not converting one kind of user into another. The
+      Redesign is legible to long-term investors. The compressed frame is
+      legible to traders. Each surface serves a frame and the frame meets an
+      intent that already exists.
+    </p>
+
+    <p>
+      Theme-specific intent is a separate question. The framing dimension
+      addresses the directional intent and stops there. It tells a long-term
+      investor she is in the right surface, but does not tell her which theme
+      she would actually back. For the design's claim to hold, surfacing has to
+      do the second job: propose themes that the users would actually stand by.
+      Surfacing therefore deserves the same design attention as framing.
+    </p>
   </>
 );
 

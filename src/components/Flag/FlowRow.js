@@ -32,15 +32,19 @@ export const FLOW_BOX_CLASS = {
 /* Fixed-width so the bracket-row connector can span the full cell. */
 export const ARROW_W = "w-5 sm:w-6";
 
-export const FlowArrow = ({ hidden = false }) => (
+// `vertical` swaps the arrow to point down and lets the cell stretch full width,
+// for diagrams that flip to a vertical stack.
+export const FlowArrow = ({ hidden = false, vertical = false }) => (
   <div
     aria-hidden="true"
-    className={`shrink-0 ${ARROW_W} flex items-center justify-center`}
+    className={`shrink-0 flex items-center justify-center ${
+      vertical ? "w-full py-1" : ARROW_W
+    }`}
   >
     <i
       className={`fa-sharp fa-regular fa-arrow-right text-[10px] sm:text-[12px] ${
         hidden ? "invisible" : "text-[var(--txt3)]"
-      }`}
+      } ${vertical ? "rotate-90" : ""}`}
     />
   </div>
 );

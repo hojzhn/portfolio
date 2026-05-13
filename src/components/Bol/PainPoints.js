@@ -77,7 +77,7 @@ function DetailContent({
   return (
     <div>
       {item.tag && <PainTag index={index} label={item.tag} />}
-      <div className="grid gap-8 md:grid-cols-1">
+      <div className="grid gap-8 lg:grid-cols-1">
         {item.problem && (
           <div>
             <div
@@ -210,7 +210,7 @@ export default function PainPointsInteractive({
   const currentItem = items[Math.min(index, items.length - 1)];
 
   return (
-    <div className="grid gap-10 md:gap-12 md:grid-cols-[20em_minmax(0,1fr)]">
+    <div className="grid gap-10 lg:gap-12 lg:grid-cols-[20em_minmax(0,1fr)]">
       {/* Tab list */}
       <div className="flex flex-col">
         {items.map((item, i) => {
@@ -225,7 +225,7 @@ export default function PainPointsInteractive({
               />
 
               {/* Mobile: inline expandable detail */}
-              <div className="md:hidden">
+              <div className="lg:hidden">
                 <AnimatePresence initial={false}>
                   {isActive && (
                     <MobileExpandablePanel
@@ -243,7 +243,7 @@ export default function PainPointsInteractive({
       </div>
 
       {/* Desktop detail panel */}
-      <div className="hidden md:block md:pt-2">
+      <div className="hidden lg:block lg:pt-2">
         <div className="bg-[var(--bg2)] border border-[var(--point)] rounded-lg p-6">
           <AnimatePresence mode="wait">
             <DesktopDetailPanel
