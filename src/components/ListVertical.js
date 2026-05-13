@@ -97,7 +97,7 @@ function BulletVertical({
         `}
       >
         {showLeadCol && (
-          <div className="text-[0.8em] font-semibold leading-[1.2] text-[var(--txt)]">
+          <div className="text-[0.8em] font-mono uppercase leading-[1.2] text-[var(--txt)]">
             {hasTitle ? (
               <div className="flex gap-2 items-baseline">
                 {numbered && (

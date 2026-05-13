@@ -516,6 +516,227 @@ const betsDesc = () => (
   </>
 );
 
+const TheTest = () => (
+  <>
+    <DescriptionHeader>Test design</DescriptionHeader>
+  </>
+);
+// One card in the register-synthesis grid. Three stacked sections:
+//   1. the register the flow landed in     (top, bordered)
+//   2. supporting verbatims                 (middle, bordered, italic)
+//   3. label + per-flow tally               (bottom row)
+// `highlighted` paints the card border in the accent color.
+const RegisterCard = ({
+  flow,
+  highlighted = false,
+  register,
+  evidence,
+  convergence,
+}) => (
+  <Card
+    label={flow}
+    className={highlighted ? "border border-[var(--point)]" : ""}
+  >
+    <div className="flex-1 border-b -mx-[var(--card-px)] px-[var(--card-px)] pb-4 border-[var(--bg3)]">
+      <MonoLabel margin={false} className="text-[var(--txt2)]">
+        {register.label}
+      </MonoLabel>
+      <div className="text-xl mb-4">{register.title}</div>
+
+      <div className="italic text-[var(--txt2)]">
+        {evidence.quotes.map((q, i) => (
+          <React.Fragment key={i}>
+            {i > 0 && <br />}
+            {`"${q}"`}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+    <div className="flex items-center justify-between">
+      <MonoLabel
+        margin={false}
+        className={`${highlighted && "text-[var(--point)]"}`}
+      >
+        {convergence.label}
+      </MonoLabel>
+      <MonoLabel margin={false} className="text-[var(--txt2)]">
+        {convergence.meta}
+      </MonoLabel>
+    </div>
+  </Card>
+);
+
+const synthesisRegisters = [
+  {
+    flow: "Traditional",
+    highlighted: true,
+    register: { label: "Register", title: "Institutional buying" },
+    evidence: {
+      count: "3 of 5 answers",
+      quotes: [
+        "Back then it was a pile of paper.",
+        "Invested quarterly.",
+        "Opted in for a fund and read through the documents.",
+      ],
+    },
+    convergence: {
+      label: "Convergent",
+      meta: (
+        <>
+          5 <i className="fa-sharp fa-regular fa-arrow-right" /> 1
+        </>
+      ),
+    },
+  },
+  {
+    flow: "Compressed",
+    highlighted: true,
+    register: { label: "Register", title: "Trading for profit" },
+    evidence: {
+      count: "3 of 5 answers",
+      quotes: [
+        "Traded a stock(ETF). Bought.",
+        "I tried to get the item that looked like I could get the most return.",
+        "Robinhood trading.",
+      ],
+    },
+    convergence: {
+      label: "Convergent",
+      meta: (
+        <>
+          4 <i className="fa-sharp fa-regular fa-arrow-right" /> 1
+        </>
+      ),
+    },
+  },
+  {
+    flow: "Reframed",
+    register: {
+      label: "Register",
+      title: "Mixed: subscription, standing, recurring, buying",
+    },
+    evidence: {
+      count: "3 of 5 answers",
+      quotes: [
+        "Recurring trade based on recommendation.",
+        "Subscription to an ETF.",
+        "Bought an ETF.",
+      ],
+    },
+    convergence: {
+      label: "Divergent",
+      meta: (
+        <>
+          6 <i className="fa-sharp fa-regular fa-arrow-right" /> 4
+        </>
+      ),
+    },
+  },
+];
+
+// One card in the self-rated-confidence grid.
+const ConfidenceCard = ({ flow, score, outOf = 30, avg, avgOutOf = 5 }) => (
+  <Card label={flow}>
+    <div className="flex items-baseline gap-1">
+      <span className="text-5xl tabular-nums">{score}</span>
+      <span className="text-[var(--txt2)]">/ {outOf}</span>
+    </div>
+    <div className="text-[var(--txt2)] font-mono text-[0.8em] uppercase ">
+      Avg {avg}/{avgOutOf}
+    </div>
+  </Card>
+);
+
+const confidenceScores = [
+  { flow: "Traditional", score: 22, avg: 3.7 },
+  { flow: "Compressed", score: 23, avg: 3.8 },
+  { flow: "Reframed", score: 23, avg: 3.8 },
+];
+
+const confidenceMeta = [
+  ["Scale", "1 to 5 per participant, summed across 6"],
+  ["Range", "6 to 30 possible"],
+  ["Observed spread", "1 point"],
+];
+
+const Synthesis = () => (
+  <>
+    <FindingParagraph
+      first
+      title="Vocabulary"
+      tagline="The conceptual frame of long-term, recurring, theme-based commitment landed. The specific vocabulary the design proposed did not consistently get adopted."
+      desc="   For traditional and Robinhood flow the answers stayed inside one register,
+    institutional buying or short-term trading. The Redesign produced register
+    scatter. Five answers split across four candidate registers with no single
+    one dominant."
+    />
+    <CardGrid cols={3}>
+      {synthesisRegisters.map((r) => (
+        <RegisterCard key={r.flow} {...r} />
+      ))}
+    </CardGrid>
+    <FindingParagraph
+      title="Self-rated confidence"
+      tagline="Three flows tied in self-rated confidence score within noise."
+    />
+    <CardGrid cols={3}>
+      {confidenceScores.map((c) => (
+        <ConfidenceCard key={c.flow} {...c} />
+      ))}
+    </CardGrid>
+
+    <ListVertical>
+      <BulletVertical title="Traditional" numbered>
+        Additional authoring depth did not increase confidence. Six author
+        decisions did not score higher than the Redesign's two.
+      </BulletVertical>
+      <BulletVertical title="Compressed" numbered>
+        Market data, price charts, and order summaries did not increase
+        confidence. The richer trading surface scored identically to the
+        stripped Redesign.
+        <div className="flex items-start gap-3 p-4 bg-[var(--bg2)] border border-[var(--bg3)] rounded-lg mt-4">
+          <i className="fa-sharp fa-regular fa-circle-exclamation text-[var(--point)] leading-none mt-0.5 shrink-0" />
+          <div className="flex flex-col gap-1.5">
+            <MonoLabel margin={false} className="text-[var(--point)]">
+              Nuanced finding
+            </MonoLabel>
+            <div className="text-[var(--txt2)]">
+              Multiple participants pointed at the chart in Compressed flow and
+              said it gave them confidence to make a trade. However this was
+              confined to short-term trade-profit context.
+            </div>
+          </div>
+        </div>
+      </BulletVertical>
+      <BulletVertical title="Reframed" numbered>
+        Removing both and placing the amount upfront did not decrease
+        confidence. The compression did not cost the procedural sureness the
+        test asked about.
+      </BulletVertical>
+    </ListVertical>
+    <p>
+      {" "}
+      Each surface produces confidence in the frame it presents. Contents that
+      look like rigor to a trader are not relevant to a long-term theme backer,
+      and vice versa. This is consistent with the matching reading developed in{" "}
+      <span className="font-mono tracking-[0.18em] text-[0.8em] text-[var(--point)] uppercase">
+        Loss instinct at –10%
+      </span>{" "}
+      and{" "}
+      <span className="font-mono tracking-[0.18em] text-[0.8em] text-[var(--point)] uppercase">
+        The matching mechanism articulated
+      </span>{" "}
+      . Confidence does not survive translation across frames any more than
+      disposition does.
+    </p>
+    <FindingParagraph
+      title="Loss instinct at –10%"
+      tagline="Loss responses split based on participant intent set prior."
+    />
+    <FindingParagraph title="The matching mechanism articulated" />
+  </>
+);
+
 export default {
   // Top-level sections, must match menu titles exactly
   Overview,
@@ -540,6 +761,8 @@ export default {
   PrototypeDesc,
   "Bets & Falsifiers": Falsification,
   betsDesc,
+  "The test": TheTest,
+  Synthesis: Synthesis,
 
   "What Comes Next?": WhatComesNext,
 };
