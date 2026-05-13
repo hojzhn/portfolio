@@ -127,7 +127,7 @@ export default function FlowDiagram({ defaultRedesigned = false }) {
       </motion.div>,
     );
     if (open && id !== lastVisible) {
-      cells.push(<FlowArrow key={`arr-${id}`} />);
+      cells.push(<FlowArrow key={`arr-${id}`} mobileVertical />);
     }
   });
 
@@ -274,48 +274,55 @@ export default function FlowDiagram({ defaultRedesigned = false }) {
           {redesigned ? "Redesigned flow " : "Standard flow"}
         </div>
 
-      {/* Tag row */}
-      <div className="flex flex-row gap-px mb-1">{tagCells}</div>
+        {/* Tag row (hidden on mobile — stacked boxes already imply order). */}
+        <div className="flex flex-row gap-px mb-1 max-sm:hidden">
+          {tagCells}
+        </div>
 
-      {/* Box row */}
-      <div className="flex flex-row items-stretch gap-px">{cells}</div>
+        {/* Box row — vertical on mobile. */}
+        <div className="flex flex-row items-stretch gap-px max-sm:flex-col">
+          {cells}
+        </div>
 
-      {/* Annotation / caption */}
-      <AnimatePresence mode="wait" initial={false}>
-        {redesigned ? (
-          <motion.div
-            key="brackets"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex flex-row gap-px mt-3">{renderBrackets()}</div>
-            <div className="flex flex-row gap-px mt-1.5">
-              {renderBracketLabels()}
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="standard-note"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div
-              className="border-t border-dashed mt-4"
-              style={{
-                borderColor:
-                  "color-mix(in srgb, var(--point) 55%, transparent)",
-              }}
-            />
-            <div className="font-mono text-[var(--point)] text-[0.7em] uppercase tracking-[0.16em] text-center mt-4">
-              ↑ Each step requires the user to author a decision
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Annotation / caption */}
+        <AnimatePresence mode="wait" initial={false}>
+          {redesigned ? (
+            <motion.div
+              key="brackets"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="max-sm:hidden"
+            >
+              <div className="flex flex-row gap-px mt-3">
+                {renderBrackets()}
+              </div>
+              <div className="flex flex-row gap-px mt-1.5">
+                {renderBracketLabels()}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="standard-note"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div
+                className="border-t border-dashed mt-4"
+                style={{
+                  borderColor:
+                    "color-mix(in srgb, var(--point) 55%, transparent)",
+                }}
+              />
+              <div className="font-mono text-[var(--point)] text-[0.7em] uppercase tracking-[0.16em] text-center mt-4">
+                ↑ Each step requires the user to author a decision
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <Toggle
