@@ -83,12 +83,6 @@ function BrowseScreen() {
 
       <div className={cn("flex justify-between mb-2", palette.mutedText)}>
         <span>{CATALOG.length} themes available</span>
-        <SelectBox>
-          <option>Sort: 1Y return</option>
-          <option>Sort: Since inception</option>
-          <option>Sort: Holdings count</option>
-          <option>Sort: AUM</option>
-        </SelectBox>
       </div>
 
       {CATALOG.map((b) => {

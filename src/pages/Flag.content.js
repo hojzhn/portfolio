@@ -546,30 +546,34 @@ const TheTest = () => {
             Each participant moves through flow wireframes in counterbalanced
             order, with a short distraction task in between to reduce carryover.
             Participants were asked to think-aloud through all flows.
-          </p>
-          <SimpleList
-            className="mt-4"
-            label="Post-flow interview"
-            line={false}
-            items={[
-              "What did you just do?",
-              "From one to five, how confident did you feel completing it?",
-              "If this exact position dropped 10 percent next month, how would you respond?",
-              "How long do you think you'd hold it?",
-            ]}
-          />
+          </p>{" "}
+          <div className="flex items-start gap-3 p-4 bg-[var(--bg2)] border border-[var(--bg3)] rounded-lg mt-4">
+            <SimpleList
+              label="Post-flow interview"
+              line={false}
+              items={[
+                "What did you just do?",
+                "From one to five, how confident did you feel completing it?",
+                "If this exact position dropped 10 percent next month, how would you respond?",
+                "How long do you think you'd hold it?",
+              ]}
+            />
+          </div>
         </BulletVertical>
         <BulletVertical numbered title="Closing">
-          <SimpleList
-            label="Closing interview"
-            line={false}
-            items={[
-              "What was the most noticeable difference for you?",
-              "Which flow felt most like trading?",
-              "Which flow felt easiest to stay in over time?",
-              "Was any of the themes feel personally relevant to you?",
-            ]}
-          />
+          {" "}
+          <div className="flex items-start gap-3 p-4 bg-[var(--bg2)] border border-[var(--bg3)] rounded-lg ">
+            <SimpleList
+              label="Closing interview"
+              line={false}
+              items={[
+                "What was the most noticeable difference for you?",
+                "Which flow felt most like trading?",
+                "Which flow felt easiest to stay in over time?",
+                "Was any of the themes feel personally relevant to you?",
+              ]}
+            />{" "}
+          </div>
         </BulletVertical>
       </ListVertical>
     </>

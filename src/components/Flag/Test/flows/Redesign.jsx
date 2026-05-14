@@ -19,7 +19,7 @@
 import { useTestState } from "../TestStateContext";
 import { CATALOG, findCatalog } from "../data/catalog";
 import { DETAIL } from "../data/detail";
-import { fmtPct, fmtMoney } from "../lib/format";
+import { fmtPct, fmtMoney, fmtMoneyDec } from "../lib/format";
 import { cn } from "../lib/cn";
 import { palette } from "../lib/tw";
 import {
@@ -230,6 +230,30 @@ function CaseItem({ marker, item }) {
   );
 }
 
+// Holdings row for WHAT THIS BACKS. Shows allocation in dollars and in
+// fractional shares so the user can reconcile to the underlying buy.
+function HoldingRow({ holding, support }) {
+  const dollars = support * holding.weight;
+  const shares = dollars / holding.pricePerShare;
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-[1fr_auto_auto] gap-x-3 py-[4px] border-b border-dashed last:border-b-0",
+        palette.border,
+      )}
+    >
+      <span>
+        {holding.name}{" "}
+        <span className={palette.mutedText}>({holding.ticker})</span>
+      </span>
+      <span className="text-right">{fmtMoneyDec(dollars)}</span>
+      <span className={cn("text-right", palette.mutedText)}>
+        {shares.toFixed(4)} sh
+      </span>
+    </div>
+  );
+}
+
 // ============================================================================
 // Step 01 · Discover · stacked claim cards
 // ============================================================================
@@ -297,10 +321,8 @@ function SetLevelScreen() {
   const a = DETAIL.amount;
   const belowMin = state.amount < a.minimum;
 
-  const { isMobile } = useTestState();
-
   // Standing implies recurrence. Drop one-time.
-  const recurringFreqs = a.frequencies;
+  const recurringFreqs = a.frequencies.filter((f) => f.id !== "one-time");
 
   return (
     <>
@@ -308,23 +330,20 @@ function SetLevelScreen() {
 
       <ClaimBlock view={view} basket={b} />
 
-      <div
-        className={`${isMobile ? "flex-col" : "flex-row"} flex gap-4 mb-[18px]`}
-      >
-        <Box>
-          <BoxHead meta="Recent supporting signals">CASE FOR</BoxHead>
-          {b.news.map((n, i) => (
-            <CaseItem key={i} marker="[+]" item={n} />
-          ))}
-        </Box>
+      <Box>
+        <BoxHead meta="Recent supporting signals">CASE FOR</BoxHead>
+        {b.news.map((n, i) => (
+          <CaseItem key={i} marker="[+]" item={n} />
+        ))}
+      </Box>
 
-        <Box>
-          <BoxHead meta="Recent contrary signals">CASE AGAINST</BoxHead>
-          {view.contraryNews.map((n, i) => (
-            <CaseItem key={i} marker="[-]" item={n} />
-          ))}
-        </Box>
-      </div>
+      <Box>
+        <BoxHead meta="Recent contrary signals">CASE AGAINST</BoxHead>
+        {view.contraryNews.map((n, i) => (
+          <CaseItem key={i} marker="[-]" item={n} />
+        ))}
+      </Box>
+
       <Box>
         <BoxHead>SUPPORT THIS STANDING</BoxHead>
         <div className="font-bold text-[14px] mb-[12px]">
@@ -378,21 +397,34 @@ function SetLevelScreen() {
       </Box>
 
       <Box>
-        <BoxHead meta={`Top ${b.topHoldings.length} of ${b.holdingsCount}`}>
+        <BoxHead
+          meta={`${fmtMoney(state.amount, a.currency)} split across ${b.topHoldings.length}`}
+        >
           WHAT THIS BACKS
         </BoxHead>
+        <div
+          className={cn(
+            "grid grid-cols-[1fr_auto_auto] gap-x-3 pb-[4px] mb-[2px] text-[11px] uppercase tracking-[0.04em] border-b border-dashed",
+            palette.border,
+            palette.mutedText,
+          )}
+        >
+          <span>Holding</span>
+          <span className="text-right">Amount</span>
+          <span className="text-right">Shares</span>
+        </div>
         {b.topHoldings.map((h) => (
-          <div
-            key={h.ticker}
-            className={cn(
-              "grid grid-cols-[1fr_auto] py-[3px] border-b border-dashed last:border-b-0",
-              palette.border,
-            )}
-          >
-            <span>{h.name}</span>
-            <span className={palette.mutedText}>{fmtPct(h.weight, 1)}</span>
-          </div>
+          <HoldingRow key={h.ticker} holding={h} support={state.amount} />
         ))}
+        <div
+          className={cn(
+            "mt-[8px] pt-[6px] text-[11px] border-t border-dashed",
+            palette.border,
+            palette.mutedText,
+          )}
+        >
+          Fractional shares. Allocation may shift if {b.curator} rebalances.
+        </div>
       </Box>
 
       <div className={cn("text-[12px] mt-[14px]", palette.mutedText)}>
