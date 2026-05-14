@@ -1,16 +1,168 @@
-import { useRef } from "react";
+// Redesign flow. Standing-with-a-view frame.
+//
+// Three screens (IDs match the existing flows.js entries for arm B):
+//   01 · discover · stacked claim cards, one view per band
+//   02 · setLevel · claim anchor, case for / case against, support question
+//   03 · confirm  · claim anchor, quiet standing summary
+//
+// Vocabulary is held constant with the other two arms so compliance posture
+// does not change. The reframe is sequence, weight, and composition. The
+// claim sentence is the user's anchor and appears at the same weight on
+// every screen it touches.
+//
+// Per-view content not in catalog.js (the claim sentence and the contrary
+// news items) lives in a local VIEWS map keyed by ticker. Keeping this
+// inline rather than in catalog.js so the Redesign arm can iterate without
+// touching the other two arms. Move to catalog.js after the test if the
+// frame holds.
+
 import { useTestState } from "../TestStateContext";
 import { CATALOG, findCatalog } from "../data/catalog";
 import { DETAIL } from "../data/detail";
-import { asciiBar } from "../lib/ascii";
 import { fmtPct, fmtMoney } from "../lib/format";
 import { cn } from "../lib/cn";
 import { palette } from "../lib/tw";
-import { Button, SelectBox, BareInput } from "../components/ui";
-import CatalogRow from "../components/CatalogRow";
-import KeyStatsGrid from "../components/KeyStatsGrid";
+import {
+  Button,
+  BareInput,
+  Box,
+  BoxHead,
+  Eyebrow,
+  OptionRow,
+  OptionSymbol,
+  PresetRow,
+} from "../components/ui";
 import MetaRows from "../components/MetaRows";
-import { useContainerSize } from "../lib/containerSize";
+
+// ============================================================================
+// Per-view content not in catalog.js. Keyed by ticker.
+//   claim         · full thesis sentence, used as the persistent anchor.
+//   contraryNews  · counter-signals rendered as the "case against" alongside
+//                   the existing basket.news (the "case for").
+// ============================================================================
+const VIEWS = {
+  EMCG: {
+    claim:
+      "Rising incomes and digital adoption across emerging markets will reshape consumer spending over the next decade.",
+    contraryNews: [
+      {
+        date: "Today",
+        source: "FT",
+        headline: "EM consumer credit defaults climb above pre-2020 levels",
+      },
+      {
+        date: "Yesterday",
+        source: "Bloomberg",
+        headline: "USD strength compresses dollar-translated EM earnings",
+      },
+      {
+        date: "3 days ago",
+        source: "Reuters",
+        headline:
+          "China property drag spills into discretionary spend across the region",
+      },
+    ],
+  },
+  AIIE: {
+    claim:
+      "Compute, chips, power, and data-center buildout will keep absorbing capital faster than the market expects through 2027.",
+    contraryNews: [
+      {
+        date: "Today",
+        source: "FT",
+        headline:
+          "Goldman analysts question AI capex ROI beyond 2026 cycle peak",
+      },
+      {
+        date: "Yesterday",
+        source: "Reuters",
+        headline:
+          "Power grid bottlenecks may force AI project delays into 2027",
+      },
+      {
+        date: "4 days ago",
+        source: "Bloomberg",
+        headline:
+          "Hyperscaler hiring slowdown signals cooling infrastructure demand",
+      },
+    ],
+  },
+  CYBR: {
+    claim:
+      "Rising attack surface and enterprise security spend will sustain a structural bid under cybersecurity software.",
+    contraryNews: [
+      {
+        date: "Today",
+        source: "Bloomberg",
+        headline:
+          "Cyber software multiples stretched vs underlying revenue growth",
+      },
+      {
+        date: "Yesterday",
+        source: "Reuters",
+        headline: "CIO surveys point to tighter security budgets through 2026",
+      },
+      {
+        date: "2 days ago",
+        source: "FT",
+        headline:
+          "Open-source security stacks gain share, pressure vendor pricing",
+      },
+    ],
+  },
+  ENTR: {
+    claim:
+      "Grid modernization, storage, and electrification will outpace the headline energy transition narrative.",
+    contraryNews: [
+      {
+        date: "Today",
+        source: "WSJ",
+        headline: "Hydrogen projects shelved as cost curves disappoint backers",
+      },
+      {
+        date: "Yesterday",
+        source: "Reuters",
+        headline: "Permitting delays push grid timelines into next decade",
+      },
+      {
+        date: "3 days ago",
+        source: "Bloomberg",
+        headline: "IRA rollback risk weighs on transition equity flows",
+      },
+    ],
+  },
+  USIR: {
+    claim:
+      "A multi-year public and private capex cycle will reset the earnings power of US industrials and materials.",
+    contraryNews: [
+      {
+        date: "Today",
+        source: "Bloomberg",
+        headline:
+          "Federal infrastructure outlays decelerate into next fiscal year",
+      },
+      {
+        date: "Yesterday",
+        source: "Reuters",
+        headline: "Construction labor shortages cap project execution speed",
+      },
+      {
+        date: "2 days ago",
+        source: "WSJ",
+        headline:
+          "State budget tightening defers maintenance and renewal projects",
+      },
+    ],
+  },
+};
+
+const getView = (ticker) => VIEWS[ticker] ?? { claim: "", contraryNews: [] };
+
+// Frequency display helpers. "$250 per month" reads more naturally than the
+// "/monthly" pattern the other arms use, and the redesign drops one-time.
+const PER_UNIT = { monthly: "month", weekly: "week", quarterly: "quarter" };
+const COMMIT_SUFFIX = { monthly: "/MO", weekly: "/WK", quarterly: "/QTR" };
+
 // ============================================================================
 // Action config
 // ============================================================================
@@ -20,7 +172,7 @@ export function getRedesignActionConfig(state, stepId) {
 
   if (stepId === "discover") {
     disabled = !state.selectedTicker;
-    label = state.selectedTicker ? "[ SET LEVEL > ]" : "[ CHOOSE A THEME ]";
+    label = state.selectedTicker ? "[ CONTINUE > ]" : "[ CHOOSE A VIEW ]";
   }
   if (stepId === "setLevel") {
     disabled = state.amount < DETAIL.amount.minimum;
@@ -28,103 +180,106 @@ export function getRedesignActionConfig(state, stepId) {
   }
   if (stepId === "confirm") {
     disabled = !state.agreed;
-    label = `[ COMMIT ${fmtMoney(state.amount, DETAIL.amount.currency)}/MO ]`;
+    const suffix = COMMIT_SUFFIX[state.frequency] ?? "/MO";
+    label = `[ COMMIT ${fmtMoney(state.amount, DETAIL.amount.currency)}${suffix} ]`;
   }
   return { disabled, label };
 }
 
 // ============================================================================
-// Step 01 · Discover
+// Persistent claim block · identical composition on detail and confirm so
+// the claim sentence is the user's anchor across screens.
+// ============================================================================
+function ClaimBlock({ view, basket, tag = "The view" }) {
+  return (
+    <div
+      className={cn(
+        "border p-[14px] mb-[14px] relative",
+        palette.bgSubtle,
+        palette.border,
+      )}
+    >
+      <p className="text-[15px] font-bold leading-[1.35] m-0">{view.claim}</p>
+      <div
+        className={cn(
+          "mt-2 pt-[6px] text-[11px] border-t border-dashed",
+          palette.border,
+          palette.mutedText,
+        )}
+      >
+        {basket.holdingsCount} holdings · managed by {basket.curator}
+      </div>
+    </div>
+  );
+}
+
+// News-shaped evidence row. Used by both Case For and Case Against.
+function CaseItem({ marker, item }) {
+  return (
+    <div
+      className={cn(
+        "py-[6px] border-b border-dashed last:border-b-0",
+        palette.border,
+      )}
+    >
+      <div className={cn("text-[11px]", palette.mutedText)}>
+        {marker} {item.date} · {item.source}
+      </div>
+      <div className="mt-[2px]">{item.headline}</div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Step 01 · Discover · stacked claim cards
 // ============================================================================
 function DiscoverScreen() {
   const { state, selectTicker } = useTestState();
-  const { isMobile } = useContainerSize();
+
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 01 OF 03</div>
+      <Eyebrow>STEP 01 OF 03</Eyebrow>
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
-        Available options
+        Available views
       </h1>
       <div className="max-w-[80ch] mb-[18px]">
-        Each theme is selected based on signal strength against your own
-        engagement history. Select the view you would back.
+        Each card is a view the platform tracks. Back the one you would put
+        weight behind.
       </div>
 
-      <div
-        className={
-          cn(isMobile ? "flex-col justify-end" : "flex justify-between") +
-          " " +
-          cn("mb-2", palette.mutedText)
-        }
-      >
-        <div className={`${isMobile && "text-right mb-2"}`}>
-          Last updated 10:42 AM
-        </div>
-        <div className="flex justify-end">
-          <SelectBox>
-            <option>Sort: Signal strength</option>
-            <option>Sort: Momentum 90d</option>
-          </SelectBox>
-        </div>
-      </div>
-
-      {CATALOG.map((etf) => {
-        const sel = state.selectedTicker === etf.ticker;
-        const expLegend = etf.typicalExposure
-          .map((s) => `${s.class.slice(0, 3)} ${Math.round(s.weight * 100)}%`)
-          .join(" · ");
-        const expBar = etf.typicalExposure
-          .map((s) => "#".repeat(Math.round(s.weight * 20)))
-          .join("");
-        const sigBar = asciiBar(etf.signalStrength.score / 100, 10);
-
+      {CATALOG.map((b) => {
+        const view = getView(b.ticker);
+        const sel = state.selectedTicker === b.ticker;
         return (
-          <CatalogRow
-            key={etf.ticker}
-            selected={sel}
-            onClick={() => selectTicker(etf.ticker)}
-            ticker={etf.ticker}
-            title={<strong>{etf.themeShort}</strong>}
-            subtitle={etf.theme}
-            cells={[
-              {
-                label: "Signal",
-                className: "w-[104px]",
-                value: (
-                  <>
-                    <div>
-                      {etf.signalStrength.score}({etf.signalStrength.level})
-                    </div>
-                  </>
-                ),
-              },
-              {
-                label: "Momentum 90d",
-                className: "w-[112px]",
-                value: (
-                  <>
-                    <div>
-                      <strong>+{etf.momentum90d.multiplier.toFixed(1)}×</strong>
-                    </div>
-                  </>
-                ),
-              },
-
-              {
-                label: "Engagement",
-                className: "w-[128px]",
-                value: (
-                  <>
-                    <div>
-                      {etf.userEngagement.researches +
-                        etf.userEngagement.watchlists +
-                        etf.userEngagement.revisits}{" "}
-                    </div>
-                  </>
-                ),
-              },
-            ]}
-          />
+          <div
+            key={b.ticker}
+            onClick={() => selectTicker(b.ticker)}
+            className={cn(
+              "border p-[14px] mb-[12px] cursor-pointer",
+              palette.border,
+              palette.hoverBg,
+              sel && cn("border-2 p-[13px]", palette.bgSelected),
+            )}
+          >
+            <div className="flex items-start gap-2">
+              <span className="font-bold whitespace-nowrap shrink-0">
+                {sel ? "[*]" : "[ ]"}
+              </span>
+              <p className="text-[14px] font-bold leading-[1.35] m-0 flex-1">
+                {view.claim || b.theme}
+              </p>
+            </div>
+            <div
+              className={cn(
+                "flex justify-between mt-[8px] pt-[8px] text-[11px] border-t border-dashed",
+                palette.border,
+                palette.mutedText,
+              )}
+            >
+              <span>{b.holdingsCount} holdings</span>
+              <span>Managed · {b.curator}</span>
+            </div>
+          </div>
         );
       })}
     </>
@@ -132,291 +287,198 @@ function DiscoverScreen() {
 }
 
 // ============================================================================
-// Step 02 · Set Level
+// Step 02 · setLevel · claim anchor, case for / against, support question
 // ============================================================================
 function SetLevelScreen() {
-  const { state, setAmount } = useTestState();
-  const sliderRef = useRef(null);
-  const etf = findCatalog(state.selectedTicker);
-  if (!etf) return null;
+  const { state, setAmount, setFrequency } = useTestState();
+  const b = findCatalog(state.selectedTicker);
+  if (!b) return null;
+  const view = getView(b.ticker);
   const a = DETAIL.amount;
-  const d = DETAIL;
-  const sliderPct = (state.amount - a.minimum) / (a.maximum - a.minimum);
-  const currentPct = d.portfolioImpact.currentExposure * 100;
-  const postPct = d.portfolioImpact.postCommitExposure * 100;
-  const delta = postPct - currentPct;
+  const belowMin = state.amount < a.minimum;
 
-  const handleSliderClick = (e) => {
-    const rect = sliderRef.current.getBoundingClientRect();
-    const pct = (e.clientX - rect.left) / rect.width;
-    const v = Math.round(a.minimum + (a.maximum - a.minimum) * pct);
-    setAmount(Math.max(a.minimum, Math.min(a.maximum, v)));
-  };
+  const { isMobile } = useTestState();
 
-  const { isMobile } = useContainerSize();
+  // Standing implies recurrence. Drop one-time.
+  const recurringFreqs = a.frequencies;
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>
-        STEP 02 OF 03 · {etf.ticker}
-      </div>
-      <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
-        Set the level
-      </h1>
-      <div className="max-w-[80ch] mb-[18px]">
-        Choose how much to back this view at.
-      </div>
+      <Eyebrow>STEP 02 OF 03</Eyebrow>
+
+      <ClaimBlock view={view} basket={b} />
 
       <div
-        className={cn(
-          "grid grid-cols-1 gap-4 border p-[14px]",
-          palette.border,
-          !isMobile && "grid-cols-2",
-        )}
+        className={`${isMobile ? "flex-col" : "flex-row"} flex gap-4 mb-[18px]`}
       >
-        <div className={cn(palette.border, !isMobile && "border-r pr-4")}>
-          <div className="font-bold mb-2">SET MONTHLY EXPOSURE</div>
+        <Box>
+          <BoxHead meta="Recent supporting signals">CASE FOR</BoxHead>
+          {b.news.map((n, i) => (
+            <CaseItem key={i} marker="[+]" item={n} />
+          ))}
+        </Box>
 
-          <div className="flex items-baseline gap-2">
-            <span className="text-[22px]">$</span>
-            <BareInput
-              type="number"
-              value={state.amount}
-              min={a.minimum}
-              max={a.maximum}
-              onChange={(e) => setAmount(Number(e.target.value) || 0)}
-            />
-            <span className={palette.mutedText}>/mo</span>
-          </div>
-
-          <div className="flex flex-wrap gap-[6px] mt-[14px]">
-            {a.presets.map((v) => (
-              <Button
-                key={v}
-                active={state.amount === v}
-                onClick={() => setAmount(v)}
-              >
-                [{fmtMoney(v, a.currency)}]
-              </Button>
-            ))}
-          </div>
-
-          <MetaRows
-            className="mt-[10px]"
-            rows={[
-              { label: "Deployment cadence", value: d.deploymentCadence },
-              {
-                label: "Estimated annual fee",
-                value: fmtPct(d.fees.expenseRatio),
-              },
-              { label: "Risk profile", value: d.risk.ratingLabel },
-              {
-                label: "Time horizon",
-                value: `${d.risk.timeHorizonYears.min}–${d.risk.timeHorizonYears.max} years`,
-              },
-              { label: "Region", value: d.region },
-            ]}
-          />
+        <Box>
+          <BoxHead meta="Recent contrary signals">CASE AGAINST</BoxHead>
+          {view.contraryNews.map((n, i) => (
+            <CaseItem key={i} marker="[-]" item={n} />
+          ))}
+        </Box>
+      </div>
+      <Box>
+        <BoxHead>SUPPORT THIS STANDING</BoxHead>
+        <div className="font-bold text-[14px] mb-[12px]">
+          How much will you support this standing?
         </div>
 
-        <div className={!isMobile ? "pl-4" : undefined}>
+        <div className="flex items-baseline gap-2 mb-[14px]">
+          <span className="text-[22px]">$</span>
+          <BareInput
+            type="number"
+            value={state.amount}
+            min={a.minimum}
+            max={a.maximum}
+            onChange={(e) => setAmount(Number(e.target.value) || 0)}
+          />
+          <span className={palette.mutedText}>
+            / {PER_UNIT[state.frequency] ?? "month"}
+          </span>
+        </div>
+
+        <PresetRow className="mb-[14px]">
+          {a.presets.map((v) => (
+            <Button
+              key={v}
+              active={state.amount === v}
+              onClick={() => setAmount(v)}
+            >
+              [{fmtMoney(v, a.currency)}]
+            </Button>
+          ))}
+        </PresetRow>
+
+        <Eyebrow>CADENCE</Eyebrow>
+        <PresetRow className="mt-1">
+          {recurringFreqs.map((f) => (
+            <Button
+              key={f.id}
+              active={state.frequency === f.id}
+              onClick={() => setFrequency(f.id)}
+            >
+              [{f.label}]
+            </Button>
+          ))}
+        </PresetRow>
+
+        {belowMin && (
+          <div className="mt-[10px] font-bold">
+            !! Amount is below the {fmtMoney(a.minimum, a.currency)} minimum.
+          </div>
+        )}
+      </Box>
+
+      <Box>
+        <BoxHead meta={`Top ${b.topHoldings.length} of ${b.holdingsCount}`}>
+          WHAT THIS BACKS
+        </BoxHead>
+        {b.topHoldings.map((h) => (
           <div
+            key={h.ticker}
             className={cn(
-              "flex justify-between font-bold mb-2",
-              isMobile && cn("border-t pt-[10px]", palette.border),
+              "grid grid-cols-[1fr_auto] py-[3px] border-b border-dashed last:border-b-0",
+              palette.border,
             )}
           >
-            <span>ALLOCATION</span>
-            <span>{fmtMoney(state.amount, a.currency)}/mo</span>
+            <span>{h.name}</span>
+            <span className={palette.mutedText}>{fmtPct(h.weight, 1)}</span>
           </div>
+        ))}
+      </Box>
 
-          {d.assetAllocation.map((seg) => {
-            const dollars = state.amount * seg.weight;
-            return (
-              <div
-                key={seg.class}
-                className="flex flex-row items-center gap-2 justify-between py-[2px]"
-              >
-                <div>{seg.class}</div>
-                <div className="flex flex-row gap-4">
-                  <div className="">{Math.round(seg.weight * 100)}%</div>
-                  <div className="text-right">
-                    +{fmtMoney(dollars, a.currency)}/mo
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-
-          <div className={cn("border-t mt-3 pt-[10px]", palette.border)}>
-            <div className="flex justify-between items-baseline font-bold mb-[6px]">
-              <span>Theme exposure after commit</span>
-            </div>
-            <div>
-              <span className="text-[16px]">
-                {currentPct.toFixed(0)}% → {postPct.toFixed(0)}%
-              </span>{" "}
-              <span>[+{delta.toFixed(0)} PP]</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        className={cn(
-          "border p-[10px_12px] mb-[10px] mt-[10px]",
-          palette.border,
-        )}
-      >
-        <div
-          className={cn(
-            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
-            palette.border,
-          )}
-        >
-          <span>DETAILS</span>
-        </div>
-
-        <div className="font-bold mb-[6px]">RISK PROFILE</div>
-        <KeyStatsGrid
-          stats={[
-            {
-              label: "Volatility (1Y est.)",
-              value: `${fmtPct(d.risk.volatility1Y.low, 0)} – ${fmtPct(d.risk.volatility1Y.high, 0)}`,
-            },
-            {
-              label: "Max drawdown (1Y est.)",
-              value: `${fmtPct(d.risk.maxDrawdown1Y.low, 0)} to ${fmtPct(d.risk.maxDrawdown1Y.high, 0)}`,
-            },
-            { label: "Worst regime", value: d.risk.worstRegime.name },
-            { label: "Strongest regime", value: d.risk.bestRegime.name },
-          ]}
-        />
-
-        <div className="font-bold mt-[14px]">KEY SENSITIVITIES</div>
-        <div className={cn("mt-[2px]", palette.mutedText)}>
-          These factors could negatively impact the performance of this
-          exposure.
-        </div>
-        <div
-          className={`grid grid-cols-1 ${isMobile ? "" : "grid-cols-2"} gap-2 mt-2`}
-        >
-          {d.keySensitivities.map((s) => (
-            <div
-              key={s.name}
-              className={cn("border p-[8px_10px]", palette.border)}
-            >
-              <div className="font-bold">{s.name}</div>
-              <div className={cn("mt-[2px]", palette.mutedText)}>{s.note}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className={cn("py-[10px]", palette.mutedText)}>
-        {d.disclosure.shortNote}
+      <div className={cn("text-[12px] mt-[14px]", palette.mutedText)}>
+        {DETAIL.disclosure.shortNote}
       </div>
     </>
   );
 }
 
 // ============================================================================
-// Step 03 · Confirm Standing
+// Step 03 · Confirm · claim anchor, quiet summary, light agreement
 // ============================================================================
 function ConfirmScreen() {
   const { state, toggleAgreed } = useTestState();
-  const etf = findCatalog(state.selectedTicker);
-  if (!etf) return null;
+  const b = findCatalog(state.selectedTicker);
+  if (!b) return null;
+  const view = getView(b.ticker);
   const d = DETAIL;
-  const a = d.amount;
-  const c = a.currency;
-  const currentPct = d.portfolioImpact.currentExposure * 100;
-  const postPct = d.portfolioImpact.postCommitExposure * 100;
-  const annualEquiv = state.amount * 12;
-  const annualFee = annualEquiv * d.fees.expenseRatio;
+  const c = d.amount.currency;
+  const perUnit = PER_UNIT[state.frequency] ?? "month";
+
+  const periodsPerYear =
+    state.frequency === "weekly"
+      ? 52
+      : state.frequency === "quarterly"
+        ? 4
+        : 12;
+  const annualEquiv = state.amount * periodsPerYear;
+  const annualFee = annualEquiv * b.expenseRatio;
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>
-        STEP 03 OF 03 · {etf.ticker}
-      </div>
+      <Eyebrow>STEP 03 OF 03</Eyebrow>
+
+      <ClaimBlock view={view} basket={b} tag="The view you are backing" />
+
       <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
-        Confirm standing
+        Your standing
       </h1>
-      <div className="max-w-[80ch] mb-[18px]">
-        Review what you are backing and at what level. The standing forms when
-        you commit and can be adjusted anytime.
+      <div className="max-w-[80ch] mb-[14px]">
+        Review what you are backing and at what level.
       </div>
 
-      <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div
-          className={cn(
-            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
-            palette.border,
-          )}
-        >
-          <span>YOUR STANDING</span>
-        </div>
+      <Box>
         <MetaRows
           divided
+          keyWidth="120px"
           rows={[
-            { label: "Theme", value: etf.themeShort },
             {
               label: "Level",
               bold: true,
-              value: `${fmtMoney(state.amount, c)} per month`,
+              value: `${fmtMoney(state.amount, c)} per ${perUnit}`,
             },
             { label: "Cadence", value: d.deploymentCadence },
             {
               label: "Risk profile",
-              value: `${d.risk.ratingLabel} (${d.risk.rating}/${d.risk.ratingScaleMax}) · ${d.risk.timeHorizonYears.min}–${d.risk.timeHorizonYears.max}Y horizon`,
-            },
-            {
-              label: "Portfolio impact",
-              value: `${currentPct.toFixed(0)}% → ${postPct.toFixed(0)}% exposure to this theme`,
+              value: `${d.risk.ratingLabel} (${b.riskRating}/${d.risk.ratingScaleMax}) · ${d.risk.timeHorizonYears.min}–${d.risk.timeHorizonYears.max}Y horizon`,
             },
             {
               label: "Annual fee",
-              value: `${fmtPct(d.fees.expenseRatio)} (≈ ${fmtMoney(annualFee, c)} / year on ${fmtMoney(annualEquiv, c)} annualized)`,
+              value: `${fmtPct(b.expenseRatio)} (≈ ${fmtMoney(annualFee, c)} / yr on ${fmtMoney(annualEquiv, c)} annualized)`,
             },
           ]}
         />
+      </Box>
+
+      <Box dashed>
+        You can <strong>adjust</strong>, <strong>pause</strong>, or{" "}
+        <strong>retract</strong> this standing at any time from your standings
+        view. No exit fees, no holding period. The view itself is tracked by the
+        platform whether you back it or not.
+      </Box>
+
+      <div className={cn("text-[12px] mt-[14px]", palette.mutedText)}>
+        The standing carries risk. Estimated volatility{" "}
+        {fmtPct(d.risk.volatility1Y.low, 0)} –{" "}
+        {fmtPct(d.risk.volatility1Y.high, 0)} over a year. Worst regime:{" "}
+        {d.risk.worstRegime.name.toLowerCase()}, when USD strength compounds
+        losses. Past performance is not a reliable indicator of future results.
       </div>
 
-      <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div
-          className={cn(
-            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
-            palette.border,
-          )}
-        >
-          <span>WHAT YOU SHOULD KNOW</span>
-        </div>
-        <div>
-          This standing carries risk. Estimated volatility{" "}
-          {fmtPct(d.risk.volatility1Y.low, 0)} –{" "}
-          {fmtPct(d.risk.volatility1Y.high, 0)} over a year, with potential
-          drawdown of {fmtPct(d.risk.maxDrawdown1Y.low, 0)} to{" "}
-          {fmtPct(d.risk.maxDrawdown1Y.high, 0)}. The standing performs worst in
-          risk-off regimes when USD strength compounds losses. Past performance
-          is not a reliable indicator of future results.
-        </div>
-        <div className="mt-[10px]">
-          You can adjust, pause, or retract this standing at any time from your
-          standings view. No exit fees or holding periods apply.
-        </div>
-      </div>
-
-      <div
-        className="py-1 cursor-pointer hover:underline font-normal mt-[10px]"
-        onClick={toggleAgreed}
-      >
-        <span className="inline-block w-[28px] font-bold">
-          {state.agreed ? "[X]" : "[ ]"}
-        </span>
-        I have reviewed the risk profile and key sensitivities. I am backing
-        this view under my own judgment.
-      </div>
+      <OptionRow onClick={toggleAgreed} className="font-normal mt-[10px]">
+        <OptionSymbol>{state.agreed ? "[X]" : "[ ]"}</OptionSymbol>I have
+        reviewed the case for and against. I am backing this view under my own
+        judgment.
+      </OptionRow>
     </>
   );
 }

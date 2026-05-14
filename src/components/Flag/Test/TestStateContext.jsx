@@ -16,10 +16,9 @@ const makeInitial = () => ({
   riskAccepted: null,
   amount: DETAIL.amount.defaultAmount,
   frequency: DETAIL.amount.defaultFrequency,
+  accountType: DETAIL.amount.defaultAccount,
   agreed: false,
   submitted: false,
-  chartPeriod: "1Y",
-  orderType: "Buy",
 });
 
 export function TestStateProvider({ children }) {
@@ -57,20 +56,16 @@ export function TestStateProvider({ children }) {
     (frequency) => setState((s) => ({ ...s, frequency })),
     [],
   );
+  const setAccountType = useCallback(
+    (accountType) => setState((s) => ({ ...s, accountType })),
+    [],
+  );
   const setRiskAccepted = useCallback(
     (option) => setState((s) => ({ ...s, riskAccepted: option })),
     [],
   );
   const toggleAgreed = useCallback(
     () => setState((s) => ({ ...s, agreed: !s.agreed })),
-    [],
-  );
-  const setChartPeriod = useCallback(
-    (period) => setState((s) => ({ ...s, chartPeriod: period })),
-    [],
-  );
-  const setOrderType = useCallback(
-    (orderType) => setState((s) => ({ ...s, orderType })),
     [],
   );
 
@@ -85,10 +80,9 @@ export function TestStateProvider({ children }) {
       selectTicker,
       setAmount,
       setFrequency,
+      setAccountType,
       setRiskAccepted,
       toggleAgreed,
-      setChartPeriod,
-      setOrderType,
     }),
     [
       state,
@@ -100,10 +94,9 @@ export function TestStateProvider({ children }) {
       selectTicker,
       setAmount,
       setFrequency,
+      setAccountType,
       setRiskAccepted,
       toggleAgreed,
-      setChartPeriod,
-      setOrderType,
     ],
   );
 

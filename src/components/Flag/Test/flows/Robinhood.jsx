@@ -1,3 +1,10 @@
+// Themed Basket flow. Compressed thematic-basket purchase pattern as
+// practiced by Public.com, Stash, eToro CopyPortfolios, and M1 Pies.
+// Theme-first listing, basket-level performance, allocation preview,
+// purchase vocabulary throughout. The file is named Robinhood.jsx for
+// backward compatibility with ActionBar imports; the flow it implements
+// is the Themed pattern.
+
 import { useTestState } from "../TestStateContext";
 import { CATALOG, findCatalog } from "../data/catalog";
 import { DETAIL } from "../data/detail";
@@ -7,17 +14,31 @@ import {
   fmtPctSigned,
   fmtMoney,
   fmtMoneyDec,
+  fmtAUM,
   getFreqLabel,
 } from "../lib/format";
 import { cn } from "../lib/cn";
 import { palette } from "../lib/tw";
-import { Button, SelectBox, BareInput, Box } from "../components/ui";
+import {
+  Button,
+  SelectBox,
+  BareInput,
+  Box,
+  BoxHead,
+  Eyebrow,
+  ScreenTitle,
+  ScreenSub,
+  PresetRow,
+  OptionRow,
+  OptionSymbol,
+  Table,
+  Td,
+} from "../components/ui";
 import CatalogRow from "../components/CatalogRow";
-import KeyStatsGrid from "../components/KeyStatsGrid";
 import MetaRows from "../components/MetaRows";
+import KeyStatsGrid from "../components/KeyStatsGrid";
 
-const ORDER_TYPES = ["Buy", "Sell", "Limit", "Stop"];
-const PERIODS = ["1D", "1W", "1M", "3M", "1Y", "5Y"];
+const PERIODS = ["1M", "3M", "1Y", "3Y", "ALL"];
 
 // ============================================================================
 // Action config
@@ -26,91 +47,82 @@ export function getRobinhoodActionConfig(state, stepId) {
   let disabled = false;
   let label = "[ CONTINUE > ]";
 
-  if (stepId === "list") {
+  if (stepId === "browse") {
     disabled = !state.selectedTicker;
-    label = state.selectedTicker
-      ? "[ VIEW DETAIL > ]"
-      : "[ SELECT AN INSTRUMENT ]";
+    label = state.selectedTicker ? "[ REVIEW THEME > ]" : "[ SELECT A THEME ]";
   }
   if (stepId === "detail") {
-    label = `[ BUY ${state.selectedTicker} ]`;
+    label = "[ INVEST > ]";
   }
   if (stepId === "amount") {
     disabled = state.amount < DETAIL.amount.minimum;
-    label = "[ REVIEW ORDER > ]";
+    label = "[ REVIEW INVESTMENT > ]";
   }
-  if (stepId === "review") {
+  if (stepId === "confirm") {
     disabled = !state.agreed;
-    label = `[ SUBMIT ORDER · ${fmtMoneyDec(state.amount)} ]`;
+    label = `[ INVEST ${fmtMoney(state.amount, DETAIL.amount.currency)} ]`;
   }
   return { disabled, label };
 }
 
 // ============================================================================
-// Step 01 · List
+// Step 01 · Browse themes
 // ============================================================================
-function ListScreen() {
+function BrowseScreen() {
   const { state, selectTicker } = useTestState();
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>STEP 01 OF 04</div>
-      <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
-        Discover
-      </h1>
-      <div className="max-w-[80ch] mb-[18px]">
-        Browse and search for ETFs and stocks. Tap an instrument to view
-        details.
-      </div>
+      <Eyebrow>STEP 01 OF 04</Eyebrow>
+      <ScreenTitle>Browse curated themes</ScreenTitle>
+      <ScreenSub>
+        Thematic baskets managed by Public and partners. Each theme is a curated
+        collection of stocks bundled around a market view. Tap a theme to review
+        its composition before investing.
+      </ScreenSub>
 
       <div className={cn("flex justify-between mb-2", palette.mutedText)}>
-        <span>Trending </span>
+        <span>{CATALOG.length} themes available</span>
         <SelectBox>
           <option>Sort: 1Y return</option>
-          <option>Sort: Volume</option>
-          <option>Sort: Price</option>
+          <option>Sort: Since inception</option>
+          <option>Sort: Holdings count</option>
+          <option>Sort: AUM</option>
         </SelectBox>
       </div>
 
-      {CATALOG.map((etf) => {
-        const up = etf.dailyChange >= 0;
-        const spark = sparkBlocks(etf.sparkline, 14);
+      {CATALOG.map((b) => {
+        const spark = sparkBlocks(b.sparkline, 14);
         return (
           <CatalogRow
-            key={etf.ticker}
-            selected={state.selectedTicker === etf.ticker}
-            onClick={() => selectTicker(etf.ticker)}
-            ticker={<strong>{etf.ticker}</strong>}
-            title={etf.name}
-            subtitle={etf.themeShort}
+            key={b.ticker}
+            selected={state.selectedTicker === b.ticker}
+            onClick={() => selectTicker(b.ticker)}
+            ticker={b.ticker}
+            title={<strong>{b.themeShort}</strong>}
+            subtitle={[b.theme, `Managed · ${b.curator}`]}
             cells={[
               {
-                label: "Price",
-                className: "w-[88px]",
-                value: <strong>{fmtMoneyDec(etf.pricePerShare)}</strong>,
+                label: "Holdings",
+                className: "w-[72px]",
+                value: b.holdingsCount,
               },
               {
-                label: "Today",
-                className: "w-[128px]",
-                value: (
-                  <>
-                    {up ? "+" : ""}
-                    {etf.dailyChange.toFixed(2)} (
-                    {fmtPctSigned(etf.dailyChangePct, 2)})
-                  </>
-                ),
+                label: "1Y",
+                className: "w-[72px]",
+                value: fmtPctSigned(b.oneYearReturn),
               },
               {
-                label: "1Y chart",
+                label: "Trend",
                 className: "w-[120px]",
                 value: (
                   <span className="text-[14px] whitespace-nowrap">{spark}</span>
                 ),
               },
               {
-                label: "1Y",
+                label: "AUM",
                 className: "w-[72px]",
-                value: fmtPctSigned(etf.oneYearReturn),
+                value: fmtAUM(b.aumUSD),
               },
             ]}
           />
@@ -121,105 +133,89 @@ function ListScreen() {
 }
 
 // ============================================================================
-// Step 02 · Detail
+// Step 02 · Theme detail
 // ============================================================================
 function DetailScreen() {
-  const { state, setChartPeriod } = useTestState();
-  const etf = findCatalog(state.selectedTicker);
-  if (!etf) return null;
-  const up = etf.dailyChange >= 0;
-  const spark = sparkBlocks(etf.sparkline, 60);
+  const { state } = useTestState();
+  const b = findCatalog(state.selectedTicker);
+  if (!b) return null;
+  const spark = sparkBlocks(b.sparkline, 60);
+
   const stats = [
-    { label: "Open", value: fmtMoneyDec(etf.open) },
-    { label: "P/E ratio", value: etf.peRatio },
-    { label: "High", value: fmtMoneyDec(etf.high) },
-    { label: "52w high", value: fmtMoneyDec(etf.weekHigh52) },
-    { label: "Low", value: fmtMoneyDec(etf.low) },
-    { label: "52w low", value: fmtMoneyDec(etf.weekLow52) },
-    { label: "Volume", value: etf.volume },
-    { label: "Market cap", value: etf.marketCap },
-    { label: "Expense ratio", value: fmtPct(etf.expenseRatio) },
-    { label: "1Y return", value: fmtPctSigned(etf.oneYearReturn) },
+    { label: "1Y return", value: fmtPctSigned(b.oneYearReturn) },
+    { label: "3Y return", value: fmtPctSigned(b.threeYearReturn) },
+    { label: "Holdings", value: b.holdingsCount },
+    { label: "AUM", value: fmtAUM(b.aumUSD) },
   ];
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>
-        STEP 02 OF 04 · {etf.ticker}
-      </div>
+      <Eyebrow>STEP 02 OF 04 · {b.ticker}</Eyebrow>
 
       <div className="mb-[14px]">
-        <div className={palette.mutedText}>{etf.name}</div>
-        <div className="font-bold text-[18px] mt-[2px]">{etf.ticker}</div>
-        <div className="text-[32px] font-bold leading-[1.1]">
-          {fmtMoneyDec(etf.pricePerShare)}
-        </div>
-        <div className="font-bold mt-1">
-          {up ? "▲" : "▼"} {up ? "+" : ""}
-          {etf.dailyChange.toFixed(2)} ({fmtPctSigned(etf.dailyChangePct, 2)})
-          Today
-        </div>
+        <div className={palette.mutedText}>Managed by {b.curator}</div>
+        <div className="font-bold text-[18px] mt-[2px]">{b.themeShort}</div>
+        <div className={cn("mt-1", palette.mutedText)}>{b.theme}</div>
       </div>
 
-      <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
+      <Box>
+        <BoxHead
+          meta={`Since inception ${fmtPctSigned(b.sinceInceptionReturn, 1)}`}
+        >
+          PERFORMANCE
+        </BoxHead>
         <div className="whitespace-pre py-[14px] text-[18px] leading-[1.4] tracking-[-1px] overflow-hidden">
           {spark}
         </div>
         <div className={cn("flex justify-between", palette.mutedText)}>
-          <span>{fmtMoneyDec(etf.weekLow52)}</span>
-          <span>52-week range</span>
-          <span>{fmtMoneyDec(etf.weekHigh52)}</span>
+          <span>0</span>
+          <span>Time</span>
+          <span>Now</span>
         </div>
-        <div className="flex gap-1 my-2 mt-[14px]">
+        <PresetRow className="mt-[14px]">
           {PERIODS.map((p) => (
-            <Button
-              key={p}
-              active={state.chartPeriod === p}
-              onClick={() => setChartPeriod(p)}
-            >
-              {p}
+            <Button key={p} active={p === "1Y"}>
+              [{p}]
             </Button>
           ))}
+        </PresetRow>
+        <div className="mt-[14px]">
+          <KeyStatsGrid stats={stats} />
         </div>
-      </div>
+      </Box>
 
-      <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div
-          className={cn(
-            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
-            palette.border,
-          )}
-        >
-          <span>KEY STATS</span>
-        </div>
-        <KeyStatsGrid stats={stats} />
-      </div>
+      <Box>
+        <BoxHead meta="Allocation by weight">
+          HOLDINGS (TOP {b.topHoldings.length})
+        </BoxHead>
+        <Table>
+          <tbody>
+            {b.topHoldings.map((h) => (
+              <tr key={h.ticker}>
+                <Td>
+                  {h.name}{" "}
+                  <span className={palette.mutedText}>({h.ticker})</span>
+                </Td>
+                <Td numeric>{fmtPct(h.weight, 1)}</Td>
+                <Td numeric>{fmtMoneyDec(h.pricePerShare)}/sh</Td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Box>
 
-      <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div
-          className={cn(
-            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
-            palette.border,
-          )}
-        >
-          <span>ABOUT</span>
-        </div>
+      <Box>
+        <BoxHead>ABOUT</BoxHead>
         <div>
-          {etf.name} tracks {etf.theme.toLowerCase()} The fund holds a
-          diversified basket of companies positioned to benefit from this theme.
+          {b.themeShort} captures companies positioned to benefit from{" "}
+          {b.theme.toLowerCase()} The basket holds a diversified collection of
+          underlying instruments selected by {b.curator}.
         </div>
-      </div>
+      </Box>
 
-      <div className={cn("border p-[10px_12px] mb-[10px]", palette.border)}>
-        <div
-          className={cn(
-            "-mx-[12px] -mt-[10px] mb-2 px-[12px] py-1 border-b flex justify-between font-bold tracking-[0.03em]",
-            palette.border,
-          )}
-        >
-          <span>RECENT NEWS</span>
-        </div>
-        {etf.news.map((n, i) => (
+      <Box>
+        <BoxHead>RECENT NEWS</BoxHead>
+        {b.news.map((n, i) => (
           <div
             key={i}
             className={cn(
@@ -233,48 +229,31 @@ function DetailScreen() {
             <div className="mt-[2px]">{n.headline}</div>
           </div>
         ))}
-      </div>
+      </Box>
     </>
   );
 }
 
 // ============================================================================
-// Step 03 · Amount
+// Step 03 · Amount with allocation preview
 // ============================================================================
 function AmountScreen() {
-  const { state, setAmount, setFrequency, setOrderType } = useTestState();
-  const etf = findCatalog(state.selectedTicker);
-  if (!etf) return null;
+  const { state, setAmount, setFrequency } = useTestState();
+  const b = findCatalog(state.selectedTicker);
+  if (!b) return null;
   const a = DETAIL.amount;
-  const estShares = state.amount / etf.pricePerShare;
   const belowMin = state.amount < a.minimum;
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>
-        STEP 03 OF 04 · {etf.ticker}
-      </div>
-      <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
-        Buy {etf.ticker}
-      </h1>
-      <div className="max-w-[80ch] mb-[18px]">
-        {etf.name} · {fmtMoneyDec(etf.pricePerShare)}
-      </div>
+      <Eyebrow>STEP 03 OF 04 · {b.ticker}</Eyebrow>
+      <ScreenTitle>How much would you like to invest?</ScreenTitle>
+      <ScreenSub>
+        Your investment will be split across the {b.holdingsCount} holdings in
+        this theme according to its current allocation.
+      </ScreenSub>
 
-      <div className={cn("mb-1 mt-[14px]", palette.mutedText)}>ORDER TYPE</div>
-      <div className="flex flex-wrap gap-[6px] mb-[14px]">
-        {ORDER_TYPES.map((o) => (
-          <Button
-            key={o}
-            active={state.orderType === o}
-            onClick={() => setOrderType(o)}
-          >
-            [{o}]
-          </Button>
-        ))}
-      </div>
-
-      <div className="flex items-baseline gap-2 mt-[18px] mb-[14px]">
+      <div className="flex items-baseline gap-2 mb-[14px]">
         <span className="text-[22px]">$</span>
         <BareInput
           type="number"
@@ -283,10 +262,15 @@ function AmountScreen() {
           max={a.maximum}
           onChange={(e) => setAmount(Number(e.target.value) || 0)}
         />
-        <span className={palette.mutedText}>{a.currency}</span>
+        <span className={palette.mutedText}>
+          {a.currency}
+          {state.frequency === "one-time"
+            ? ""
+            : " / " + getFreqLabel(state.frequency).toLowerCase()}
+        </span>
       </div>
 
-      <div className="flex flex-wrap gap-[6px] mb-[14px]">
+      <PresetRow className="mb-[14px]">
         {a.presets.map((v) => (
           <Button
             key={v}
@@ -296,10 +280,10 @@ function AmountScreen() {
             [{fmtMoney(v, a.currency)}]
           </Button>
         ))}
-      </div>
+      </PresetRow>
 
-      <div className={cn("mb-1", palette.mutedText)}>FREQUENCY</div>
-      <div className="flex flex-wrap gap-[6px] mt-1">
+      <Eyebrow>FREQUENCY</Eyebrow>
+      <PresetRow className="mt-1 mb-[18px]">
         {a.frequencies.map((f) => (
           <Button
             key={f.id}
@@ -309,41 +293,56 @@ function AmountScreen() {
             [{f.label}]
           </Button>
         ))}
-      </div>
+      </PresetRow>
+
+      <Box>
+        <BoxHead meta={`Split across ${b.topHoldings.length} holdings`}>
+          YOUR {fmtMoney(state.amount, a.currency)} BUYS
+        </BoxHead>
+        <Table>
+          <tbody>
+            {b.topHoldings.map((h) => {
+              const dollars = state.amount * h.weight;
+              const shares = dollars / h.pricePerShare;
+              return (
+                <tr key={h.ticker}>
+                  <Td>
+                    {h.name}{" "}
+                    <span className={palette.mutedText}>({h.ticker})</span>
+                  </Td>
+                  <Td numeric>{fmtMoneyDec(dollars)}</Td>
+                  <Td numeric>{shares.toFixed(4)} sh</Td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </Box>
 
       <div
         className={cn(
-          "border p-[10px_12px] my-[10px] mt-[18px]",
+          "border p-[10px_12px] my-[10px]",
           palette.bgSubtle,
           palette.border,
         )}
       >
         <div className="flex justify-between py-[2px]">
-          <span className={palette.mutedText}>Estimated price per share</span>
-          <span>{fmtMoneyDec(etf.pricePerShare)}</span>
-        </div>
-        <div className="flex justify-between py-[2px]">
-          <span className={palette.mutedText}>Estimated shares</span>
-          <span>{estShares.toFixed(4)}</span>
-        </div>
-        <div
-          className={cn(
-            "flex justify-between py-[6px] mt-1 border-t border-dashed font-bold",
-            palette.border,
-          )}
-        >
-          <span>Estimated total</span>
-          <span>{fmtMoneyDec(state.amount)}</span>
+          <span className={palette.mutedText}>Estimated total</span>
+          <span className="font-bold">{fmtMoneyDec(state.amount)}</span>
         </div>
         <div className={cn("flex justify-between py-[2px]", palette.mutedText)}>
           <span>Estimated fees</span>
           <span>$0.00 (commission-free)</span>
         </div>
+        <div className={cn("flex justify-between py-[2px]", palette.mutedText)}>
+          <span>Annual basket fee</span>
+          <span>{fmtPct(b.expenseRatio)}</span>
+        </div>
       </div>
 
       <div className={cn("mt-2", palette.mutedText)}>
-        Minimum {fmtMoney(a.minimum, a.currency)} · Order will execute at the
-        best available price.
+        Minimum {fmtMoney(a.minimum, a.currency)} · Allocation may shift if{" "}
+        {b.curator} rebalances the theme.
       </div>
       {belowMin ? (
         <div className="mt-1 font-bold">
@@ -355,62 +354,79 @@ function AmountScreen() {
 }
 
 // ============================================================================
-// Step 04 · Review
+// Step 04 · Confirm
 // ============================================================================
-function ReviewScreen() {
+function ConfirmScreen() {
   const { state, toggleAgreed } = useTestState();
-  const etf = findCatalog(state.selectedTicker);
-  if (!etf) return null;
-  const estShares = state.amount / etf.pricePerShare;
+  const b = findCatalog(state.selectedTicker);
+  if (!b) return null;
+  const c = DETAIL.amount.currency;
 
   return (
     <>
-      <div className={cn("mb-1", palette.mutedText)}>
-        STEP 04 OF 04 · {etf.ticker}
-      </div>
-      <h1 className="text-[14px] font-bold mb-[6px] uppercase tracking-[0.02em]">
-        Review order
-      </h1>
-      <div className="max-w-[80ch] mb-[18px]">
-        Review the details below before submitting your order.
-      </div>
+      <Eyebrow>STEP 04 OF 04 · {b.ticker}</Eyebrow>
+      <ScreenTitle>Review your investment</ScreenTitle>
+      <ScreenSub>
+        Confirm the details below. Your investment will be placed across the
+        theme's holdings.
+      </ScreenSub>
 
       <Box>
         <MetaRows
           divided
           keyWidth="140px"
           rows={[
-            { label: "Symbol", value: <strong>{etf.ticker}</strong> },
-            { label: "Name", value: etf.name },
-            { label: "Order type", value: state.orderType },
-            { label: "Frequency", value: getFreqLabel(state.frequency) },
-            { label: "Estimated price", value: fmtMoneyDec(etf.pricePerShare) },
-            { label: "Estimated shares", value: estShares.toFixed(4) },
-            { label: "Estimated fees", value: "$0.00 (commission-free)" },
+            { label: "Theme", value: <strong>{b.themeShort}</strong> },
+            { label: "Managed by", value: b.curator },
+            { label: "Holdings", value: b.holdingsCount },
             {
-              label: "Estimated total",
+              label: "Amount",
               bold: true,
-              value: fmtMoneyDec(state.amount),
+              value: `${fmtMoney(state.amount, c)}${
+                state.frequency === "one-time"
+                  ? ""
+                  : ` / ${getFreqLabel(state.frequency).toLowerCase()}`
+              }`,
+            },
+            {
+              label: "Estimated fees",
+              value: `$0.00 (commission-free) · ${fmtPct(b.expenseRatio)} annual basket fee`,
             },
           ]}
         />
       </Box>
 
+      <Box>
+        <BoxHead meta={`Top ${b.topHoldings.length} of ${b.holdingsCount}`}>
+          ALLOCATION BREAKDOWN
+        </BoxHead>
+        <Table>
+          <tbody>
+            {b.topHoldings.map((h) => {
+              const dollars = state.amount * h.weight;
+              const shares = dollars / h.pricePerShare;
+              return (
+                <tr key={h.ticker}>
+                  <Td>{h.name}</Td>
+                  <Td numeric>{fmtMoneyDec(dollars)}</Td>
+                  <Td numeric>{shares.toFixed(4)} sh</Td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </Box>
+
       <div className={cn("py-[10px]", palette.mutedText)}>
-        By submitting, you authorize the execution of this order at the best
-        available price. Orders placed outside market hours will execute at the
-        next open. Past performance is not indicative of future results.
+        The basket's curator may rebalance the holdings periodically. Past
+        performance is not a reliable indicator of future results.
       </div>
 
-      <div
-        className="py-1 cursor-pointer hover:underline font-normal"
-        onClick={toggleAgreed}
-      >
-        <span className="inline-block w-[28px] font-bold">
-          {state.agreed ? "[X]" : "[ ]"}
-        </span>
-        I agree to the order terms and the platform's trade disclosures.
-      </div>
+      <OptionRow onClick={toggleAgreed} className="font-normal">
+        <OptionSymbol>{state.agreed ? "[X]" : "[ ]"}</OptionSymbol>I agree to
+        the platform terms and acknowledge that thematic baskets carry
+        concentration risk.
+      </OptionRow>
     </>
   );
 }
@@ -419,10 +435,10 @@ function ReviewScreen() {
 // Flow dispatcher
 // ============================================================================
 const SCREENS = {
-  list: ListScreen,
+  browse: BrowseScreen,
   detail: DetailScreen,
   amount: AmountScreen,
-  review: ReviewScreen,
+  confirm: ConfirmScreen,
 };
 
 export default function RobinhoodFlow({ stepId }) {

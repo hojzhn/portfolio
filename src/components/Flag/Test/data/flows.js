@@ -1,30 +1,42 @@
+// Flow keys are kept stable (A / R / B) so existing dispatcher logic in
+// TestPrototypes, ActionBar, and TopBar does not need updates. Content
+// generalizes from "thematic ETF" to "thematic basket."
+
 export const FLOWS = {
+  // A · Traditional Basket. Regulated full-service product onboarding.
   A: {
-    name: 'Traditional',
+    name: "Traditional",
     steps: [
-      { id: 'theme', title: 'Choose theme' },
-      { id: 'holdings', title: 'Review holdings' },
-      { id: 'risk', title: 'Assess risk' },
-      { id: 'fees', title: 'Review fees' },
-      { id: 'amount', title: 'Set amount' },
-      { id: 'confirm', title: 'Confirm' },
+      { id: "browse", title: "Select basket" },
+      { id: "composition", title: "Review composition" },
+      { id: "risk", title: "Assess risk" },
+      { id: "fees", title: "Review fees" },
+      { id: "amount", title: "Set amount and account" },
+      { id: "confirm", title: "Review and confirm" },
     ],
   },
+
+  // R · Themed Basket. Compressed thematic-basket purchase (Public, Stash,
+  // eToro CopyPortfolios, M1 Pies). Theme-first listing, basket-level
+  // performance, allocation preview, purchase vocabulary.
   R: {
-    name: 'Robinhood',
+    name: "Themed",
     steps: [
-      { id: 'list', title: 'Browse' },
-      { id: 'detail', title: 'Review instrument' },
-      { id: 'amount', title: 'Buy' },
-      { id: 'review', title: 'Confirm order' },
+      { id: "browse", title: "Browse themes" },
+      { id: "detail", title: "Review theme" },
+      { id: "amount", title: "Set amount" },
+      { id: "confirm", title: "Review and invest" },
     ],
   },
+
+  // B · Redesign. Compressed thematic backing. Surface as persistent
+  // alignment with a view rather than as transactional purchase.
   B: {
-    name: 'Redesign',
+    name: "Redesign",
     steps: [
-      { id: 'discover', title: 'Recognize theme' },
-      { id: 'setLevel', title: 'Set level' },
-      { id: 'confirm', title: 'Confirm standing' },
+      { id: "discover", title: "Recognize theme" },
+      { id: "setLevel", title: "Set level" },
+      { id: "confirm", title: "Confirm standing" },
     ],
   },
 };

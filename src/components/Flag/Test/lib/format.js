@@ -21,3 +21,6 @@ export const fmtAUM = (n) =>
 
 export const getFreqLabel = (id) =>
   DETAIL.amount.frequencies.find((f) => f.id === id)?.label ?? id;
+
+export const getAccountLabel = (id) =>
+  DETAIL.amount.accountTypes.find((a) => a.id === id)?.label ?? id;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BulletVertical, ListVertical } from "../components/ListVertical";
 import Reference from "../components/Reference.js";
 import FindingParagraph from "../components/FindingParagraph.js";
@@ -15,6 +15,8 @@ import { CodeInline } from "../components/Code.js";
 import Pill from "../components/Pill.js";
 import PainPointsInteractive from "../components/Bol/PainPoints.js";
 import SimpleList from "../components/SimpleList.js";
+import TestPrototypes from "../components/Flag/Test/TestPrototypes.jsx";
+import { LayoutContext } from "../context/LayoutContext.js";
 const Overview = () => (
   <>
     <img
@@ -31,10 +33,12 @@ const Proposition = () => (
   <>
     <DescriptionHeader>How it works</DescriptionHeader>
     <p>
-      The design collapses six authoring steps into one. The user picks a theme
-      drawn from their own engagement, sets a monthly level, and commits.
-      Allocation, risk profile, fees, and rebalancing run under the system. The
-      user authors the view. The system authors the configuration.
+      This project reframes thematic investment from a transaction into a
+      stance. Existing flows borrow their structure from instrument-purchase
+      onboarding. The user picks an instrument, sees its price, reviews
+      holdings, and buys. The act is finished on submit. The redesign treats the
+      act as the user taking up a position on something they value. They name
+      what they back, they set the level, they commit.
     </p>
     <p>
       The work tests whether the authoring-chain collapse holds in a regulated
@@ -134,13 +138,13 @@ const TheFlow = () => (
 const ShiftStat = ({ from, to, big = false }) => (
   <span
     className={`flex items-center tabular-nums leading-none ${
-      big ? "gap-5 text-[5em]" : "gap-2.5 text-[2em]"
+      big ? "gap-5 text-[4em]" : "gap-2.5 text-[2em]"
     }`}
   >
     <span className="text-[var(--txt2)]">{from}</span>
     <i
       className={`fa-sharp fa-regular fa-arrow-right text-[var(--point)] ${
-        big ? "text-[0.5em]" : "text-[0.55em]"
+        big ? "text-[0.45em]" : "text-[0.55em]"
       }`}
     />
     <span className="text-[var(--point)]">{to}</span>
@@ -238,8 +242,8 @@ const Investment = () => (
       tagline="A compressed trade flow lets attentive users act. However, it does not produce commitment."
       desc={
         <p>
-          Robinhood and similar consumer brokerages run single-screen amount
-          entry and one-tap binding. Research on Robinhood users{" "}
+          Consumer brokerages already run single-screen amount entry and one-tap
+          binding. Research on Robinhood users{" "}
           <Reference
             index={1}
             label="Barber et al., Attention Induced Trading and Returns: Evidence from Robinhood Users (October 12, 2021)."
@@ -256,13 +260,10 @@ const Investment = () => (
       What compression did not change is what the act produces. The user leaves
       with a holding and the vocabulary stays transactional. The screens anchor
       on price chart and ticker symbol. For users who want to trade, this is
-      exactly right.
-    </p>
-    <p>
-      However for users who just have a thematic view to back with low fluency
-      to trading, the flow concludes with a security they own. Compression
-      addressed the agency burden, but it did not address what the user feels
-      they have done.
+      exactly right. However for users who just have a thematic view to back
+      with low fluency to trading, the flow concludes with a security they own.
+      Compression addressed the agency burden, but it did not address what the
+      user feels they have done.
     </p>
   </>
 );
@@ -279,22 +280,22 @@ const Opportunities = () => (
       passage={[
         [
           {
-            text: "Many people maintain recurring beliefs about where the world is moving without developing those beliefs into formal investment theses.  They follow themes like AI infrastructure, energy transition, or emerging-market growth because the direction feels convincing long before they could justify it through financial analysis.",
+            text: "Many people maintain recurring beliefs about where the world is moving without developing those into formal investment theses. They follow themes like AI infrastructure, energy transition, or emerging-market growth because the direction feels convincing long before they could justify it through financial analysis.",
           },
         ],
         [
           {
-            text: "Current investment flows expect that conviction to already exist in operational form. Full-service platforms assume the user can translate a directional belief into holdings, allocation, and risk tolerance. Compressed brokerages simplify execution but ",
+            text: "Current investment flows expect that conviction to already exist in operational form.",
           },
           {
             text: " Full-service platforms assume the user can translate a directional belief into holdings, allocation, and risk tolerance.",
-            hmw: "How might we support users in translating directional beliefs into investable positions without requiring fluency in financial decision fields?",
+            hmw: "How might we support users in translating what their value perception into investable positions without requiring fluency in financial decision fields?",
           },
           {
             text: " Compressed brokerages simplify execution but ",
           },
           {
-            text: " still conclude the interaction as a trade.",
+            text: " still conclude the interaction as a trade or purchase.",
             hmw: "How might we make the act read as backing a direction the user holds?",
           },
         ],
@@ -494,13 +495,10 @@ const Falsification = () => (
 const PrototypeDesc = () => (
   <>
     <p>
-      The work is a speculative prototype exploring how thematic ETF flows
-      change when the authoring chain is compressed and the configuration
-      appears as confirmation rather than as primary input.
-    </p>
-    <p>
       The section documents the interaction model, the behavioral assumptions
-      behind it, and the ways those assumptions could fail.
+      behind it, and the ways those assumptions could fail. The test holds
+      compression and vocabulary against a regulated baseline and a compressed
+      instrument-purchase baseline.
     </p>
   </>
 );
@@ -517,11 +515,66 @@ const betsDesc = () => (
   </>
 );
 
-const TheTest = () => (
-  <>
-    <DescriptionHeader>Test design</DescriptionHeader>
-  </>
-);
+const TheTest = () => {
+  const { layout } = useContext(LayoutContext);
+  const prototypeOrientation = layout.mobiler ? "mobile" : "desktop";
+
+  return (
+    <>
+      <FindingParagraph
+        title="Test Design"
+        tagline="A comparative test with three onboarding flows."
+        desc="Three prototype onboarding models were comparatively tested for thematic investment products."
+      />
+      {/* <>The first reproduced traditional allocation-driven flows modeled after institutional fund selection and robo-advisor platforms. The second reproduced compressed retail trading flows inspired by apps like Public.com
+ and eToro
+. The third introduced a redesigned thesis-first model that led with thematic positions rather than trading primitives, compressing the onboarding chain while reframing the position as an ongoing standing rather than a discrete trade.</> */}
+      <TestPrototypes
+        key={prototypeOrientation}
+        orientation={prototypeOrientation}
+      />
+
+      <ListVertical>
+        <BulletVertical numbered title="Participants">
+          6 participants with retail investing experience.
+        </BulletVertical>
+        <BulletVertical numbered title="Duration">
+          30 to 50 minutes per participant.
+        </BulletVertical>
+        <BulletVertical numbered title="Condition runs">
+          <p>
+            Each participant moves through flow wireframes in counterbalanced
+            order, with a short distraction task in between to reduce carryover.
+            Participants were asked to think-aloud through all flows.
+          </p>
+          <SimpleList
+            className="mt-4"
+            label="Post-flow interview"
+            line={false}
+            items={[
+              "What did you just do?",
+              "From one to five, how confident did you feel completing it?",
+              "If this exact position dropped 10 percent next month, how would you respond?",
+              "How long do you think you'd hold it?",
+            ]}
+          />
+        </BulletVertical>
+        <BulletVertical numbered title="Closing">
+          <SimpleList
+            label="Closing interview"
+            line={false}
+            items={[
+              "What was the most noticeable difference for you?",
+              "Which flow felt most like trading?",
+              "Which flow felt easiest to stay in over time?",
+              "Was any of the themes feel personally relevant to you?",
+            ]}
+          />
+        </BulletVertical>
+      </ListVertical>
+    </>
+  );
+};
 // One card in the register-synthesis grid. Three stacked sections:
 //   1. the register the flow landed in     (top, bordered)
 //   2. supporting verbatims                 (middle, bordered, italic)
@@ -577,7 +630,8 @@ const synthesisRegisters = [
       quotes: [
         "Back then it was a pile of paper.",
         "Invested quarterly.",
-        "Opted in for a fund and read through the documents.",
+        "Opted in for a fund.",
+        "Portfolio configuration.",
       ],
     },
     convergence: {
@@ -596,9 +650,9 @@ const synthesisRegisters = [
     evidence: {
       count: "3 of 5 answers",
       quotes: [
-        "Traded a stock(ETF). Bought.",
+        "Traded multiple stocks. Bought.",
         "I tried to get the item that looked like I could get the most return.",
-        "Robinhood trading.",
+        "Looks like I bought stocks.",
       ],
     },
     convergence: {
@@ -619,9 +673,9 @@ const synthesisRegisters = [
     evidence: {
       count: "3 of 5 answers",
       quotes: [
-        "Recurring trade based on recommendation.",
-        "Subscription to an ETF.",
-        "Bought an ETF.",
+        "Basket trading.",
+        "Subscription to stocks and funds.",
+        "Felt political.",
       ],
     },
     convergence: {

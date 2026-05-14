@@ -13,15 +13,12 @@ export default function TopBar() {
         palette.border,
       )}
     >
-      <div className="tracking-[0.04em]">
-        3-ARM TEST · TRADITIONAL · ROBINHOOD · REDESIGN
-      </div>
       <div className="flex gap-[6px] flex-wrap">
         <Button active={state.flow === "A"} onClick={() => setFlow("A")}>
           [TRADITIONAL]
         </Button>
         <Button active={state.flow === "R"} onClick={() => setFlow("R")}>
-          [ROBINHOOD]
+          [THEMED]
         </Button>
         <Button active={state.flow === "B"} onClick={() => setFlow("B")}>
           [REDESIGN]

@@ -2,12 +2,16 @@ import { useMemo } from "react";
 import { useTestState } from "../TestStateContext";
 import { findCatalog } from "../data/catalog";
 import { DETAIL } from "../data/detail";
-import { fmtMoney, fmtMoneyDec, getFreqLabel } from "../lib/format";
+import {
+  fmtMoney,
+  getFreqLabel,
+  getAccountLabel,
+} from "../lib/format";
 import { Box } from "./ui";
 
 export default function Success() {
   const { state } = useTestState();
-  const etf = findCatalog(state.selectedTicker);
+  const b = findCatalog(state.selectedTicker);
   const c = DETAIL.amount.currency;
   const id = useMemo(
     () =>
@@ -17,7 +21,7 @@ export default function Success() {
     [],
   );
 
-  if (!etf) return null;
+  if (!b) return null;
 
   let banner;
   let label;
@@ -25,7 +29,7 @@ export default function Success() {
   let body;
 
   if (state.flow === "A") {
-    banner = "[ INVESTMENT SUBMITTED! ]";
+    banner = "[ ORDER RECEIVED ]";
     label = "Order";
     idPrefix = "ORD";
     body =
@@ -35,28 +39,29 @@ export default function Success() {
         ? ""
         : " " + getFreqLabel(state.frequency).toLowerCase()) +
       " in " +
-      etf.name +
-      " has been received.";
+      b.name +
+      " has been received. Settlement T+2.";
   } else if (state.flow === "R") {
-    banner = "[ ORDER SUBMITTED! ]";
-    label = "Order";
-    idPrefix = "ORD";
-    const shares = state.amount / etf.pricePerShare;
+    banner = "[ INVESTMENT CONFIRMED ]";
+    label = "Investment";
+    idPrefix = "INV";
     body =
-      "Your order to buy " +
-      shares.toFixed(4) +
-      " shares of " +
-      etf.ticker +
-      " at approximately " +
-      fmtMoneyDec(etf.pricePerShare) +
-      " each has been submitted for execution.";
+      "Your " +
+      (state.frequency === "one-time"
+        ? "one-time"
+        : getFreqLabel(state.frequency).toLowerCase()) +
+      " investment of " +
+      fmtMoney(state.amount, c) +
+      " in " +
+      b.name +
+      " has been placed.";
   } else {
-    banner = "[ STANDING CREATED! ]";
+    banner = "[ STANDING CREATED ]";
     label = "Standing";
     idPrefix = "STD";
     body =
       "You are now backing " +
-      etf.themeShort +
+      b.themeShort +
       " at " +
       fmtMoney(state.amount, c) +
       " per month.";
@@ -64,33 +69,51 @@ export default function Success() {
 
   return (
     <div className="flex-1 flex flex-col py-6">
-      <div className="">{banner}</div>
+      <div>{banner}</div>
 
       <div className="mt-[14px]">{body}</div>
 
-      <Box className="mt-4 w-full max-w-[420px]">
-        {state.flow === "R" ? (
+      <Box className="mt-4 w-full max-w-[460px]">
+        {state.flow === "A" ? (
           <>
             <div>
               {label} ID · {idPrefix}-{id.slice(0, 4)}
             </div>
-            <div>Symbol · {etf.ticker}</div>
-            <div>Shares · {(state.amount / etf.pricePerShare).toFixed(4)}</div>
-            <div>Est. price · {fmtMoneyDec(etf.pricePerShare)}</div>
-            <div>Total · {fmtMoneyDec(state.amount)}</div>
-          </>
-        ) : (
-          <>
             <div>
-              {label} ID · {idPrefix}-{id.slice(0, 4)}
+              Basket · {b.name} ({b.ticker})
             </div>
-            <div>Ticker · {etf.ticker}</div>
+            <div>Manager · {b.manager}</div>
+            <div>Account · {getAccountLabel(state.accountType)}</div>
             <div>
               Amount · {fmtMoney(state.amount, c)}{" "}
               {state.frequency === "one-time"
                 ? ""
                 : "/ " + getFreqLabel(state.frequency).toLowerCase()}
             </div>
+            <div>Status · Pending settlement (T+2)</div>
+          </>
+        ) : state.flow === "R" ? (
+          <>
+            <div>
+              {label} ID · {idPrefix}-{id.slice(0, 4)}
+            </div>
+            <div>Theme · {b.name}</div>
+            <div>Curated by · {b.curator}</div>
+            <div>Holdings · {b.holdingsCount}</div>
+            <div>
+              Amount · {fmtMoney(state.amount, c)}{" "}
+              {state.frequency === "one-time"
+                ? ""
+                : "/ " + getFreqLabel(state.frequency).toLowerCase()}
+            </div>
+          </>
+        ) : (
+          <>
+            <div>
+              {label} ID · {idPrefix}-{id.slice(0, 4)}
+            </div>
+            <div>Theme · {b.themeShort}</div>
+            <div>Level · {fmtMoney(state.amount, c)} per month</div>
           </>
         )}
       </Box>

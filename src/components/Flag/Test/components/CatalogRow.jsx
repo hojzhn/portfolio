@@ -33,14 +33,18 @@ export default function CatalogRow({
           <span className="font-bold whitespace-nowrap">
             {selected ? "[*]" : "[ ]"}
           </span>
-          <span className="whitespace-nowrap">{ticker}</span>
         </div>
         <div className="min-w-0 flex-1 overflow-hidden">
           <span className="block overflow-hidden text-ellipsis whitespace-nowrap">
             {title}
           </span>
           {subtitle != null && (
-            <span className={cn("block overflow-hidden text-ellipsis whitespace-nowrap", palette.mutedText)}>
+            <span
+              className={cn(
+                "block overflow-hidden text-ellipsis whitespace-nowrap",
+                palette.mutedText,
+              )}
+            >
               {subtitle}
             </span>
           )}
@@ -56,7 +60,12 @@ export default function CatalogRow({
         {cells.map((c, i) => (
           <div key={i} className={cn("shrink-0 overflow-hidden", c.className)}>
             {c.label != null && (
-              <div className={cn("uppercase text-[11px] tracking-[0.05em] mb-[2px]", palette.mutedText)}>
+              <div
+                className={cn(
+                  "uppercase text-[11px] tracking-[0.05em] mb-[2px]",
+                  palette.mutedText,
+                )}
+              >
                 {c.label}
               </div>
             )}
