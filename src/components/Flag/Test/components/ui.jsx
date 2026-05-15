@@ -1,10 +1,27 @@
+import { motion } from "framer-motion";
 import { cn } from "../lib/cn";
 import { palette } from "../lib/tw";
-export function Button({ active = false, ghost = false, className, ...props }) {
+
+// Snappy spring shared by hover-lift and tap-squish on every prototype button.
+const BUTTON_SPRING = { type: "spring", stiffness: 600, damping: 30 };
+
+export function Button({
+  active = false,
+  ghost = false,
+  disabled = false,
+  className,
+  ...props
+}) {
   return (
-    <button
+    <motion.button
+      disabled={disabled}
+      whileHover={disabled ? undefined : { scale: 1.04 }}
+      whileTap={disabled ? undefined : { scale: 0.96 }}
+      transition={BUTTON_SPRING}
       className={cn(
         "border px-[10px] py-[2px] cursor-pointer rounded-none",
+        // colour swap on hover / active / disabled fades smoothly
+        "transition-colors duration-150 ease-out",
         "disabled:border-dashed disabled:cursor-not-allowed",
 
         ghost

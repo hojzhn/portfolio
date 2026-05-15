@@ -626,7 +626,7 @@ function RathouseLofi() {
               ease: "easeOut",
               layout: { duration: 0.28, ease: "easeInOut" },
             }}
-            className="bg-[var(--bg2)] p-4 text-[0.8em] rounded-lg my-4"
+            className="bg-[var(--bg2)] p-4  rounded-lg my-4"
           >
             <BulletVertical className="mb-0">
               {viewMode === "A"

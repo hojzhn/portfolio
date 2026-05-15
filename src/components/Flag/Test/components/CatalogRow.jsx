@@ -16,6 +16,7 @@ export default function CatalogRow({
     <div
       className={cn(
         "border px-[10px] py-2 mb-[6px] overflow-hidden cursor-pointer",
+        "transition-colors duration-200 ease-out",
         palette.border,
         palette.hoverBg,
         isMobile

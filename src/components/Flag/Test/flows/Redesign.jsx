@@ -280,6 +280,7 @@ function DiscoverScreen() {
             onClick={() => selectTicker(b.ticker)}
             className={cn(
               "border p-[14px] mb-[12px] cursor-pointer",
+              "transition-colors duration-200 ease-out",
               palette.border,
               palette.hoverBg,
               sel && cn("border-2 p-[13px]", palette.bgSelected),

@@ -87,8 +87,8 @@ const MODE = {
     holdings: {
       order: 2,
       grow: 62,
-      label: "Holdings · Risk · Fees",
-      sub: "visible at commit, inspectable",
+      label: "Confirm",
+      sub: "holdings, risk, fees, allocation surfaced for review",
       kind: "commit",
       tag: "Surfaced · not authored",
     },
@@ -97,11 +97,9 @@ const MODE = {
     fees: { order: 4, grow: 0, label: "", sub: "" },
     confirm: {
       order: 5,
-      grow: 16,
-      label: "Confirm",
-      sub: "single tap",
-      kind: "retained",
-      tag: "Commit",
+      grow: 0,
+      label: "",
+      sub: "",
     },
   },
 };
@@ -255,8 +253,7 @@ export default function FlowDiagram({ defaultRedesigned = false }) {
           const c = cfg[id];
           const grp = BRACKETS.find(
             (b) =>
-              cfg[b.fromId].order <= c.order &&
-              c.order <= cfg[b.toId].order,
+              cfg[b.fromId].order <= c.order && c.order <= cfg[b.toId].order,
           );
           const last = out[out.length - 1];
           if (last && last.bracket === grp) {
@@ -387,9 +384,7 @@ export default function FlowDiagram({ defaultRedesigned = false }) {
         </div>
 
         {/* Tag row — wide only. */}
-        {!narrow && (
-          <div className="flex flex-row gap-px mb-1">{tagCells}</div>
-        )}
+        {!narrow && <div className="flex flex-row gap-px mb-1">{tagCells}</div>}
 
         {/* Boxes — narrow stacks them by bracket group with a rotated side
             label; wide keeps the horizontal row. Each box has a `layoutId`

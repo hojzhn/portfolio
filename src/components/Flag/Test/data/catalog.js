@@ -40,17 +40,68 @@ export const CATALOG = [
     signalStrength: { score: 87, level: "High" },
     momentum90d: { multiplier: 2.4 },
 
-    sparkline: [3, 3, 4, 4, 3, 4, 5, 5, 4, 5, 6, 6, 5, 6, 7, 7, 6, 7, 6, 5, 4, 5, 6, 7, 7, 6, 7, 7, 6, 7],
+    sparkline: [
+      3, 3, 4, 4, 3, 4, 5, 5, 4, 5, 6, 6, 5, 6, 7, 7, 6, 7, 6, 5, 4, 5, 6, 7, 7,
+      6, 7, 7, 6, 7,
+    ],
 
     topHoldings: [
-      { name: "Mercado Libre", ticker: "MELI", weight: 0.142, sector: "Cons. Disc.", pricePerShare: 1850.20 },
-      { name: "Tencent", ticker: "0700.HK", weight: 0.116, sector: "Communication", pricePerShare: 380.50 },
-      { name: "Reliance", ticker: "RELIANCE", weight: 0.105, sector: "Energy", pricePerShare: 28.40 },
-      { name: "Alibaba", ticker: "9988.HK", weight: 0.094, sector: "Cons. Disc.", pricePerShare: 92.10 },
-      { name: "Sea Limited", ticker: "SE", weight: 0.084, sector: "Cons. Disc.", pricePerShare: 138.40 },
-      { name: "Coupang", ticker: "CPNG", weight: 0.076, sector: "Cons. Disc.", pricePerShare: 24.20 },
-      { name: "Bajaj Finance", ticker: "BAJFINANCE", weight: 0.064, sector: "Financial", pricePerShare: 92.50 },
-      { name: "MakeMyTrip", ticker: "MMYT", weight: 0.058, sector: "Cons. Disc.", pricePerShare: 96.30 },
+      {
+        name: "Mercado Libre",
+        ticker: "MELI",
+        weight: 0.142,
+        sector: "Cons. Disc.",
+        pricePerShare: 1850.2,
+      },
+      {
+        name: "Tencent",
+        ticker: "0700.HK",
+        weight: 0.116,
+        sector: "Communication",
+        pricePerShare: 380.5,
+      },
+      {
+        name: "Reliance",
+        ticker: "RELIANCE",
+        weight: 0.105,
+        sector: "Energy",
+        pricePerShare: 28.4,
+      },
+      {
+        name: "Alibaba",
+        ticker: "9988.HK",
+        weight: 0.094,
+        sector: "Cons. Disc.",
+        pricePerShare: 92.1,
+      },
+      {
+        name: "Sea Limited",
+        ticker: "SE",
+        weight: 0.084,
+        sector: "Cons. Disc.",
+        pricePerShare: 138.4,
+      },
+      {
+        name: "Coupang",
+        ticker: "CPNG",
+        weight: 0.076,
+        sector: "Cons. Disc.",
+        pricePerShare: 24.2,
+      },
+      {
+        name: "Bajaj Finance",
+        ticker: "BAJFINANCE",
+        weight: 0.064,
+        sector: "Financial",
+        pricePerShare: 92.5,
+      },
+      {
+        name: "MakeMyTrip",
+        ticker: "MMYT",
+        weight: 0.058,
+        sector: "Cons. Disc.",
+        pricePerShare: 96.3,
+      },
     ],
     sectors: [
       { sector: "Consumer Discretionary", weight: 0.34 },
@@ -61,9 +112,24 @@ export const CATALOG = [
     ],
 
     news: [
-      { date: "Today", source: "Bloomberg", headline: "Mercado Libre Q3 earnings beat estimates on Latin America growth" },
-      { date: "Yesterday", source: "Reuters", headline: "India retail sales accelerate, boosting consumer basket inflows" },
-      { date: "2 days ago", source: "Financial Times", headline: "Tencent reports record gaming revenue, lifts EM growth outlook" },
+      {
+        date: "Today",
+        source: "Bloomberg",
+        headline:
+          "Mercado Libre Q3 earnings beat estimates on Latin America growth",
+      },
+      {
+        date: "Yesterday",
+        source: "Reuters",
+        headline:
+          "India retail sales accelerate, boosting consumer basket inflows",
+      },
+      {
+        date: "2 days ago",
+        source: "Financial Times",
+        headline:
+          "Tencent reports record gaming revenue, lifts EM growth outlook",
+      },
     ],
   },
 
@@ -97,30 +163,94 @@ export const CATALOG = [
     signalStrength: { score: 78, level: "High" },
     momentum90d: { multiplier: 1.8 },
 
-    sparkline: [2, 2, 3, 3, 2, 3, 4, 4, 5, 5, 6, 6, 5, 6, 7, 7, 7, 6, 5, 6, 7, 7, 7, 7, 7, 7, 7, 6, 7, 7],
+    sparkline: [
+      2, 2, 3, 3, 2, 3, 4, 4, 5, 5, 6, 6, 5, 6, 7, 7, 7, 6, 5, 6, 7, 7, 7, 7, 7,
+      7, 7, 6, 7, 7,
+    ],
 
     topHoldings: [
-      { name: "NVIDIA", ticker: "NVDA", weight: 0.241, sector: "Semiconductor", pricePerShare: 145.20 },
-      { name: "Microsoft", ticker: "MSFT", weight: 0.183, sector: "Software", pricePerShare: 420.50 },
-      { name: "AMD", ticker: "AMD", weight: 0.125, sector: "Semiconductor", pricePerShare: 135.40 },
-      { name: "ASML Holding", ticker: "ASML", weight: 0.092, sector: "Semi-equipment", pricePerShare: 925.00 },
-      { name: "TSMC", ticker: "TSM", weight: 0.084, sector: "Semiconductor", pricePerShare: 185.30 },
-      { name: "Broadcom", ticker: "AVGO", weight: 0.075, sector: "Semiconductor", pricePerShare: 1620.00 },
-      { name: "Arista Networks", ticker: "ANET", weight: 0.058, sector: "Networking", pricePerShare: 320.45 },
-      { name: "Vertiv", ticker: "VRT", weight: 0.042, sector: "Data Center", pricePerShare: 88.10 },
+      {
+        name: "NVIDIA",
+        ticker: "NVDA",
+        weight: 0.241,
+        sector: "Semiconductor",
+        pricePerShare: 145.2,
+      },
+      {
+        name: "Microsoft",
+        ticker: "MSFT",
+        weight: 0.183,
+        sector: "Software",
+        pricePerShare: 420.5,
+      },
+      {
+        name: "AMD",
+        ticker: "AMD",
+        weight: 0.125,
+        sector: "Semiconductor",
+        pricePerShare: 135.4,
+      },
+      {
+        name: "ASML Holding",
+        ticker: "ASML",
+        weight: 0.092,
+        sector: "Semi-equipment",
+        pricePerShare: 925.0,
+      },
+      {
+        name: "TSMC",
+        ticker: "TSM",
+        weight: 0.084,
+        sector: "Semiconductor",
+        pricePerShare: 185.3,
+      },
+      {
+        name: "Broadcom",
+        ticker: "AVGO",
+        weight: 0.075,
+        sector: "Semiconductor",
+        pricePerShare: 1620.0,
+      },
+      {
+        name: "Arista Networks",
+        ticker: "ANET",
+        weight: 0.058,
+        sector: "Networking",
+        pricePerShare: 320.45,
+      },
+      {
+        name: "Vertiv",
+        ticker: "VRT",
+        weight: 0.042,
+        sector: "Data Center",
+        pricePerShare: 88.1,
+      },
     ],
     sectors: [
       { sector: "Semiconductors", weight: 0.42 },
       { sector: "Software", weight: 0.28 },
       { sector: "Networking & Hardware", weight: 0.15 },
-      { sector: "Data Center Infrastructure", weight: 0.10 },
+      { sector: "Data Center Infrastructure", weight: 0.1 },
       { sector: "Other Technology", weight: 0.05 },
     ],
 
     news: [
-      { date: "2h ago", source: "Bloomberg", headline: "Nvidia capex guidance raised, AI chip demand seen extending into 2027" },
-      { date: "Today", source: "WSJ", headline: "Hyperscalers commit $200B in data center spend through 2026" },
-      { date: "Yesterday", source: "Reuters", headline: "Power grid bottlenecks slow AI rollout, analysts say" },
+      {
+        date: "2h ago",
+        source: "Bloomberg",
+        headline:
+          "Nvidia capex guidance raised, AI chip demand seen extending into 2027",
+      },
+      {
+        date: "Today",
+        source: "WSJ",
+        headline: "Hyperscalers commit $200B in data center spend through 2026",
+      },
+      {
+        date: "Yesterday",
+        source: "Reuters",
+        headline: "Power grid bottlenecks slow AI rollout, analysts say",
+      },
     ],
   },
 
@@ -154,15 +284,54 @@ export const CATALOG = [
     signalStrength: { score: 72, level: "Above avg" },
     momentum90d: { multiplier: 1.3 },
 
-    sparkline: [4, 4, 5, 5, 4, 5, 6, 5, 5, 5, 5, 6, 6, 5, 5, 6, 5, 6, 6, 5, 5, 6, 5, 6, 5, 5, 6, 6, 5, 6],
+    sparkline: [
+      4, 4, 5, 5, 4, 5, 6, 5, 5, 5, 5, 6, 6, 5, 5, 6, 5, 6, 6, 5, 5, 6, 5, 6, 5,
+      5, 6, 6, 5, 6,
+    ],
 
     topHoldings: [
-      { name: "CrowdStrike", ticker: "CRWD", weight: 0.165, sector: "Software", pricePerShare: 318.20 },
-      { name: "Palo Alto", ticker: "PANW", weight: 0.142, sector: "Software", pricePerShare: 425.50 },
-      { name: "Fortinet", ticker: "FTNT", weight: 0.108, sector: "Software", pricePerShare: 68.40 },
-      { name: "Zscaler", ticker: "ZS", weight: 0.092, sector: "Software", pricePerShare: 185.30 },
-      { name: "Cloudflare", ticker: "NET", weight: 0.083, sector: "Software", pricePerShare: 112.40 },
-      { name: "Okta", ticker: "OKTA", weight: 0.075, sector: "Software", pricePerShare: 92.50 },
+      {
+        name: "CrowdStrike",
+        ticker: "CRWD",
+        weight: 0.165,
+        sector: "Software",
+        pricePerShare: 318.2,
+      },
+      {
+        name: "Palo Alto",
+        ticker: "PANW",
+        weight: 0.142,
+        sector: "Software",
+        pricePerShare: 425.5,
+      },
+      {
+        name: "Fortinet",
+        ticker: "FTNT",
+        weight: 0.108,
+        sector: "Software",
+        pricePerShare: 68.4,
+      },
+      {
+        name: "Zscaler",
+        ticker: "ZS",
+        weight: 0.092,
+        sector: "Software",
+        pricePerShare: 185.3,
+      },
+      {
+        name: "Cloudflare",
+        ticker: "NET",
+        weight: 0.083,
+        sector: "Software",
+        pricePerShare: 112.4,
+      },
+      {
+        name: "Okta",
+        ticker: "OKTA",
+        weight: 0.075,
+        sector: "Software",
+        pricePerShare: 92.5,
+      },
     ],
     sectors: [
       { sector: "Software & Services", weight: 0.62 },
@@ -172,9 +341,23 @@ export const CATALOG = [
     ],
 
     news: [
-      { date: "Today", source: "Reuters", headline: "Ransomware attacks up 38% YoY, driving security budgets higher" },
-      { date: "Yesterday", source: "FT", headline: "EU expands cyber resilience mandate to critical infrastructure" },
-      { date: "3 days ago", source: "Bloomberg", headline: "Zero-trust adoption hits inflection point in enterprise" },
+      {
+        date: "Today",
+        source: "Reuters",
+        headline:
+          "Ransomware attacks up 38% YoY, driving security budgets higher",
+      },
+      {
+        date: "Yesterday",
+        source: "FT",
+        headline:
+          "EU expands cyber resilience mandate to critical infrastructure",
+      },
+      {
+        date: "3 days ago",
+        source: "Bloomberg",
+        headline: "Zero-trust adoption hits inflection point in enterprise",
+      },
     ],
   },
 
@@ -209,14 +392,47 @@ export const CATALOG = [
     signalStrength: { score: 64, level: "Above avg" },
     momentum90d: { multiplier: 0.9 },
 
-    sparkline: [5, 5, 5, 4, 5, 4, 5, 5, 4, 4, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 4, 5, 5, 5, 5, 5, 5, 4, 5, 5],
+    sparkline: [
+      5, 5, 5, 4, 5, 4, 5, 5, 4, 4, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 4, 5, 5, 5, 5,
+      5, 5, 4, 5, 5,
+    ],
 
     topHoldings: [
-      { name: "NextEra Energy", ticker: "NEE", weight: 0.135, sector: "Utilities", pricePerShare: 68.40 },
-      { name: "Linde", ticker: "LIN", weight: 0.118, sector: "Materials", pricePerShare: 478.20 },
-      { name: "Albemarle", ticker: "ALB", weight: 0.092, sector: "Materials", pricePerShare: 92.10 },
-      { name: "Eaton", ticker: "ETN", weight: 0.084, sector: "Industrials", pricePerShare: 285.40 },
-      { name: "Quanta Services", ticker: "PWR", weight: 0.075, sector: "Industrials", pricePerShare: 245.50 },
+      {
+        name: "NextEra Energy",
+        ticker: "NEE",
+        weight: 0.135,
+        sector: "Utilities",
+        pricePerShare: 68.4,
+      },
+      {
+        name: "Linde",
+        ticker: "LIN",
+        weight: 0.118,
+        sector: "Materials",
+        pricePerShare: 478.2,
+      },
+      {
+        name: "Albemarle",
+        ticker: "ALB",
+        weight: 0.092,
+        sector: "Materials",
+        pricePerShare: 92.1,
+      },
+      {
+        name: "Eaton",
+        ticker: "ETN",
+        weight: 0.084,
+        sector: "Industrials",
+        pricePerShare: 285.4,
+      },
+      {
+        name: "Quanta Services",
+        ticker: "PWR",
+        weight: 0.075,
+        sector: "Industrials",
+        pricePerShare: 245.5,
+      },
     ],
     sectors: [
       { sector: "Industrials", weight: 0.32 },
@@ -227,9 +443,22 @@ export const CATALOG = [
     ],
 
     news: [
-      { date: "Today", source: "Bloomberg", headline: "Grid storage installations triple in 2025" },
-      { date: "Yesterday", source: "Reuters", headline: "Inflation Reduction Act funds boost domestic battery production" },
-      { date: "2 days ago", source: "FT", headline: "Hydrogen infrastructure faces capex headwinds" },
+      {
+        date: "Today",
+        source: "Bloomberg",
+        headline: "Grid storage installations triple in 2025",
+      },
+      {
+        date: "Yesterday",
+        source: "Reuters",
+        headline:
+          "Inflation Reduction Act funds boost domestic battery production",
+      },
+      {
+        date: "2 days ago",
+        source: "FT",
+        headline: "Hydrogen infrastructure faces capex headwinds",
+      },
     ],
   },
 
@@ -237,7 +466,8 @@ export const CATALOG = [
     ticker: "USIR",
     name: "U.S. Infrastructure Reinvestment",
     themeShort: "U.S. infrastructure reinvestment",
-    theme: "Public and private capex cycle across transport, industrials, utilities.",
+    theme:
+      "Public and private capex cycle across transport, industrials, utilities.",
 
     manager: "Fidelity Select",
     category: "Sector · Industrials",
@@ -264,14 +494,47 @@ export const CATALOG = [
     signalStrength: { score: 58, level: "Average" },
     momentum90d: { multiplier: 0.6 },
 
-    sparkline: [4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 5, 6, 5, 5, 6, 6, 5, 5, 5, 5, 6, 5, 5, 5, 5, 5],
+    sparkline: [
+      4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 5, 6, 5, 5, 6, 6, 5, 5, 5, 5, 6,
+      5, 5, 5, 5, 5,
+    ],
 
     topHoldings: [
-      { name: "Caterpillar", ticker: "CAT", weight: 0.118, sector: "Industrials", pricePerShare: 385.20 },
-      { name: "Vulcan Materials", ticker: "VMC", weight: 0.094, sector: "Materials", pricePerShare: 268.50 },
-      { name: "Eaton", ticker: "ETN", weight: 0.084, sector: "Industrials", pricePerShare: 285.40 },
-      { name: "Union Pacific", ticker: "UNP", weight: 0.076, sector: "Industrials", pricePerShare: 238.10 },
-      { name: "Quanta Services", ticker: "PWR", weight: 0.075, sector: "Industrials", pricePerShare: 245.50 },
+      {
+        name: "Caterpillar",
+        ticker: "CAT",
+        weight: 0.118,
+        sector: "Industrials",
+        pricePerShare: 385.2,
+      },
+      {
+        name: "Vulcan Materials",
+        ticker: "VMC",
+        weight: 0.094,
+        sector: "Materials",
+        pricePerShare: 268.5,
+      },
+      {
+        name: "Eaton",
+        ticker: "ETN",
+        weight: 0.084,
+        sector: "Industrials",
+        pricePerShare: 285.4,
+      },
+      {
+        name: "Union Pacific",
+        ticker: "UNP",
+        weight: 0.076,
+        sector: "Industrials",
+        pricePerShare: 238.1,
+      },
+      {
+        name: "Quanta Services",
+        ticker: "PWR",
+        weight: 0.075,
+        sector: "Industrials",
+        pricePerShare: 245.5,
+      },
     ],
     sectors: [
       { sector: "Industrials", weight: 0.48 },
@@ -282,9 +545,22 @@ export const CATALOG = [
     ],
 
     news: [
-      { date: "Today", source: "WSJ", headline: "Bipartisan infrastructure spending hits record execution rate" },
-      { date: "Yesterday", source: "Bloomberg", headline: "Construction backlog reaches 9-month high" },
-      { date: "3 days ago", source: "Reuters", headline: "Port modernization drives industrial REIT gains" },
+      {
+        date: "Today",
+        source: "WSJ",
+        headline:
+          "Bipartisan infrastructure spending hits record execution rate",
+      },
+      {
+        date: "Yesterday",
+        source: "Bloomberg",
+        headline: "Construction backlog reaches 9-month high",
+      },
+      {
+        date: "3 days ago",
+        source: "Reuters",
+        headline: "Port modernization drives industrial REIT gains",
+      },
     ],
   },
 ];

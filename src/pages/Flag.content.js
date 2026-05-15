@@ -5,6 +5,7 @@ import FindingParagraph from "../components/FindingParagraph.js";
 import { Card, CardGrid } from "../components/Twenty/Cards";
 import flag1 from "../images/flag1.png";
 import flag2 from "../images/flag2.png";
+import flag3 from "../images/flag3.png";
 import GraphicCaption from "../components/GraphicCaption.js";
 import DescriptionHeader from "../components/DescriptionHeader.js";
 import FigCaption from "../components/FigCaption.js";
@@ -17,6 +18,9 @@ import PainPointsInteractive from "../components/Bol/PainPoints.js";
 import SimpleList from "../components/SimpleList.js";
 import TestPrototypes from "../components/Flag/Test/TestPrototypes.jsx";
 import { LayoutContext } from "../context/LayoutContext.js";
+import StandingCard from "../components/Flag/StandingCard.jsx";
+import ThemeCard from "../components/Flag/ThemeCard.jsx";
+import PortfolioView from "../components/Flag/PortfolioView.js";
 const Overview = () => (
   <>
     <img
@@ -210,12 +214,6 @@ const WhereThisStarted = () => (
   <>
     <DescriptionHeader>The research</DescriptionHeader>
     <p>
-      Some people pay attention to markets without acting on it. They read
-      sector news. They watchlist instruments. They follow themes over months.
-      They hold views about where things are going. They do not commit capital
-      to those views.
-    </p>
-    <p>
       My previous research on attentive but non-initiating users surfaced one
       structural cause. When the system assigned the target at the moment of
       initiation, participation rose materially. The same users who did not act
@@ -225,12 +223,6 @@ const WhereThisStarted = () => (
     </p>
 
     <TheShiftCard />
-    <p>
-      The hypothesis this design tests is whether the same lever moves the same
-      population in a higher-stakes domain. If lowering the agency burden brings
-      attention-holding users into action when stakes are low, it may bring them
-      into commitment when stakes are real.
-    </p>
   </>
 );
 
@@ -260,10 +252,9 @@ const Investment = () => (
       What compression did not change is what the act produces. The user leaves
       with a holding and the vocabulary stays transactional. The screens anchor
       on price chart and ticker symbol. For users who want to trade, this is
-      exactly right. However for users who just have a thematic view to back
-      with low fluency to trading, the flow concludes with a security they own.
-      Compression addressed the agency burden, but it did not address what the
-      user feels they have done.
+      exactly right.However for users with non-profit grounding for the act,
+      whether it is a worldview they want to back, a bet they want to stand by,
+      or a bias they want to see play out, the flow needs a different approach.
     </p>
   </>
 );
@@ -324,59 +315,327 @@ export const ChartContainer = ({ children, className }) => (
     {children}
   </div>
 );
-const WhatComesNext = () => (
+
+const TheIntervention = () => (
   <>
-    <DescriptionHeader>Conclusion</DescriptionHeader>
-    <p>
-      Removing interpersonal target selection reshapes participation, timing,
-      and escalation intensity, reducing exposure inequality while coinciding
-      with higher engagement in irreversible actions. The data support a
-      rule-level interpretation: initiation structure influences not only who
-      acts, but how far actors proceed once action becomes consequential.
-    </p>
-    <p>
-      This line of research may extend to interaction systems in which
-      individuals decide whether to impose consequential outcomes on others.
-      When responsibility for initial targeting is mediated by system design,
-      patterns of escalation may shift even if the available actions remain
-      constant.
-    </p>
-    <p>
-      Future work can examine whether redistributing responsibility at early
-      stages alters willingness to enact high-impact decisions in other
-      digitally mediated environments.
-    </p>
+    {" "}
+    <img
+      src={flag3}
+      alt="Inactivity Illustration"
+      className="max-w-full h-auto"
+    />{" "}
   </>
 );
-
-const TheIntervention = () => <></>;
 const InterventionDesc = () => (
   <>
-    The intervention works on the two dimensions the problem named. The first
-    dimension is the onboarding structure. The second is the framing and
-    persistence of the conviction.
+    The intervention works on the three dimensions: object, display, and flow.
   </>
 );
 const baselineDesc = () => <></>;
 const movesDesc = () => <></>;
+
+const Objects = () => {
+  const aiInfraStanding = {
+    name: "AI infrastructure expansion",
+    manager: "Public",
+    tenure: "147 days",
+    level: "$500/mo",
+    value: "$6,755",
+    sharePct: "14%",
+    themes: [
+      {
+        name: "AI infrastructure",
+        meta: "Contributes $6,755 of $14,958 total",
+        contribPct: "14%",
+        totalPct: "31%",
+      },
+      {
+        name: "Semiconductors",
+        meta: "Contributes $4,830 of $13,958 total",
+        contribPct: "10%",
+        totalPct: "29%",
+      },
+      {
+        name: "U.S. mega-cap technology",
+        meta: "Contributes $1,820 of $12,548 total",
+        contribPct: "4%",
+        totalPct: "26%",
+      },
+    ],
+  };
+
+  const aiInfraTheme = {
+    name: "AI infrastructure",
+    taxonomyVersion: "v3.2",
+    value: "$14,958",
+    sharePct: "31%",
+    backed: { amount: "$6,755", pct: "14%" },
+    incidental: { amount: "$8,203", pct: "17%" },
+    backedFraction: 0.45,
+    sources: [
+      {
+        name: "AI infrastructure standing",
+        meta: "Managed by Public · 147 days · $500/mo",
+        amount: "$6,755",
+        kind: "backed",
+      },
+      {
+        name: "Semiconductor leaders standing",
+        meta: "Overlaps via NVDA, TSM, AMD · 89 days · $300/mo",
+        amount: "$5,035",
+        kind: "backed",
+      },
+      {
+        name: "Direct holdings",
+        meta: "NVDA direct shares contribute to this theme",
+        amount: "$3,168",
+        kind: "incidental",
+      },
+    ],
+  };
+
+  return (
+    <>
+      <FindingParagraph
+        title="Standings"
+        tagline="Standing: a persistent container of
+            instruments(baskets)."
+        desc="This departs from the standard brokerage
+            stack, where the basket is a purchase-time routing instruction that
+            disappears after execution and the portfolio collapses to a flat
+            list of instruments. Here the basket persists. Sub-positions are
+            tracked per basket. Retraction sells FIFO against the basket's own
+            lots."
+        first
+      />
+
+      <StandingCard {...aiInfraStanding} />
+      <FindingParagraph
+        title="Themes"
+        tagline="Theme: a derived measurement across all holdings."
+        desc="Exposure to a theme is the sum of every qualifying holding
+            regardless of how it was acquired. A use who wants to back a theme
+            is routed to baskets curated around it. Taxonomy is published; each theme card opens a rule that defines the theme, including which instruments qualify and at what weight. When the platform updates the taxonomy, the user sees what changed."
+      />
+
+      <ThemeCard
+        {...aiInfraTheme}
+        onWhatCounts={() => {
+          /* open taxonomy rule */
+        }}
+      />
+    </>
+  );
+};
+const ObjDesc = () => (
+  <>
+    The portfolio contains two kinds of object: standings and themes. The design
+    treats them separately to prevent conflation.
+  </>
+);
+const Standing = () => {
+  const portfolio = {
+    total: "$48,250.00",
+    alert: "NVDA is 22% of your portfolio across 3 standings.",
+    standings: [
+      {
+        id: "ai-infra",
+        name: "AI infrastructure expansion",
+        manager: "Public",
+        holdings: 8,
+        tenure: "147 days",
+        level: "$500/mo",
+        sharePct: "14%",
+        shareValue: "$6,755",
+      },
+      {
+        id: "semi",
+        name: "Semiconductor leaders",
+        manager: "ARK",
+        holdings: 6,
+        tenure: "89 days",
+        level: "$300/mo",
+        sharePct: "11%",
+        shareValue: "$5,308",
+      },
+      {
+        id: "cyber",
+        name: "Cybersecurity resilience",
+        manager: "Public",
+        holdings: 10,
+        tenure: "62 days",
+        level: "$250/mo",
+        sharePct: "8%",
+        shareValue: "$3,860",
+      },
+      {
+        id: "em",
+        name: "Emerging markets consumer growth",
+        manager: "ARK",
+        holdings: 12,
+        tenure: "203 days",
+        level: "$400/mo",
+        sharePct: "9%",
+        shareValue: "$4,343",
+      },
+      {
+        id: "direct",
+        name: "Direct holdings",
+        direct: true,
+        sharePct: "58%",
+        shareValue: "$27,984",
+      },
+    ],
+    instruments: [
+      {
+        ticker: "NVDA",
+        name: "Nvidia Corporation",
+        shares: "73.12",
+        value: "$10,615",
+        sharePct: "22%",
+        flagged: true,
+        sources: [
+          {
+            label: "AI Infra",
+            kind: "basket",
+            shares: "26.4 sh",
+            value: "$3,832",
+          },
+          { label: "Semi", kind: "basket", shares: "31.8 sh", value: "$4,615" },
+          {
+            label: "Direct",
+            kind: "direct",
+            shares: "14.9 sh",
+            value: "$2,168",
+          },
+        ],
+      },
+      {
+        ticker: "AAPL",
+        name: "Apple",
+        shares: "42.00",
+        value: "$8,148",
+        sharePct: "17%",
+        sources: [
+          { label: "Direct", kind: "direct", shares: "42 sh", value: "$8,148" },
+        ],
+      },
+      {
+        ticker: "TSM",
+        name: "Taiwan Semiconductor",
+        shares: "12.40",
+        value: "$2,298",
+        sharePct: "5%",
+        sources: [
+          {
+            label: "AI Infra",
+            kind: "basket",
+            shares: "5.1 sh",
+            value: "$945",
+          },
+          { label: "Semi", kind: "basket", shares: "7.3 sh", value: "$1,353" },
+        ],
+      },
+      {
+        ticker: "CRWD",
+        name: "CrowdStrike",
+        shares: "5.40",
+        value: "$1,718",
+        sharePct: "4%",
+        sources: [
+          { label: "Cyber", kind: "basket", shares: "5.4 sh", value: "$1,718" },
+        ],
+      },
+      {
+        ticker: "MELI",
+        name: "Mercado Libre",
+        shares: "0.33",
+        value: "$611",
+        sharePct: "1%",
+        sources: [
+          {
+            label: "EM Consumer",
+            kind: "basket",
+            shares: "0.33 sh",
+            value: "$611",
+          },
+        ],
+      },
+    ],
+    themes: [
+      {
+        id: "ai-infra",
+        name: "AI infrastructure",
+        sharePct: "31%",
+        value: "$14,958",
+        backed: { amount: "$6,755", pct: "14%" },
+        incidental: { amount: "$8,203", pct: "17%" },
+        backedFraction: 0.45,
+      },
+      {
+        id: "semi",
+        name: "Semiconductors",
+        sharePct: "29%",
+        value: "$13,958",
+        backed: { amount: "$5,308", pct: "11%" },
+        incidental: { amount: "$8,650", pct: "18%" },
+        backedFraction: 0.38,
+      },
+      {
+        id: "us-mega",
+        name: "U.S. mega-cap technology",
+        sharePct: "26%",
+        value: "$12,548",
+        backed: { amount: "$0", pct: "0%" },
+        incidental: { amount: "$12,548", pct: "26%" },
+        backedFraction: 0,
+      },
+      {
+        id: "cyber",
+        name: "Cybersecurity",
+        sharePct: "9%",
+        value: "$4,343",
+        backed: { amount: "$3,860", pct: "8%" },
+        incidental: { amount: "$483", pct: "1%" },
+        backedFraction: 0.89,
+      },
+    ],
+  };
+
+  return (
+    <>
+      <PortfolioView {...portfolio} />
+    </>
+  );
+};
+const StandingDesc = () => (
+  <>
+    The portfolio offers three view modes. Standings answers what the user is
+    backing and at what level. Instruments answers what the user owns at the
+    custody layer. Themes answers what the user is exposed to, whether they
+    intended it or not.{" "}
+  </>
+);
 
 const TheBaseline = () => (
   <>
     <FindingParagraph
       first
       title="Onboarding flow"
-      tagline="The user authors two decisions. The view they back, and the level they back it at. Everything else is to be inspected than to be constructed."
-      desc=" The intervention reorders the chain so the user's two binding decisions come first. The configuration appears at step three as the standing taking shape, visible at commit because suitability and disclosure require it, but framed as confirmation rather than as fields the user must author."
+      tagline="The user authors two decisions. The view they back, and the level they back it at. The flow compresses around those two and treats everything else as inspection rather than authoring."
+      desc="The standard onboarding chain runs through six steps. Select, holdings, risk, fees, amount, confirm. Each step requires the user to author a decision before the next surface opens. The redesign collapses the chain so the binding decisions, theme and level, come first. The other elements appear at step three as the standing taking shape, framed as confirmation rather than as fields the user must construct."
     />
 
     <FlowDiagram />
     <p>
-      The amount-upfront placement borrows from compressed brokerage flows. The
-      structural reason is that a thematic position commits the user to a view,
-      so the level at which they back that view anchors the act.
+      Level appears before fees because a user expressing a view decides the
+      view and the level of conviction first. Fees are a property of the
+      instrument that carries the view, so the instrument review can follow
+      without changing the disclosure surface. The fee disclosure remains
+      visible at commit.
     </p>
     <FindingParagraph
-      title="What stays visible"
+      title="Hard constraint"
       tagline="Suitability, fee disclosure, material information, auditability, and reversibility needs to stay."
       desc="The intervention changes the sequencing and framing of the flow. It should not remove the financial or regulatory requirements around the commit moment."
     />
@@ -495,10 +754,10 @@ const Falsification = () => (
 const PrototypeDesc = () => (
   <>
     <p>
-      The section documents the interaction model, the behavioral assumptions
-      behind it, and the ways those assumptions could fail. The test holds
-      compression and vocabulary against a regulated baseline and a compressed
-      instrument-purchase baseline.
+      An exploratory test was conducted to surface where the framing lands or
+      slips in a financial context, and which assumptions need to be revised.
+      Six participants moved through three prototype flows, each representing a
+      different framing of the same act.
     </p>
   </>
 );
@@ -522,6 +781,7 @@ const TheTest = () => {
   return (
     <>
       <FindingParagraph
+        first
         title="Test Design"
         tagline="A comparative test with three onboarding flows."
         desc="Three prototype onboarding models were comparatively tested for thematic investment products."
@@ -843,9 +1103,66 @@ const Synthesis = () => (
       do the second job: propose themes that the users would actually stand by.
       Surfacing therefore deserves the same design attention as framing.
     </p>
+    <FindingParagraph
+      title="Into hi-fi"
+      tagline={
+        <>
+          Framing carries through in Objects and Standing. <br />
+          The substance question becomes a surfacing mechanism.
+        </>
+      }
+      desc="The lo-fi did not answer which themes a user would actually back. The hi-fi answers that structurally. The mechanism reads the gap between what the user backs and what they are exposed to. When a theme shows large incidental exposure without a corresponding standing, it flags as a candidate. The next study tests whether the gap, surfaced, moves users to convert."
+    />
   </>
 );
 
+const WCN1 = () => (
+  <>
+    <p>
+      Finance is a regulated domain with non-negotiable guardrails. The redesign
+      had to move structure without removing those. That constraint sharpened
+      the work. The intervention became "find the friction that protects the
+      user, and the friction that protects the institution from change, and move
+      only the second" instead of "remove the friction." Holding the distinction
+      was the hardest part.
+    </p>
+  </>
+);
+const WCN2 = () => (
+  <>
+    <p>
+      The regulation encodes a model of the user. Someone optimizing for
+      risk-adjusted return within a stated horizon, with quantifiable tolerance
+      and a clear investment objective. That user exists. They are not the only
+      user. Investment behavior is sometimes shaped by belief, identity, and
+      worldview, not just by return-optimization. Most interfaces assume
+      otherwise. The trading frame asks the user to optimize for profit, and the
+      user who came to back a direction they believe in is left without a
+      surface that matches the act.
+    </p>
+    <p>
+      The redesign is one attempt at a different surface. It lets the user see
+      the conviction structure of their portfolio of what they back, what they
+      hold without backing, and where the two diverge. Some users see the gap
+      and want to diversify. Others see it and want to commit further. While
+      making the question visible, the interface does not prescribe either
+      response.
+    </p>
+  </>
+);
+
+const ReflectionKey = () => (
+  <>
+    <p>
+      The work documents a hypothesis with a structural answer. The lo-fi tested
+      whether the framing holds, and the hi-fi specifies the data model, the
+      surfaces, and the surfacing mechanism that follow from it. Neither tested
+      whether real users, with real money, in a regulated environment, would
+      back themes the way this design imagines. The next study is the one that
+      closes the gap.
+    </p>
+  </>
+);
 export default {
   // Top-level sections, must match menu titles exactly
   Overview,
@@ -863,8 +1180,11 @@ export default {
   "The Intervention": TheIntervention,
 
   InterventionDesc,
-  "Collapsing the authoring chain.": TheBaseline,
-  "Reframing the surface.": Reframing,
+  "Standings and Themes": Objects,
+  "Surfacing the objects": Standing,
+  ObjDesc,
+  StandingDesc,
+  Flow: TheBaseline,
 
   "Prototype & Testing": PrototypeAndTesting,
   PrototypeDesc,
@@ -873,5 +1193,7 @@ export default {
   "The test": TheTest,
   Synthesis: Synthesis,
 
-  "What Comes Next?": WhatComesNext,
+  ReflectionKey,
+  "On regulated design": WCN1,
+  "Why I changed that": WCN2,
 };

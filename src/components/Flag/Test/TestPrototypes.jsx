@@ -5,7 +5,6 @@ import { stepIdAt } from "./data/flows";
 import { ContainerSizeProvider } from "./lib/containerSize";
 import { cn } from "./lib/cn";
 import { palette } from "./lib/tw";
-import { Button } from "./components/ui";
 import TopBar from "./components/TopBar";
 import Stepper from "./components/Stepper";
 import ActionBar from "./components/ActionBar";
@@ -51,9 +50,29 @@ function AppContent({ orientation }) {
     >
       <div className="flex justify-end p-2">
         {orientation === "desktop" && (
-          <Button active={desktop} onClick={() => setDesktop((d) => !d)}>
-            [ DESKTOP ]
-          </Button>
+          <motion.button
+            type="button"
+            onClick={() => setDesktop((d) => !d)}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            transition={{ type: "spring", stiffness: 600, damping: 30 }}
+            aria-label={desktop ? "Switch to phone view" : "Switch to desktop view"}
+            title={desktop ? "Desktop view" : "Phone view"}
+            className={cn(
+              "w-9 h-9 rounded-full border flex items-center justify-center cursor-pointer",
+              "transition-colors duration-150 ease-out",
+              palette.bg,
+              palette.text,
+              palette.border,
+              palette.hoverBg,
+            )}
+          >
+            <i
+              className={`fa-sharp fa-regular ${
+                desktop ? "fa-desktop" : "fa-mobile-screen"
+              }`}
+            />
+          </motion.button>
         )}
       </div>
 
@@ -65,15 +84,38 @@ function AppContent({ orientation }) {
               className="overflow-y-auto w-full flex-1 px-3 pt-16 pb-8"
             >
               <ContainerSizeProvider className="min-h-full">
-                {state.submitted ? (
-                  <Success />
-                ) : (
-                  <>
-                    {state.flow === "A" && <TraditionalFlow stepId={stepId} />}
-                    {state.flow === "R" && <RobinhoodFlow stepId={stepId} />}
-                    {state.flow === "B" && <RedesignFlow stepId={stepId} />}
-                  </>
-                )}
+                {/* Swap flow / stage content with a quick fade-and-slide.
+                    Key on flow+step so both transitions animate; submitted
+                    state has its own key. */}
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={
+                      state.submitted
+                        ? "submitted"
+                        : `${state.flow}-${stepId}`
+                    }
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                  >
+                    {state.submitted ? (
+                      <Success />
+                    ) : (
+                      <>
+                        {state.flow === "A" && (
+                          <TraditionalFlow stepId={stepId} />
+                        )}
+                        {state.flow === "R" && (
+                          <RobinhoodFlow stepId={stepId} />
+                        )}
+                        {state.flow === "B" && (
+                          <RedesignFlow stepId={stepId} />
+                        )}
+                      </>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
               </ContainerSizeProvider>
             </div>
             {!state.submitted && <ActionBar />}
@@ -106,7 +148,7 @@ function AppContent({ orientation }) {
               ease: "easeOut",
               layout: { duration: 0.28, ease: "easeInOut" },
             }}
-            className={cn("p-4 text-[0.8em] rounded-lg my-4", palette.bgSubtle)}
+            className={cn("p-4  rounded-lg my-4", palette.bgSubtle)}
           >
             {FLOW_DESC[state.flow] ?? ""}
           </motion.div>

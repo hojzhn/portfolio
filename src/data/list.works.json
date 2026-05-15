@@ -270,7 +270,7 @@
         ]
       }
     ],
-    "summary": "Thematic onboarding for thematic investments.",
+    "summary": "Thematic system for thematic investments.",
     "menu": [
       {
         "title": "Overview",
@@ -298,15 +298,15 @@
       },
       {
         "title": "The Intervention",
-        "desc": "Opt-in easy. \nPersist with conviction.",
+        "desc": "Reframing the investment in three layers.",
         "descKey": "InterventionDesc",
         "subsections": [
+          { "title": "Standings and Themes", "descKey": "ObjDesc" },
+          { "title": "Surfacing the objects", "descKey": "StandingDesc" },
           {
-            "title": "Collapsing the authoring chain.",
+            "title": "Flow",
             "descKey": "baselineDesc"
-          },
-
-          { "title": "Reframing the surface.", "descKey": "staysDesc" }
+          }
         ]
       },
 
@@ -323,7 +323,9 @@
 
       {
         "title": "What Comes Next?",
-        "desc": "Initiation structure defines the future interaction."
+        "desc": "Reflections",
+        "descKey": "ReflectionKey",
+        "subsections": ["On regulated design", "Why I changed that"]
       }
     ]
   },

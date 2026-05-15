@@ -7,7 +7,7 @@ export const palette = {
   // surfaces
   bg: "bg-[var(--bg)]",
   bgSubtle: "bg-[var(--bg2)]",
-  bgSelected: "bg-[var(--bg3)]",
+  bgSelected: "bg-[var(--txt3)]",
   bgInverted: "bg-[var(--bg3)]",
   bgTransparent: "bg-transparent",
 
@@ -21,7 +21,7 @@ export const palette = {
   borderTransparent: "border-transparent",
 
   // interactive states
-  hoverBg: "hover:bg-[var(--bg2)]",
+  hoverBg: "hover:bg-[var(--txt3)]",
   hoverBgInverted: "hover:bg-[var(--txt)]",
   hoverBgTransparent: "hover:bg-transparent",
   disabledText: "disabled:text-[var(--txt2)]",

@@ -93,7 +93,7 @@ function BrowseScreen() {
             selected={state.selectedTicker === b.ticker}
             onClick={() => selectTicker(b.ticker)}
             ticker={b.ticker}
-            title={<strong>{b.themeShort}</strong>}
+            title={<>{b.name}</>}
             subtitle={[b.theme, `Managed · ${b.curator}`]}
             cells={[
               {
