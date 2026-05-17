@@ -250,7 +250,7 @@
     "category": "designer",
     "desc": "This project reframes thematic investment to match how people actually arrive at it. The intervention works in three layers. New objects: baskets and themes treated as different kinds of holding rather than collapsed into instruments. New surfaces: with standings and themes as separate views over the same portfolio. New flow: compressing the onboarding chain so the user authors two decisions instead of six. The direction started from a preliminary behavioral study and was tested through comparative prototype flows.",
     "date": "Apr, 2026",
-    "role": ["HCI Research"],
+    "role": ["Product Design", "Finance"],
     "desc_items": [
       {
         "title": "Type",
@@ -343,7 +343,7 @@
       "url": "https://twenty-inbox-demo.vercel.app/",
       "buttonText": "Go to live demo"
     },
-    "role": ["Product Design"],
+    "role": ["Product Design", "CRM"],
     "summary": "An Inbox that walks the graph.",
     "desc": "Two-week sprint with Twenty, an open-source CRM. I designed a notification inbox as a view of the existing Task object. Four primitives: a notification data model, a Focus filter using graph distance, an action panel, and a Resolve-with pattern that closes related notifications in one move. Five-user moderated test on an interactive prototype against a scripted high-stakes scenario. Shipped a live, fully functional hi-fi prototype.",
     "descKey": "overviewDesc",
