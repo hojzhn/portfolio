@@ -48,7 +48,7 @@ const Main = ({ scrollRef }) => {
     return [...worksData].sort((a, b) => parse(b.date) - parse(a.date));
   }, []);
 
-  const [selectedItem, setSelectedItem] = useState(4); // Selected item state
+  const [selectedItem, setSelectedItem] = useState(0); // Selected item state
 
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [postReady, setPostReady] = useState(false);
