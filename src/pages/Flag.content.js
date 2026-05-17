@@ -21,6 +21,14 @@ import { LayoutContext } from "../context/LayoutContext.js";
 import StandingCard from "../components/Flag/StandingCard.jsx";
 import ThemeCard from "../components/Flag/ThemeCard.jsx";
 import PortfolioView from "../components/Flag/PortfolioView.js";
+
+import v1 from "../images/flag/flag_demo_1.mp4";
+import v2 from "../images/flag/flag_demo_1-2.mp4";
+import v3 from "../images/flag/flag-demo-2.mp4";
+import v4 from "../images/flag/flag-demo-3.mp4";
+import VideoEmbed from "../components/VideoEmbed.js";
+import VideoShowcase from "../components/VideoShowcase.js";
+
 const Overview = () => (
   <>
     <img
@@ -35,19 +43,20 @@ const overviewDesc = () => <></>;
 
 const Proposition = () => (
   <>
-    <DescriptionHeader>How it works</DescriptionHeader>
+    <DescriptionHeader>Starting point</DescriptionHeader>
     <p>
-      This project reframes thematic investment from a transaction into a
-      stance. Existing flows borrow their structure from instrument-purchase
-      onboarding. The user picks an instrument, sees its price, reviews
-      holdings, and buys. The act is finished on submit. The redesign treats the
-      act as the user taking up a position on something they value. They name
-      what they back, they set the level, they commit.
+      A user is not optimizing for an immediate return when they back a thematic
+      position. They are placing weight behind a reading of the world. The act
+      has financial consequences but the motivation runs through worldview,
+      identity, and conviction before it touches return.
     </p>
     <p>
-      The work tests whether the authoring-chain collapse holds in a regulated
-      retail-investment flow, where suitability and disclosure constrain how far
-      the collapse can go.
+      The same is true in reverse. A trade that looks like pure return-seeking
+      often carries the same thing underneath. The user who buys NVDA because
+      they think AI will reshape the next decade is doing the same act in
+      trading vocabulary. Existing flows recognize only the vocabulary. The
+      redesign starts from what the user is actually doing and lets the
+      vocabulary follow.
     </p>
   </>
 );
@@ -56,86 +65,46 @@ const TheFlow = () => (
   <>
     <FindingParagraph
       first
-      title="1. The Conviction"
-      tagline="The system drafts. The user only decides whether to claim it."
-      desc="The screen lists themes the system has constructed from observed activity. Each row carries a signal strength score, 90-day momentum, a typical exposure mix, and a column showing the user's own engagement with the theme. The user selects a theme and proceeds to set exposure."
+      title="Opt-in flow"
+      tagline='Recurring investment on thematic baskets becomes a "standing".'
+      desc={`Choose monthly and the act creates a persistent object the user can revisit, adjust, and read against their themes over time. Choose one-time and the basket dissolves into the user's instrument-level holdings as if they had bought the constituents directly. "Standing" as the persistent object is the design's contribution.`}
     />
-    <div>
-      <div className="aspect-[5/3]  bg-[var(--bg2)] border border-dashed border-[var(--bg3)] rounded-lg flex items-center justify-center text-[var(--txt3)] font-mono text-[12px] uppercase tracking-[0.16em]">
-        screen
-      </div>
-      <FigCaption>
-        The user does not author a position from scratch. The system has already
-        constructed candidate themes and ranked them. The system surfaces the
-        position the user has already shown interest in, ranked by how strongly
-        the signal is currently moving.
-      </FigCaption>
-    </div>
-    <CardGrid>
-      <Card label="Surfaced">
-        Ranked themes. Signal strength. 90-day momentum. Typical exposure mix.
-        The user's own engagement history per theme.
-      </Card>
-      <Card label="Displaced" labelClass="text-[var(--txt2)]">
-        Composing a thesis from scratch. Summarizing one's own activity.
-        Choosing what to commit to without scaffolding.
-      </Card>
-    </CardGrid>
+    <VideoShowcase
+      items={[
+        {
+          src: v1,
+          label: "Demo 1",
+          header: 'Video 1-1: Recurring investment ("Standing")',
+        },
+        {
+          src: v2,
+          label: "Demo 2",
+          header: 'Video 1-2: One-time investment ("Purchase")',
+        },
+      ]}
+    />
     <FindingParagraph
-      title="2. The Commitment"
-      tagline="One question: the level of conviction."
-      desc="Once a theme is selected, the screen asks the user one binding question: at what monthly level do you want to back this. The rest of the screen shows what the commit will produce."
+      title="Live standing detail"
+      tagline="Keeping up with the standings."
+      desc="The basket detail page is the editorial surface with information for a user to make a decision about opting in. The standing page is the managerial surface for recurring investments. The user adjusts the level, reviews activity, checks holdings tied to this standing, or retracts if they change their mind."
     />
-    <div>
-      <div className="aspect-[5/3]  bg-[var(--bg2)] border border-dashed border-[var(--bg3)] rounded-lg flex items-center justify-center text-[var(--txt3)] font-mono text-[12px] uppercase tracking-[0.16em]">
-        screen
-      </div>{" "}
-      <FigCaption>
-        Everything other than the monthly level is present but as consequence,
-        surfaced for review rather than for configuration. The displacement is
-        from authoring those things to inspecting them. Allocation, risk, and
-        implementation move out of the user's path. They do not move off the
-        screen.
-      </FigCaption>
+    <div className="flex flex-col gap-2">
+      <GraphicCaption icon="fa-video">
+        Video 2: Basket - Standing navigation
+      </GraphicCaption>
+      <VideoEmbed src={v3} />
     </div>
-    <CardGrid>
-      <Card label="Surfaced">
-        The monthly level. Full allocation breakdown. Risk profile. Time
-        horizon. Deployment cadence. Estimated fee. Portfolio impact. Four named
-        sensitivities.
-      </Card>
-      <Card label="Displaced" labelClass="text-[var(--txt2)]">
-        Authoring the allocation. Picking instruments. Constructing the risk
-        profile. Building the implementation. The user inspects what the system
-        would do, then decides at what level to back it.
-      </Card>
-    </CardGrid>
     <FindingParagraph
-      title="3. The Standing"
-      tagline="Commit. Stand your ground. And watch how it plays out."
-      desc='The committed position becomes a tracked state. The screen shows the theme statement with tenure ("Backed for 4 months"), last review, total deployed, and current monthly exposure. Performance since initiation is plotted alongside best environment, largest drawdown, and realized volatility.'
+      title="Portfolio navigation"
+      tagline="Thematic lens for portfolio analysis."
+      desc="A theme is a group of qualifying instruments published by the platform. The themes view shows how much of the user's portfolio aligns with each theme, whether authored through a directly related standing (to the theme) or different standing with holdings overlap, or direct holdings. The user reads where their interest sits, where their concentration runs deeper than they realized, and decides whether to reinforce or diversify."
     />
-    <div>
-      <div className="aspect-[5/3]  bg-[var(--bg2)] border border-dashed border-[var(--bg3)] rounded-lg flex items-center justify-center text-[var(--txt3)] font-mono text-[12px] uppercase tracking-[0.16em]">
-        screen
-      </div>{" "}
-      <FigCaption>
-        Controls are Adjust exposure, Pause deposits, and Modify standing.
-        Recent activity is logged as Standing reviewed, Quarterly rebalance, and
-        First deployment. The standing is a held view, with monitoring
-        underneath.
-      </FigCaption>
+    <div className="flex flex-col gap-2">
+      <GraphicCaption icon="fa-video">
+        Video 3: Portfolio navigation
+      </GraphicCaption>
+      <VideoEmbed src={v4} />
     </div>
-    <CardGrid>
-      <Card label="Surfaced">
-        The held position. Tenure. Deployed amount. Activity log. Routes into
-        the management surface.
-      </Card>
-      <Card label="Displaced" labelClass="text-[var(--txt2)]">
-        Cancellation framing. Billing controls. The mechanical unwind itself,
-        which the system handles after retraction is confirmed.
-      </Card>
-    </CardGrid>
   </>
 );
 
@@ -195,7 +164,9 @@ const TheShiftCard = () => (
 
     <div className="border-t border-[var(--bg3)]" />
     <a href="">
-      <MonoLabel margin={false}>Method and limits → Appendix A</MonoLabel>
+      <MonoLabel margin={false}>
+        Method and limits → Appendix A (under construction)
+      </MonoLabel>
     </a>
   </div>
 );
@@ -398,14 +369,8 @@ const Objects = () => {
     <>
       <FindingParagraph
         title="Standings"
-        tagline="Standing: a persistent container of
-            instruments(baskets)."
-        desc="This departs from the standard brokerage
-            stack, where the basket is a purchase-time routing instruction that
-            disappears after execution and the portfolio collapses to a flat
-            list of instruments. Here the basket persists. Sub-positions are
-            tracked per basket. Retraction sells FIFO against the basket's own
-            lots."
+        tagline="Standing: a persisting thematic basket."
+        desc={`Recurring investment on a thematic basket becomes a "standing". This departs from the standard brokerage stack, where the basket is a purchase-time routing instruction that disappears after execution and the portfolio collapses to a flat list of instruments. Here the basket persists. Sub-positions are tracked per basket. Retraction ends the subscription. The holdings remain in the portfolio as direct holdings.`}
         first
       />
 
@@ -1144,9 +1109,11 @@ const WCN2 = () => (
       The redesign is one attempt at a different surface. It lets the user see
       the conviction structure of their portfolio of what they back, what they
       hold without backing, and where the two diverge. Some users see the gap
-      and want to diversify. Others see it and want to commit further. While
-      making the question visible, the interface does not prescribe either
-      response.
+      and want to diversify. Others see it and want to commit further. The
+      interface did not aim to prescribe either response, but to makes the
+      question visible. Although the distance between how people actually relate
+      to their money and the systems that handle it would not close in one
+      project, this was a step toward it.
     </p>
   </>
 );
@@ -1168,8 +1135,8 @@ export default {
   Overview,
   overviewDesc,
 
-  "The Proposition": Proposition,
-  "The Flow": TheFlow,
+  "The proposition": Proposition,
+  "The flow": TheFlow,
   "Problem Statement": ProblemStatement,
   "Where this started": WhereThisStarted,
 
@@ -1195,5 +1162,5 @@ export default {
 
   ReflectionKey,
   "On regulated design": WCN1,
-  "Why I changed that": WCN2,
+  Interests: WCN2,
 };

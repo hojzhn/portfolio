@@ -243,31 +243,35 @@
     "id": 4,
     "title": "Let Them Wave Flag",
     "slug": "Flag",
+    "demo": {
+      "url": "https://flagship-demo-lake.vercel.app/",
+      "buttonText": "Go to live demo"
+    },
     "category": "designer",
-    "desc": "People can hold strong thematic positions without translating them into financial commitment very well. Existing flows either ask users to configure a financial instrument or compress the flow while still framing the act as trading. This redesign bridges that gap by 1) compressing the onboarding structure into a smaller set of authored decisions, and 2) reshaping the holding model so the position reads less like a trade and more like maintaining a standing over time. The direction started from a preliminary behavioral study and was tested through comparative prototype flows.",
-    "date": "Jul, 2025",
+    "desc": "This project reframes thematic investment to match how people actually arrive at it. The intervention works in three layers. New objects: baskets and themes treated as different kinds of holding rather than collapsed into instruments. New surfaces: with standings and themes as separate views over the same portfolio. New flow: compressing the onboarding chain so the user authors two decisions instead of six. The direction started from a preliminary behavioral study and was tested through comparative prototype flows.",
+    "date": "Apr, 2026",
     "role": ["HCI Research"],
     "desc_items": [
       {
         "title": "Type",
-        "content": ["Commitment-flow redesign"]
+        "content": ["Research-led design exploration", "Prototype testing"]
+      },
+      {
+        "title": "Method",
+        "content": [
+          "Comparative prototype testing",
+          "Qualitative research",
+          "Behavioral analysis",
+          "Interactive prototype"
+        ]
       },
       {
         "title": "Role",
-        "content": [
-          "Interaction rule design",
-          "Quantative analysis",
-          "Figure planning",
-          "Design concept development"
-        ]
+        "content": ["Solo project"]
       },
-
       {
-        "title": "Premise",
-        "content": [
-          "Configuration off the user",
-          "Conviction as the user's decision"
-        ]
+        "title": "Duration",
+        "content": ["2 weeks"]
       }
     ],
     "summary": "Thematic system for thematic investments.",
@@ -275,8 +279,8 @@
       {
         "title": "Overview",
         "descKey": "overviewDesc",
-        "desc": "Conviction upfront. And then the rest becomes easy.",
-        "subsections": [{ "title": "The Proposition" }, { "title": "The Flow" }]
+        "desc": "What does the commitment (to a thematic investment) feel like?",
+        "subsections": [{ "title": "The proposition" }, { "title": "The flow" }]
       },
       {
         "title": "Problem Statement",
@@ -325,7 +329,7 @@
         "title": "What Comes Next?",
         "desc": "Reflections",
         "descKey": "ReflectionKey",
-        "subsections": ["On regulated design", "Why I changed that"]
+        "subsections": ["On regulated design", "Interests"]
       }
     ]
   },
@@ -334,7 +338,7 @@
     "title": "Twenty CRM",
     "slug": "Twenty",
     "category": "designer",
-    "date": "Apr, 2026",
+    "date": "May, 2026",
     "demo": {
       "url": "https://twenty-inbox-demo.vercel.app/",
       "buttonText": "Go to live demo"

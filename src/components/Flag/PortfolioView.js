@@ -130,7 +130,7 @@ const SourceTag = ({ kind, children }) => {
 // Shared grid template so the row, the multi-source sub-rows, and the
 // header all line up on the same columns. The trailing `1.25rem` column is
 // the caret slot — empty on single-source rows.
-const INSTRUMENT_COLS = "grid-cols-[1.4fr_0.8fr_1fr_1.25rem]";
+const INSTRUMENT_COLS = "grid-cols-[1.25rem_1.4fr_0.8fr_1fr]";
 
 const InstrumentRow = ({ inst, last }) => {
   const multi = inst.sources && inst.sources.length > 1;
@@ -139,6 +139,14 @@ const InstrumentRow = ({ inst, last }) => {
       className={`px-4 py-3 ${!last ? "border-b  border-[var(--bg3)]" : ""} `}
     >
       <div className={`grid ${INSTRUMENT_COLS} gap-3 items-baseline`}>
+        <div className="flex items-center justify-end text-[var(--txt2)]">
+          {multi && (
+            <i
+              aria-hidden="true"
+              className="fa-sharp fa-regular fa-chevron-down text-[0.8em]"
+            />
+          )}
+        </div>
         <div className="min-w-0">
           <div className="font-mono text-[var(--txt)] tracking-[0.04em]">
             {inst.ticker}
@@ -153,20 +161,13 @@ const InstrumentRow = ({ inst, last }) => {
         <div className="text-right shrink-0">
           <div className="tabular-nums text-[var(--txt)]">{inst.value}</div>
         </div>
-        <div className="flex items-center justify-end text-[var(--txt2)]">
-          {multi && (
-            <i
-              aria-hidden="true"
-              className="fa-sharp fa-regular fa-chevron-down text-[0.8em]"
-            />
-          )}
-        </div>
       </div>
       {multi && (
-        <div className="mt-3 pt-3 gap-y-2 font-mono ">
-          <MonoLabel>Held through</MonoLabel>
+        <div className="mt-3 pt-3 font-mono">
+          <MonoLabel className="pl-8">Held through</MonoLabel>
           {inst.sources.map((src, i) => (
-            <div key={i} className={`grid ${INSTRUMENT_COLS} gap-3`}>
+            <div key={i} className={`grid ${INSTRUMENT_COLS} gap-x-3`}>
+              <div></div>
               <div className="text-[var(--txt2)] uppercase tracking-[0.12em] text-[0.8em]">
                 {src.label}
               </div>
