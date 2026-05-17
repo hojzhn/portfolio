@@ -3,7 +3,7 @@ import Item from "./Item";
 import worksData from "../data/list.works.json"; // Import the JSON file directly
 import { LayoutContext, SiteRoleContext } from "../context/LayoutContext.js";
 
-function List({ works, selectedItem, handleItemSelection }) {
+function List({ works, selectedItem, handleItemSelection, onHover }) {
   const { layout, setLayout, setTheme } = useContext(LayoutContext);
 
   const [previousSelectedItem, setPreviousSelectedItem] = useState(null); // Selected Previousitem state
@@ -36,7 +36,13 @@ function List({ works, selectedItem, handleItemSelection }) {
   }, [selectedItem]);
 
   return (
-    <div className="list-items w-full ">
+    // Hover handled at the list level: per-item `onMouseEnter` updates the
+    // hovered id, list-level `onMouseLeave` clears it. Avoids the transient
+    // null when moving between items.
+    <div
+      className="list-items w-full "
+      onMouseLeave={() => onHover?.(null)}
+    >
       {/* Display Items */}
       {works.map((work) => (
         <div
@@ -45,6 +51,7 @@ function List({ works, selectedItem, handleItemSelection }) {
           className={`item-wrapper w-full ${selectedItem === work.id && "h-full"} mb-[10px] overflow-hidden border border-transparent ${
             selectedItem === work.id ? "selected" : ""
           }`}
+          onMouseEnter={() => onHover?.(work.id)}
           onClick={(e) => {
             const currentId = `item-${work.id}`;
             const previousId = `item-${previousSelectedItem}`;

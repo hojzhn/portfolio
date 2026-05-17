@@ -9,6 +9,7 @@ import ElasticLines from "../components/ElasticLines.js";
 import List from "../components/List.js";
 import Post from "./Post.js";
 import MonoLabel from "../components/MonoLabel.js";
+import { resolveCover } from "../images/covers.js";
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -49,6 +50,15 @@ const Main = ({ scrollRef }) => {
   }, []);
 
   const [selectedItem, setSelectedItem] = useState(0); // Selected item state
+  const [hoveredId, setHoveredId] = useState(null);
+
+  const hoveredWork = useMemo(
+    () => (hoveredId == null ? null : works.find((w) => w.id === hoveredId)),
+    [works, hoveredId],
+  );
+  const hoveredCover = hoveredWork
+    ? resolveCover(hoveredWork.slug, layout.palette.mode)
+    : null;
 
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [postReady, setPostReady] = useState(false);
@@ -71,23 +81,29 @@ const Main = ({ scrollRef }) => {
     );
   }, [setLayout]);
 
+  // `post` layout flag follows selection only.
   useEffect(() => {
-    if (selectedItem !== null) {
-      setLayout((prev) =>
-        prev.post === true ? prev : { ...prev, post: true },
-      );
-      const selectedWork = works.find((w) => w.id === selectedItem);
+    setLayout((prev) => {
+      const next = selectedItem !== null;
+      return prev.post === next ? prev : { ...prev, post: next };
+    });
+  }, [selectedItem, setLayout]);
 
-      if (selectedWork?.slug) {
-        setTheme(selectedWork.slug);
-      }
-    } else {
-      setTheme("noncommittal");
-      setLayout((prev) =>
-        prev.post === false ? prev : { ...prev, post: false },
-      );
-    }
-  }, [selectedItem, works, setLayout, setTheme]);
+  // Theme: hovered item takes precedence over the selected one, so the page
+  // palette previews the hovered work and reverts when the cursor leaves.
+  // On mobile we ignore hover entirely — touch fires `mouseenter` on tap
+  // without a matching `mouseleave`, which would otherwise leave the palette
+  // stuck on the tapped item.
+  useEffect(() => {
+    const useHover = !layout.mobiler;
+    const work =
+      useHover && hoveredId != null
+        ? works.find((w) => w.id === hoveredId)
+        : selectedItem != null
+          ? works.find((w) => w.id === selectedItem)
+          : null;
+    setTheme(work?.slug || "noncommittal");
+  }, [hoveredId, selectedItem, works, setTheme, layout.mobiler]);
 
   const handleItemSelection = (id) => {
     const next = id === null ? null : selectedItem === id ? null : id;
@@ -213,32 +229,32 @@ const Main = ({ scrollRef }) => {
                 ease: "easeOut",
                 layout: { duration: 0.3, ease: "easeInOut" },
               }}
-              className="layout w-full h-auto flex justify-center"
+              className="layout w-full h-auto flex justify-start gap-16 "
             >
               <div className="profile-container max-w-[600px]">
-                <div className="profile">
-                  <button
-                    type="button"
-                    aria-label="Toggle theme"
-                    className="hover:bg-[var(--bg2)] text-[var(-txt2)] w-8 h-8 transition-all duration-300 rounded-full flex justify-center items-center"
-                    onClick={toggleLightMode}
-                  >
-                    <AnimatePresence mode="wait" initial={false}>
-                      <motion.i
-                        key={layout.palette.mode}
-                        initial={{ opacity: 0, rotate: -20, scale: 0.85 }}
-                        animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                        exit={{ opacity: 0, rotate: 20, scale: 0.85 }}
-                        transition={{ duration: 0.18, ease: "easeOut" }}
-                        className={
-                          layout.palette.mode === "light"
-                            ? "fa-sharp fa-solid fa-sun-bright"
-                            : "fa-sharp fa-solid fa-moon"
-                        }
-                      />
-                    </AnimatePresence>
-                  </button>
+                <button
+                  type="button"
+                  aria-label="Toggle theme"
+                  className="hover:bg-[var(--bg2)] text-[var(-txt2)] w-8 h-8 transition-all duration-300 rounded-full flex justify-center items-center"
+                  onClick={toggleLightMode}
+                >
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.i
+                      key={layout.palette.mode}
+                      initial={{ opacity: 0, rotate: -20, scale: 0.85 }}
+                      animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                      exit={{ opacity: 0, rotate: 20, scale: 0.85 }}
+                      transition={{ duration: 0.18, ease: "easeOut" }}
+                      className={
+                        layout.palette.mode === "light"
+                          ? "fa-sharp fa-solid fa-sun-bright"
+                          : "fa-sharp fa-solid fa-moon"
+                      }
+                    />
+                  </AnimatePresence>
+                </button>
 
+                <div className="">
                   <div className="text-6xl instrument pt-40">
                     Savvy(Ahn).
                     {/* <span className="rotate-180 inline-block relative top-[0.18em]">
@@ -270,53 +286,47 @@ const Main = ({ scrollRef }) => {
                       across UX, full stack development, physical interaction
                       prototyping, and HCI research.
                     </div>
-                    {/* 
-                    <div className="grid gap-8 w-full grid-cols-1 sm:grid-cols-2">
-                      <a
-                        href="https://www.pratt.edu/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <div className="min-w-0 cursor-pointer ">
-                          <div>
-                            Pratt Institute{" "}
-                            <i className="fa-sharp fa-regular fa-arrow-up-right"></i>
-                          </div>
-                          <div className="opacity-60">
-                            MFA Digital Arts (Interactive Arts)
-                          </div>
-                        </div>
-                      </a>
-                      <a
-                        href="https://www.karts.ac.kr/en/main.do"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <div className="min-w-0">
-                          <div>
-                            Korea Nat'l University of Arts{" "}
-                            <i className="fa-sharp fa-regular fa-arrow-up-right"></i>
-                          </div>
-                          <div className="opacity-60">BA Fine Arts</div>
-                          <div className="opacity-60">
-                            Minor in Dance Theory
-                          </div>
-                        </div>
-                      </a>
-                    </div> */}
-
-                    <ElasticLines className="my-8" />
-
-                    <MonoLabel>Selected Works</MonoLabel>
                   </div>
                 </div>
 
-                <List
-                  works={works}
-                  selectedItem={selectedItem}
-                  handleItemSelection={handleItemSelection}
-                />
+                <ElasticLines className="my-8" />
+
+                <div>
+                  <MonoLabel>Selected Works</MonoLabel>
+                  <List
+                    works={works}
+                    selectedItem={selectedItem}
+                    handleItemSelection={handleItemSelection}
+                    onHover={layout.mobiler ? undefined : setHoveredId}
+                  />
+                </div>
               </div>
+              {!layout.mobiler && (
+                <div className="flex-1 relative overflow-hidden">
+                  {/* Render every cover up front and just toggle opacity —
+                      no mount/unmount means no blink as the cursor moves
+                      between items, and the browser keeps each image cached
+                      after its first load. */}
+                  {works.map((w) => {
+                    const cover = resolveCover(w.slug, layout.palette.mode);
+                    if (!cover) return null;
+                    const active = hoveredId === w.id;
+                    return (
+                      <img
+                        key={w.id}
+                        src={cover}
+                        alt={w.title || ""}
+                        draggable={false}
+                        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-out"
+                        style={{
+                          opacity: active ? 1 : 0,
+                          pointerEvents: "none",
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

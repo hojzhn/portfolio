@@ -138,6 +138,20 @@ html {
   top: 0;
   left: 0;
 }
+/* Register the palette variables as <color> so the browser can interpolate
+   them on theme change. Consumers (var(--bg) etc.) inherit the animated
+   value automatically — no per-element transition needed. */
+@property --bg     { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
+@property --bg2    { syntax: "<color>"; inherits: true; initial-value: #f3f3f3; }
+@property --bg3    { syntax: "<color>"; inherits: true; initial-value: #d8d8d8; }
+@property --txt    { syntax: "<color>"; inherits: true; initial-value: #1a1a1a; }
+@property --txt2   { syntax: "<color>"; inherits: true; initial-value: #4a4a4a; }
+@property --txt3   { syntax: "<color>"; inherits: true; initial-value: #8a8a8a; }
+@property --point  { syntax: "<color>"; inherits: true; initial-value: #888888; }
+@property --point1 { syntax: "<color>"; inherits: true; initial-value: #888888; }
+@property --point2 { syntax: "<color>"; inherits: true; initial-value: #aaaaaa; }
+@property --point3 { syntax: "<color>"; inherits: true; initial-value: #cccccc; }
+
 :root {
   --bg: #dddddd;
   --bg2: #c0c0c0;
@@ -148,6 +162,19 @@ html {
   --point1: #ff76b8;
   --point2: #2e2624;
   --point3: #657b83;
+
+  /* Gradually crossfade the palette when data-theme / data-mode flips. */
+  transition:
+    --bg 400ms ease,
+    --bg2 400ms ease,
+    --bg3 400ms ease,
+    --txt 400ms ease,
+    --txt2 400ms ease,
+    --txt3 400ms ease,
+    --point 400ms ease,
+    --point1 400ms ease,
+    --point2 400ms ease,
+    --point3 400ms ease;
 }
 
 /* LIGHT */
